@@ -40,6 +40,7 @@ class Enterpay_Company_Search_Loader {
 	 * @var      array    $filters    The filters registered with WordPress to fire when the plugin loads.
 	 */
 	protected $filters;
+	protected $shortcodes;
 
 	/**
 	 * Initialize the collections used to maintain the actions and filters.
@@ -50,6 +51,7 @@ class Enterpay_Company_Search_Loader {
 
 		$this->actions = array();
 		$this->filters = array();
+		$this->shortcodes = array();
 
 	}
 
@@ -81,6 +83,11 @@ class Enterpay_Company_Search_Loader {
 		$this->filters = $this->add( $this->filters, $hook, $component, $callback, $priority, $accepted_args );
 	}
 
+	public function add_shortcode($hook, $component, $callback){
+		$this->shortcodes = $this->add($this->shortcodes, $hook, $component, $callback,100, 1 );
+		
+	}
+
 	/**
 	 * A utility function that is used to register the actions and hooks into a single
 	 * collection.
@@ -104,7 +111,7 @@ class Enterpay_Company_Search_Loader {
 			'priority'      => $priority,
 			'accepted_args' => $accepted_args
 		);
-
+		
 		return $hooks;
 
 	}
@@ -123,7 +130,12 @@ class Enterpay_Company_Search_Loader {
 		foreach ( $this->actions as $hook ) {
 			add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
 		}
+		
+		foreach ( $this->shortcodes as $hook ) {
+		    add_shortcode( $hook['hook'], array( $hook['component'], $hook['callback'] ) );
+        }
 
 	}
+
 
 }

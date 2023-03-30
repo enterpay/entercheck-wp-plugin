@@ -73,8 +73,12 @@ class Enterpay_Company_Search_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all' );
+		
+		//wp_register_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name."-CSS", plugin_dir_url( __FILE__ ) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all' );
+		
 
+		wp_enqueue_style( $this->plugin_name."-ISO-BOOTSTRAP", plugin_dir_url( __FILE__ ) . 'css/iso_bootstrap4.0.0min.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -141,4 +145,13 @@ class Enterpay_Company_Search_Public {
 		die();
 	}
 
+	
+
+	public function company_search_form_render(){
+		ob_start();
+		
+		include( plugin_dir_path( __FILE__ ) . 'partials/form-shortcode.php');
+		
+		return ob_get_clean();
+	}
 }
