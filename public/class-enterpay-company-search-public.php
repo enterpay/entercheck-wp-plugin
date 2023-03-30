@@ -101,7 +101,8 @@ class Enterpay_Company_Search_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/enterpay-company-search-public.js', array( 'jquery' ), $this->version, false );
-
+		//typeahead.bundle.js"
+		wp_enqueue_script( "typeahead", plugin_dir_url( __FILE__ ) . 'js/typeahead/typeahead.bundle.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( 'enterpay_script', 'myAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 
 	}
