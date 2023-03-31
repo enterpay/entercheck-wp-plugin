@@ -50,7 +50,7 @@
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: '/wp-admin/admin-ajax.php?action=call_api&name=%QUERY',
+				url: '/wp-admin/admin-ajax.php?action=search_company&name=%QUERY',
 				wildcard: '%QUERY'
 			}
 		});
@@ -65,6 +65,25 @@
 		$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 			console.log(suggestion);
 			$("#inputBusinessId").val(suggestion.businessId);
+			jQuery.ajax({
+				type: "post",
+				dataType: "json",
+				url: '/wp-admin/admin-ajax.php',
+				data: { action: "company_detail", bid: suggestion.businessId }
+			}).done(function (e) {
+				var ids= e.ids;
+				ids.forEach(id => {
+					if(id.idType == 'VAT') $("#inputVATNumber").val(id.idValue)
+				});
+				
+				var address = e.addresses[0];
+				$("#inputStreetAddress").val(address.street);
+				$("#inputCity").val(address.city);
+				$("#inputPostalCode").val(address.postalCode);
+				
+
+
+			});
 		  });
 		  
 	});

@@ -107,7 +107,7 @@ class Enterpay_Company_Search_Public {
 
 	}
 
-	public function send_API_request($data,$endpoint_url,$method){
+	public function send_API_request($endpoint_url,$method){
 		$token_str = get_option( 'enterpay_token' );
 
 		$ch = curl_init($endpoint_url);
@@ -131,18 +131,25 @@ class Enterpay_Company_Search_Public {
 		return $data;
 	}
 
-	public function search_company_API(){
+	public function search_company(){
 		$name = $_REQUEST["name"];
 		$country_code = 'fi';
 		
-		$data = array();
+		
 		$endpoint_url = "https://api.test.entercheck.eu/company/search?country=".$country_code."&name=".$name;
 
-		print_r($this->send_API_request($data,$endpoint_url,"GET"));
+		print_r($this->send_API_request($endpoint_url,"GET"));
 		die();
 	}
 
-	
+	public function get_company_detail(){
+		$bid = $_REQUEST["bid"];
+		$country_code = 'fi';
+		$endpoint_url = "https://api.test.entercheck.eu/company/details?country=".$country_code."&id=".$bid;
+
+		print_r($this->send_API_request($endpoint_url,"GET"));
+		die();
+	}	
 
 	public function company_search_form_render(){
 		ob_start();

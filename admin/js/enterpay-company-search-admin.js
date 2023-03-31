@@ -43,7 +43,7 @@ function test() {
 		type: "post",
 		dataType: "json",
 		url: ajaxurl+"?name=a",
-		data: { action: "call_api", nonce: nonce }
+		data: { action: "search_company", nonce: nonce }
 	}).done(function (e) {
 		jQuery("#test_result").html("<pre>" + JSON.stringify(e) + "</pre>");
 	});

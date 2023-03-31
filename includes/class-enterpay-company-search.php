@@ -180,10 +180,14 @@ class Enterpay_Company_Search {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-		$this->loader->add_action( 'wp_ajax_call_api', $plugin_public, 'search_company_API' );
-		$this->loader->add_action( 'wp_ajax_nopriv_call_api', $plugin_public, 'search_company_API' );
+		$this->loader->add_action( 'wp_ajax_search_company', $plugin_public, 'search_company' );
+		$this->loader->add_action( 'wp_ajax_nopriv_search_company', $plugin_public, 'search_company' );
+
+		$this->loader->add_action( 'wp_ajax_company_detail', $plugin_public, 'get_company_detail' );
+		$this->loader->add_action( 'wp_ajax_nopriv_company_detail', $plugin_public, 'get_company_detail' );
 		//$tag, $component, $callback
 		$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
+		
 		
 	}
 

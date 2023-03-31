@@ -5,7 +5,7 @@
     
 
     <div class="container py-5">
-    <h2>Company detail</h2>
+    <h2 class="mb-2">Company detail</h2>
             <div class="row">
                 <div class="col-md-10 mx-auto">
                     <form>
@@ -40,13 +40,13 @@
                                 <input type="text" class="form-control" id="inputPostalCode" placeholder="">
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <div class="col-sm-6">
                                 <label for="inputMaa">Maa</label>
                                 <input type="text" class="form-control" id="inputMaa" placeholder="">
                             </div>
                             
-                        </div>
+                        </div> -->
                         <button type="button" class="btn btn-primary px-4 float-right">Save</button>
                     </form>
                 </div>
