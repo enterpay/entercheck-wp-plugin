@@ -12,11 +12,11 @@
                         <div class="form-group row">
                             <div class="col-sm-6" id="autoCom">
                                 <label for="inputCompanyName">Company name</label>
-                                <input type="text" class="form-control typeahead" id="inputFirstname" placeholder="">
+                                <input type="text" class="form-control typeahead" id="inputCompanyName" placeholder="" name="name">
                             </div>
                             <div class="col-sm-6">
                                 <label for="inputBusinessId">Business ID</label>
-                                <input type="text" class="form-control" id="inputCompanyName" placeholder="">
+                                <input type="text" class="form-control" id="inputBusinessId" placeholder="" name="bizid">
                             </div>
                         </div>
                         <div class="form-group row">

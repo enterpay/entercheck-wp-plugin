@@ -1,4 +1,4 @@
-(function( $ ) {
+(function ($) {
 	'use strict';
 
 	/**
@@ -30,22 +30,21 @@
 	 */
 
 
-	 
 
 
-})( jQuery );
 
-console.log("a");
+})(jQuery);
 
-function test(){
+
+function test() {
 	var e = document.getElementById("test_result");
 
-  jQuery.ajax({
-			     type : "post",
-			     dataType : "json",
-			     url : ajaxurl,
-			     data : {action: "call_api", nonce: nonce}
-			  }).done(function(e){
-			  	jQuery("#test_result").html("<pre>"+JSON.stringify(e)+"</pre>");
-			  }) ;
+	jQuery.ajax({
+		type: "post",
+		dataType: "json",
+		url: ajaxurl+"?name=a",
+		data: { action: "call_api", nonce: nonce }
+	}).done(function (e) {
+		jQuery("#test_result").html("<pre>" + JSON.stringify(e) + "</pre>");
+	});
 }

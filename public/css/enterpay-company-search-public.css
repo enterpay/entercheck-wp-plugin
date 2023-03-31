@@ -2,3 +2,10 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+ .tt-menu{
+    background-color: aqua;
+
+ }
+ .tt-suggestion{
+    padding: 5px 10px;
+ }
