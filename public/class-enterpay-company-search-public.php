@@ -20,7 +20,8 @@
  * @subpackage Enterpay_Company_Search/public
  * @author     Ha Nguyen <nd.dungha@gmail.com>
  */
-class Enterpay_Company_Search_Public {
+class Enterpay_Company_Search_Public
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,11 +48,11 @@ class Enterpay_Company_Search_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -59,7 +60,8 @@ class Enterpay_Company_Search_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -73,12 +75,12 @@ class Enterpay_Company_Search_Public {
 		 * class.
 		 */
 
-		
-		//wp_register_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name."-CSS", plugin_dir_url( __FILE__ ) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all' );
-		
 
-		wp_enqueue_style( $this->plugin_name."-ISO-BOOTSTRAP", plugin_dir_url( __FILE__ ) . 'css/iso_bootstrap4.0.0min.css', array(), $this->version, 'all' );
+		//wp_register_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style($this->plugin_name . "-CSS", plugin_dir_url(__FILE__) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all');
+
+
+		wp_enqueue_style($this->plugin_name . "-ISO-BOOTSTRAP", plugin_dir_url(__FILE__) . 'css/iso_bootstrap4.0.0min.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -86,7 +88,8 @@ class Enterpay_Company_Search_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -100,15 +103,23 @@ class Enterpay_Company_Search_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/enterpay-company-search-public.js', array( 'jquery' ), $this->version, false );
+		
 		//typeahead.bundle.js"
-		wp_enqueue_script( "typeahead", plugin_dir_url( __FILE__ ) . 'js/typeahead/typeahead.bundle.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script( 'ajax-script', 'my_ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+		wp_enqueue_script("typeahead", plugin_dir_url(__FILE__) . 'js/typeahead/typeahead.bundle.js', array('jquery'), $this->version, false);
+		
+	
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/enterpay-company-search-public.js', array('jquery'), $this->version, false);
+
+		$variables = array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' )
+		);
+		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 
 	}
 
-	public function send_API_request($endpoint_url,$method){
-		$token_str = get_option( 'enterpay_token' );
+	public function send_API_request($endpoint_url, $method)
+	{
+		$token_str = get_option('enterpay_token');
 
 		$ch = curl_init($endpoint_url);
 
@@ -119,43 +130,192 @@ class Enterpay_Company_Search_Public {
 
 		//Set your auth headers
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-		   'Content-Type: application/json',
-		   'Authorization: Bearer ' . $token_str
-		   ));
+			'Content-Type: application/json',
+			'Authorization: Bearer ' . $token_str
+		));
 
 		// get stringified data/output. See CURLOPT_RETURNTRANSFER
 		$data = curl_exec($ch);
-		
+
 		// close curl resource to free up system resources
 		curl_close($ch);
 		return $data;
 	}
 
-	public function search_company(){
+	public function search_company()
+	{
 		$name = $_REQUEST["name"];
 		$country_code = 'fi';
-		
-		
-		$endpoint_url = "https://api.test.entercheck.eu/company/search?country=".$country_code."&name=".$name;
 
-		print_r($this->send_API_request($endpoint_url,"GET"));
+
+		$endpoint_url = "https://api.test.entercheck.eu/company/search?country=" . $country_code . "&name=" . $name;
+
+		print_r($this->send_API_request($endpoint_url, "GET"));
 		die();
 	}
 
-	public function get_company_detail(){
+	public function get_company_detail()
+	{
 		$bid = $_REQUEST["bid"];
 		$country_code = 'fi';
-		$endpoint_url = "https://api.test.entercheck.eu/company/details?country=".$country_code."&id=".$bid;
+		$endpoint_url = "https://api.test.entercheck.eu/company/details?country=" . $country_code . "&id=" . $bid;
 
-		print_r($this->send_API_request($endpoint_url,"GET"));
+		print_r($this->send_API_request($endpoint_url, "GET"));
 		die();
-	}	
+	}
 
-	public function company_search_form_render(){
+	public function company_search_form_render()
+	{
 		ob_start();
-		
-		include( plugin_dir_path( __FILE__ ) . 'partials/form-shortcode.php');
-		
+
+		include(plugin_dir_path(__FILE__) . 'partials/form-shortcode.php');
+
 		return ob_get_clean();
+	}
+
+	public function custom_checkout_field()
+	{
+		echo '<div id="custom_checkout_field"><h2>' . __('Company details') . '</h2>';
+
+		woocommerce_form_field(
+			'name',
+			array(
+
+				'type' => 'text',
+
+				'class' => array(
+
+					'my-field-class form-row-wide',
+					'typeahead'
+
+				),
+				'id' => 'inputCompanyName',
+				'name' => 'name',
+
+				'label' => __('Company Name'),
+				'required' => true
+
+			),
+
+			//$checkout->get_value('custom_field_name')
+		);
+
+		woocommerce_form_field(
+			'bizid',
+			array(
+
+				'type' => 'text',
+
+				'class' => array(
+
+					'my-field-class form-row-wide'
+
+				),
+				'id' => 'inputBusinessId',
+				'name' => 'bizid',
+
+				'label' => __('Business ID'),
+				'required' => true
+
+			),
+
+			//$checkout->get_value('custom_field_name')
+		);
+
+		//inputVATNumber
+
+		woocommerce_form_field(
+			'bizid',
+			array(
+
+				'type' => 'text',
+
+				'class' => array(
+
+					'my-field-class form-row-wide'
+
+				),
+				'id' => 'inputVATNumber',
+				'name' => 'VAT',
+
+				'label' => __('VAT NUMBER'),
+				'required' => true
+
+			),
+
+			//$checkout->get_value('custom_field_name')
+		);
+		//inputStreetAddress
+
+		woocommerce_form_field(
+			'StreetAddress',
+			array(
+
+				'type' => 'text',
+
+				'class' => array(
+
+					'my-field-class form-row-wide'
+
+				),
+				'id' => 'inputStreetAddress',
+				'name' => 'StreetAddress',
+
+				'label' => __('Street address'),
+				'required' => true
+
+			),
+
+			//$checkout->get_value('custom_field_name')
+		);
+
+		//inputCity
+
+		woocommerce_form_field(
+			'inputCity',
+			array(
+
+				'type' => 'text',
+
+				'class' => array(
+
+					'my-field-class form-row-wide'
+
+				),
+				'id' => 'inputCity',
+				'name' => 'inputCity',
+
+				'label' => __('CITY'),
+				'required' => true
+
+			),
+
+			//$checkout->get_value('custom_field_name')
+		);
+
+		//inputPostalCode
+
+		woocommerce_form_field(
+			'inputPostalCode',
+			array(
+
+				'type' => 'text',
+
+				'class' => array(
+
+					'my-field-class form-row-wide'
+
+				),
+				'id' => 'inputPostalCode',
+				'name' => 'inputPostalCode',
+
+				'label' => __('Postal code'),
+				'required' => true
+
+			),
+
+			//$checkout->get_value('custom_field_name')
+		);
+		echo '</div>';
 	}
 }

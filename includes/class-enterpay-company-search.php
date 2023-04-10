@@ -185,6 +185,7 @@ class Enterpay_Company_Search {
 
 		$this->loader->add_action( 'wp_ajax_company_detail', $plugin_public, 'get_company_detail' );
 		$this->loader->add_action( 'wp_ajax_nopriv_company_detail', $plugin_public, 'get_company_detail' );
+		$this->loader->add_action( 'woocommerce_after_order_notes',$plugin_public, 'custom_checkout_field');
 		//$tag, $component, $callback
 		$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
 		

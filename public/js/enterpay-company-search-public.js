@@ -30,10 +30,12 @@
 	 */
 
 	$(document).ready(function () {
+		console.log('ABC');
 		$('#inputCompanyName').typeahead({
 			source: function (query, result) {
+				
 				$.ajax({
-					url: ajaxurl,
+					url: enterpayjs.ajaxurl,
 					data: { action: "call_api", nonce: nonce },
 					dataType: "json",
 					type: "POST"
@@ -50,7 +52,7 @@
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: 'wp-admin/admin-ajax.php?action=search_company&name=%QUERY',
+				url: enterpayjs.ajaxurl+'?action=search_company&name=%QUERY',
 				wildcard: '%QUERY'
 			}
 		});
@@ -68,7 +70,7 @@
 			jQuery.ajax({
 				type: "post",
 				dataType: "json",
-				url: 'wp-admin/admin-ajax.php',
+				url: enterpayjs.ajaxurl,
 				data: { action: "company_detail", bid: suggestion.businessId }
 			}).done(function (e) {
 				var ids= e.ids;
