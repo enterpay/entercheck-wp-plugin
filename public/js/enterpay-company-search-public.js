@@ -50,7 +50,7 @@
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: '/wp-admin/admin-ajax.php?action=search_company&name=%QUERY',
+				url: 'wp-admin/admin-ajax.php?action=search_company&name=%QUERY',
 				wildcard: '%QUERY'
 			}
 		});
@@ -68,7 +68,7 @@
 			jQuery.ajax({
 				type: "post",
 				dataType: "json",
-				url: '/wp-admin/admin-ajax.php',
+				url: 'wp-admin/admin-ajax.php',
 				data: { action: "company_detail", bid: suggestion.businessId }
 			}).done(function (e) {
 				var ids= e.ids;
