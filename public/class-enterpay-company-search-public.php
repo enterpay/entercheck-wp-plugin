@@ -103,18 +103,17 @@ class Enterpay_Company_Search_Public
 		 * class.
 		 */
 
-		
+
 		//typeahead.bundle.js"
 		wp_enqueue_script("typeahead", plugin_dir_url(__FILE__) . 'js/typeahead/typeahead.bundle.js', array('jquery'), $this->version, false);
-		
-	
+
+
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/enterpay-company-search-public.js', array('jquery'), $this->version, false);
 
 		$variables = array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' )
+			'ajaxurl' => admin_url('admin-ajax.php')
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
-
 	}
 
 	public function send_API_request($endpoint_url, $method)
@@ -175,6 +174,7 @@ class Enterpay_Company_Search_Public
 
 	public function custom_checkout_field()
 	{
+
 		echo '<div id="custom_checkout_field"><h2>' . __('Company details') . '</h2>';
 
 		woocommerce_form_field(
@@ -225,7 +225,7 @@ class Enterpay_Company_Search_Public
 		//inputVATNumber
 
 		woocommerce_form_field(
-			'bizid',
+			'vat',
 			array(
 
 				'type' => 'text',
@@ -317,5 +317,49 @@ class Enterpay_Company_Search_Public
 			//$checkout->get_value('custom_field_name')
 		);
 		echo '</div>';
+	}
+
+	function custom_woocommerce_billing_fields($fields)
+	{
+
+		$fields['vat'] = array(
+			'label' => __('VAT number', 'woocommerce'), // Add custom field label
+			'placeholder' => "", // Add custom field placeholder
+			'required' => true, // if field is required or not
+			'clear' => false, // add clear or not
+			'type' => 'text', // add field type
+			'id' => 'inputVATNumber',
+			'class' => array(' form-row-wide')    // add class name
+		);
+
+		$fields['bizid'] = array(
+			'label' => __('Business ID', 'woocommerce'), // Add custom field label
+			'placeholder' => "", // Add custom field placeholder
+			'required' => true, // if field is required or not
+			'clear' => false, // add clear or not
+			'type' => 'text', // add field type
+			'id' => 'inputBusinessId',
+			'class' => array(' form-row-wide')    // add class name
+		);
+		return $fields;
+	}
+
+	function custom_override_checkout_fields($fields){
+
+		$fields['billing']['billing_first_name']['priority'] = 1;
+		$fields['billing']['billing_last_name']['priority'] = 2;
+		$fields['billing']['billing_company']['priority'] = 3;
+		$fields['bizid']['priority'] = 4;
+		$fields['vat']['priority'] = 5;
+		$fields['billing']['billing_address_1']['priority'] = 6;
+		$fields['billing']['billing_address_2']['priority'] = 7;
+		$fields['billing']['billing_city']['priority'] = 8;		
+		$fields['billing']['billing_state']['priority'] = 9;
+		$fields['billing']['billing_postcode']['priority'] = 10;
+		$fields['billing']['billing_country']['priority'] = 11;		
+		$fields['billing']['billing_email']['priority'] = 12;
+		$fields['billing']['billing_phone']['priority'] = 13;
+		return $fields;
+
 	}
 }

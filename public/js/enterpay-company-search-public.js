@@ -82,9 +82,6 @@
 				$("#inputStreetAddress").val(address.street);
 				$("#inputCity").val(address.city);
 				$("#inputPostalCode").val(address.postalCode);
-				
-
-
 			});
 		  });
 		  

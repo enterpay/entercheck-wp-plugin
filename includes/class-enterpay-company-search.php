@@ -158,11 +158,7 @@ class Enterpay_Company_Search {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_menu' );
 		
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'admin_register_settings' );
-
-		
-
-		
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'admin_register_settings' );	
 
 	}
 
@@ -185,10 +181,11 @@ class Enterpay_Company_Search {
 
 		$this->loader->add_action( 'wp_ajax_company_detail', $plugin_public, 'get_company_detail' );
 		$this->loader->add_action( 'wp_ajax_nopriv_company_detail', $plugin_public, 'get_company_detail' );
-		$this->loader->add_action( 'woocommerce_after_order_notes',$plugin_public, 'custom_checkout_field');
+		//$this->loader->add_action( 'woocommerce_after_order_notes',$plugin_public, 'custom_checkout_field');
 		//$tag, $component, $callback
-		$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
-		
+		//$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
+		$this->loader->add_filter( 'woocommerce_billing_fields', $plugin_public, 'custom_woocommerce_billing_fields' );
+		$this->loader->add_filter("woocommerce_checkout_fields", $plugin_public, "custom_override_checkout_fields");
 		
 	}
 
