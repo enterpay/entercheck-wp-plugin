@@ -30,8 +30,8 @@
 	 */
 
 	$(document).ready(function () {
-		console.log('ABC');
-		$('#inputCompanyName').typeahead({
+		//console.log('ABC');
+		$('#billing_company').typeahead({
 			source: function (query, result) {
 				
 				$.ajax({
@@ -57,14 +57,13 @@
 			}
 		});
 
-		$('#inputCompanyName').typeahead(null, {
+		$('#billing_company').typeahead(null, {
 			name: 'company-search',
 			display: 'name',
-			source: dataset
-		
+			source: dataset		
 		});
 
-		$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+		$('#billing_company').bind('typeahead:select', function(ev, suggestion) {
 			console.log(suggestion);
 			$("#inputBusinessId").val(suggestion.businessId);
 			jQuery.ajax({
@@ -79,9 +78,9 @@
 				});
 				
 				var address = e.addresses[0];
-				$("#inputStreetAddress").val(address.street);
-				$("#inputCity").val(address.city);
-				$("#inputPostalCode").val(address.postalCode);
+				$("#billing_address_1").val(address.street);
+				$("#billing_city").val(address.city);
+				$("#billing_postcode").val(address.postalCode);
 			});
 		  });
 		  
