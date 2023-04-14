@@ -207,11 +207,8 @@ class Enterpay_Company_Search_Public
 	public function company_search_form_render()
 	{
 		// ob_start();
-
 		// include(plugin_dir_path(__FILE__) . 'partials/form-shortcode.php');
-
-		// return ob_get_clean();
-		// echo get_current_user_id();
+		// return ob_get_clean();		
 	}
 
 	public function custom_checkout_field()
@@ -408,14 +405,16 @@ class Enterpay_Company_Search_Public
 	
 
 	function bbloomer_hide_price_addcart_not_logged_in( $price,  $product ) {
+		//return "";
 		$cuid = get_current_user_id();
 
-		if ($cuid !== null && !$cuid == "" ) { 
-			return $price;		   
-			//    remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
-			//    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
-			//    add_filter( 'woocommerce_is_purchasable', '__return_false' );
-			//    return '<div><a href="' . get_permalink( wc_get_page_id( 'myaccount' ) ) . '">' . __( 'Login to see prices', 'bbloomer' ) . '</a></div>';
+		if ($cuid == null || $cuid == "" ) { 
+			//return "";		
+
+			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+			add_filter( 'woocommerce_is_purchasable', '__return_false' );
+			return '<div><a href="' . get_permalink( wc_get_page_id( 'myaccount' ) ) . '">' . __( 'Login to see prices', 'bbloomer' ) . '</a></div>';
 		} else {
 			return $price;
 		}		

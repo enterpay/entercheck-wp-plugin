@@ -187,7 +187,7 @@ class Enterpay_Company_Search {
 		$this->loader->add_filter( 'woocommerce_billing_fields', $plugin_public, 'custom_woocommerce_billing_fields' );
 		$this->loader->add_filter("woocommerce_checkout_fields", $plugin_public, "custom_override_checkout_fields");
 		
-		//$this->loader->add_filter("woocommerce_get_price_html", $plugin_public, "bbloomer_hide_price_addcart_not_logged_in");
+		$this->loader->add_filter("woocommerce_get_price_html", $plugin_public, "bbloomer_hide_price_addcart_not_logged_in",10,2);
 		
 		
 	}
