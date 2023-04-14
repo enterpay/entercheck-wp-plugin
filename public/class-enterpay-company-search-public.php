@@ -115,7 +115,40 @@ class Enterpay_Company_Search_Public
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
+	
+	public function auth(){
+		$curl = curl_init();
+		$options = get_option( 'dbi_example_plugin_options' );
 
+		$data = array(
+			"username" => $options['username'],
+			"password" => $options['password']
+		);
+		$data = json_encode($data);
+		$options =array(
+			CURLOPT_RETURNTRANSFER => 1,
+			CURLOPT_URL => 'https://api.test.entercheck.eu/v1/auth',
+			CURLOPT_POST => true,
+			CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
+			CURLOPT_POSTFIELDS => $data
+		);
+
+		curl_setopt_array($curl, $options);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+			'Content-Type: application/json',
+			'Content-Length: ' . strlen($data))
+		);
+
+		$resp = curl_exec($curl);
+
+		if($resp){
+			$token = json_decode($resp)->token;
+			if($token){
+				update_option('enterpay_token',$token);
+			}
+		}
+	}
+	
 	public function send_API_request($endpoint_url, $method)
 	{
 		$token_str = get_option('enterpay_token');
@@ -135,9 +168,18 @@ class Enterpay_Company_Search_Public
 
 		// get stringified data/output. See CURLOPT_RETURNTRANSFER
 		$data = curl_exec($ch);
-
+		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		// close curl resource to free up system resources
 		curl_close($ch);
+
+		//check the token 
+		
+		if($http_code == 401 || $http_code == '401'){
+			//auth again
+			$this->auth();
+			return $this->send_API_request($endpoint_url, $method);
+		}
+
 		return $data;
 	}
 
@@ -145,7 +187,6 @@ class Enterpay_Company_Search_Public
 	{
 		$name = $_REQUEST["name"];
 		$country_code = 'fi';
-
 
 		$endpoint_url = "https://api.test.entercheck.eu/company/search?country=" . $country_code . "&name=" . $name;
 
@@ -165,11 +206,12 @@ class Enterpay_Company_Search_Public
 
 	public function company_search_form_render()
 	{
-		ob_start();
+		// ob_start();
 
-		include(plugin_dir_path(__FILE__) . 'partials/form-shortcode.php');
+		// include(plugin_dir_path(__FILE__) . 'partials/form-shortcode.php');
 
-		return ob_get_clean();
+		// return ob_get_clean();
+		// echo get_current_user_id();
 	}
 
 	public function custom_checkout_field()
@@ -362,4 +404,22 @@ class Enterpay_Company_Search_Public
 		return $fields;
 
 	}
+
+	
+
+	function bbloomer_hide_price_addcart_not_logged_in( $price,  $product ) {
+		$cuid = get_current_user_id();
+
+		if ($cuid !== null && !$cuid == "" ) { 
+			return $price;		   
+			//    remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+			//    remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+			//    add_filter( 'woocommerce_is_purchasable', '__return_false' );
+			//    return '<div><a href="' . get_permalink( wc_get_page_id( 'myaccount' ) ) . '">' . __( 'Login to see prices', 'bbloomer' ) . '</a></div>';
+		} else {
+			return $price;
+		}		
+	 }
+
+	
 }

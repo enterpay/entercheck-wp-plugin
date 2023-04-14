@@ -90,3 +90,13 @@
 
 //autoCom	
 
+// add_filter( 'cron_schedules', 'example_add_cron_interval' );
+
+// function example_add_cron_interval( $schedules ) {
+//  $schedules['five_seconds'] = array(
+//  'interval' =&gt; 5,
+//  'display' =&gt; esc_html__( 'Every Five Seconds' ),
+//  );
+
+// return $schedules;
+//  }
