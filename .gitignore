@@ -8,5 +8,6 @@ _debug
 .vscode/**
 !.vscode/tasks.json
 !.vscode/launch.json
+.vscode/sftp.json
 /TODO.md
 /INSTALL_DEBUG.md

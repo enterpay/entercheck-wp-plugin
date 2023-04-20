@@ -77,41 +77,10 @@
 					if(id.idType == 'VAT') $("#inputVATNumber").val(id.idValue)
 				});
 				
-				var NOP = null;
-				var FOP = null;
-				var firstStreetAddress = null;
-				
-				e.addresses.forEach(address => {
-					if(address.addressType == "NOP") NOP = address;	
-					if(address.addressType == "FOP") FOP = address;
-					
-					if(!firstStreetAddress && address.street){
-						firstStreetAddress = address;
-					}
-				})
-
-				if(NOP){
-					$("#billing_address_1").val(NOP.street);
-					$("#billing_city").val(NOP.city);
-					$("#billing_postcode").val(NOP.postalCode);
-					return true;
-				} 
-
-				if(FOP){
-					$("#billing_address_1").val(FOP.street);
-					$("#billing_city").val(FOP.city);
-					$("#billing_postcode").val(FOP.postalCode);
-					return true;
-				} 
-
-				if(firstStreetAddress){
-					$("#billing_address_1").val(firstStreetAddress.street);
-					$("#billing_city").val(firstStreetAddress.city);
-					$("#billing_postcode").val(firstStreetAddress.postalCode);
-					return true;
-				} 
-
-
+				var address = e.addresses[0];
+				$("#billing_address_1").val(address.street);
+				$("#billing_city").val(address.city);
+				$("#billing_postcode").val(address.postalCode);
 			});
 		  });
 		  
@@ -119,3 +88,15 @@
 
 })(jQuery);
 
+//autoCom	
+
+// add_filter( 'cron_schedules', 'example_add_cron_interval' );
+
+// function example_add_cron_interval( $schedules ) {
+//  $schedules['five_seconds'] = array(
+//  'interval' =&gt; 5,
+//  'display' =&gt; esc_html__( 'Every Five Seconds' ),
+//  );
+
+// return $schedules;
+//  }
