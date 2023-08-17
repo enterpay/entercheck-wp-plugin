@@ -115,17 +115,18 @@ class Enterpay_Company_Search_Public
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
-	
-	public function auth(){
+
+	public function auth()
+	{
 		$curl = curl_init();
-		$options = get_option( 'dbi_example_plugin_options' );
+		$options = get_option('dbi_example_plugin_options');
 
 		$data = array(
 			"username" => $options['username'],
 			"password" => $options['password']
 		);
 		$data = json_encode($data);
-		$options =array(
+		$options = array(
 			CURLOPT_RETURNTRANSFER => 1,
 			CURLOPT_URL => 'https://api.test.entercheck.eu/v1/auth',
 			CURLOPT_POST => true,
@@ -134,21 +135,25 @@ class Enterpay_Company_Search_Public
 		);
 
 		curl_setopt_array($curl, $options);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-			'Content-Type: application/json',
-			'Content-Length: ' . strlen($data))
+		curl_setopt(
+			$curl,
+			CURLOPT_HTTPHEADER,
+			array(
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen($data)
+			)
 		);
 
 		$resp = curl_exec($curl);
 
-		if($resp){
+		if ($resp) {
 			$token = json_decode($resp)->token;
-			if($token){
-				update_option('enterpay_token',$token);
+			if ($token) {
+				update_option('enterpay_token', $token);
 			}
 		}
 	}
-	
+
 	public function send_API_request($endpoint_url, $method)
 	{
 		$token_str = get_option('enterpay_token');
@@ -173,8 +178,8 @@ class Enterpay_Company_Search_Public
 		curl_close($ch);
 
 		//check the token 
-		
-		if($http_code == 401 || $http_code == '401'){
+
+		if ($http_code == 401 || $http_code == '401') {
 			//auth again
 			$this->auth();
 			return $this->send_API_request($endpoint_url, $method);
@@ -383,7 +388,8 @@ class Enterpay_Company_Search_Public
 		return $fields;
 	}
 
-	function custom_override_checkout_fields($fields){
+	function custom_override_checkout_fields($fields)
+	{
 
 		$fields['billing']['billing_first_name']['priority'] = 1;
 		$fields['billing']['billing_last_name']['priority'] = 2;
@@ -392,33 +398,89 @@ class Enterpay_Company_Search_Public
 		$fields['vat']['priority'] = 5;
 		$fields['billing']['billing_address_1']['priority'] = 6;
 		$fields['billing']['billing_address_2']['priority'] = 7;
-		$fields['billing']['billing_city']['priority'] = 8;		
+		$fields['billing']['billing_city']['priority'] = 8;
 		$fields['billing']['billing_state']['priority'] = 9;
 		$fields['billing']['billing_postcode']['priority'] = 10;
-		$fields['billing']['billing_country']['priority'] = 11;		
+		$fields['billing']['billing_country']['priority'] = 11;
 		$fields['billing']['billing_email']['priority'] = 12;
 		$fields['billing']['billing_phone']['priority'] = 13;
 		return $fields;
-
 	}
 
-	
 
-	function bbloomer_hide_price_addcart_not_logged_in( $price,  $product ) {
+
+	function bbloomer_hide_price_addcart_not_logged_in($price,  $product)
+	{
 		//return "";
 		$cuid = get_current_user_id();
 
-		if ($cuid == null || $cuid == "" ) { 
+		if ($cuid == null || $cuid == "") {
 			//return "";		
 
-			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
-			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
-			add_filter( 'woocommerce_is_purchasable', '__return_false' );
-			return '<div><a href="' . get_permalink( wc_get_page_id( 'myaccount' ) ) . '">' . __( 'Login to see prices', 'bbloomer' ) . '</a></div>';
+			remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10);
+			remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30);
+			add_filter('woocommerce_is_purchasable', '__return_false');
+			return '<div><a href="' . get_permalink(wc_get_page_id('myaccount')) . '">' . __('Login to see prices', 'bbloomer') . '</a></div>';
 		} else {
 			return $price;
-		}		
-	 }
+		}
+	}
 
-	
+	function wooc_extra_register_fields()
+	{
+	?>
+		<p class="form-row form-row-first">
+			<label for="reg_billing_first_name"><?php _e('First name', 'woocommerce'); ?><span class="required">*</span></label>
+			<input type="text" class="input-text" name="billing_first_name" id="reg_billing_first_name" value="<?php if (!empty($_POST['billing_first_name'])) esc_attr_e($_POST['billing_first_name']); ?>" />
+		</p>
+		<p class="form-row form-row-last">
+			<label for="reg_billing_last_name"><?php _e('Last name', 'woocommerce'); ?><span class="required">*</span></label>
+			<input type="text" class="input-text" name="billing_last_name" id="reg_billing_last_name" value="<?php if (!empty($_POST['billing_last_name'])) esc_attr_e($_POST['billing_last_name']); ?>" />
+		</p>
+		<p class="form-row form-row-wide">
+			<label for="billing_company"><?php _e('Company name', 'woocommerce'); ?></label>
+			<input type="text" class="input-text" name="billing_company" id="billing_company" value="<?php esc_attr_e($_POST['billing_company']); ?>" />
+		</p>
+		<p class="form-row form-row-wide">
+			<label for="billing_company"><?php _e('VAT number', 'woocommerce'); ?></label>
+			<input type="text" class="input-text" name="vat" id="inputVATNumber" value="<?php esc_attr_e($_POST['vat']); ?>" />
+		</p>
+		<?php $business_id = ! empty( $_POST[ 'bizid' ] ) ? $_POST[ 'bizid' ] : ''; ?>
+		<p class="form-row form-row-wide">
+			<label for="billing_company"><?php _e('Business ID', 'woocommerce'); ?><span class="required">*</span></label>
+			<input type="text" class="input-text" name="bizid" id="inputBusinessId" value="<?php esc_attr_e($business_id); ?>" />
+		</p>
+		<p class="form-row form-row-wide">
+			<label for="billing_address_1"><?php _e('Company  address', 'woocommerce'); ?></label>
+			<input type="text" class="input-text" name="billing_address_1" id="billing_address_1" value="<?php esc_attr_e($_POST['billing_address_1']); ?>" />
+		</p>
+		<p class="form-row form-row-wide">
+			<label for="billing_postcode"><?php _e('Postcode', 'woocommerce'); ?></label>
+			<input type="text" class="input-text" name="billing_postcode" id="billing_postcode" value="<?php esc_attr_e($_POST['billing_postcode']); ?>" />
+		</p>
+		<p class="form-row form-row-wide">
+			<label for="billing_city"><?php _e('City', 'woocommerce'); ?></label>
+			<input type="text" class="input-text" name="billing_city" id="billing_city" value="<?php esc_attr_e($_POST['billing_city']); ?>" />
+		</p>
+		<div class="clear"></div>
+		<hr>
+	<?php
+	}
+
+	function wooc_extra_register_fields_validation($errors)
+	{
+		if ( empty( $_POST[ 'bizid' ] )) {
+			$errors->add( 'name_err', '<strong>Error</strong>: Please provide a Business ID.' );
+		}
+        return $errors;
+	}
+
+	function request_after_registration_submission($user_id)
+	{
+		if(isset($_POST['bizid'])){
+			$business_id =  $_POST['bizid'];
+			$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId='.$business_id.'&country=FI&refresh=true';
+			$this->send_API_request($endpoint_url, "GET");
+		}
+	}
 }
