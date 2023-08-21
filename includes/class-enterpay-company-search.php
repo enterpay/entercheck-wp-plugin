@@ -181,6 +181,9 @@ class Enterpay_Company_Search {
 
 		$this->loader->add_action( 'wp_ajax_company_detail', $plugin_public, 'get_company_detail' );
 		$this->loader->add_action( 'wp_ajax_nopriv_company_detail', $plugin_public, 'get_company_detail' );
+		$this->loader->add_action( 'woocommerce_register_form_start', $plugin_public, 'wooc_extra_register_fields');
+		$this->loader->add_action( 'woocommerce_registration_errors', $plugin_public, 'wooc_extra_register_fields_validation');
+		$this->loader->add_action( 'user_register', $plugin_public, 'request_after_registration_submission' );
 		
 		$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
 		
