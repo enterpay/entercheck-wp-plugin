@@ -119,7 +119,7 @@ class Enterpay_Company_Search_Public
 	public function auth()
 	{
 		$curl = curl_init();
-		$options = get_option('dbi_example_plugin_options');
+		$options = get_option('enterpay_plugin_options');
 
 		$data = array(
 			"username" => $options['username'],
@@ -220,7 +220,7 @@ class Enterpay_Company_Search_Public
 	{
 
 		echo '<div id="custom_checkout_field"><h2>' . __('Company details') . '</h2>';
-
+		// inputCompanyName
 		woocommerce_form_field(
 			'name',
 			array(
@@ -243,17 +243,15 @@ class Enterpay_Company_Search_Public
 
 			//$checkout->get_value('custom_field_name')
 		);
-
+		//inputBusinessId
 		woocommerce_form_field(
 			'bizid',
 			array(
-
+				'custom_attributes' => array('data-length' => 500),
 				'type' => 'text',
 
 				'class' => array(
-
 					'my-field-class form-row-wide'
-
 				),
 				'id' => 'inputBusinessId',
 				'name' => 'bizid',
@@ -265,19 +263,13 @@ class Enterpay_Company_Search_Public
 
 			//$checkout->get_value('custom_field_name')
 		);
-
 		//inputVATNumber
-
 		woocommerce_form_field(
 			'vat',
 			array(
-
 				'type' => 'text',
-
 				'class' => array(
-
 					'my-field-class form-row-wide'
-
 				),
 				'id' => 'inputVATNumber',
 				'name' => 'VAT',
@@ -290,7 +282,6 @@ class Enterpay_Company_Search_Public
 			//$checkout->get_value('custom_field_name')
 		);
 		//inputStreetAddress
-
 		woocommerce_form_field(
 			'StreetAddress',
 			array(
@@ -312,9 +303,7 @@ class Enterpay_Company_Search_Public
 
 			//$checkout->get_value('custom_field_name')
 		);
-
 		//inputCity
-
 		woocommerce_form_field(
 			'inputCity',
 			array(
@@ -336,9 +325,7 @@ class Enterpay_Company_Search_Public
 
 			//$checkout->get_value('custom_field_name')
 		);
-
 		//inputPostalCode
-
 		woocommerce_form_field(
 			'inputPostalCode',
 			array(
@@ -365,26 +352,38 @@ class Enterpay_Company_Search_Public
 
 	function custom_woocommerce_billing_fields($fields)
 	{
+		$options = get_option('enterpay_plugin_options');
+		$show_business = false;
+		if (empty($options['checkbox'])) {
+			$show_business = true;
+			$options['checkbox'] = array();
+		}
+		if (count($options['checkbox']) >= 1 && array_key_exists('businesses', $options['checkbox'])) {
+			$show_business = true;
+		}
+		if ($show_business) {
+			$fields['vat'] = array(
+				'custom_attributes' => array('readonly' => 'readonly'),
+				'label' => __('VAT number', 'woocommerce'), // Add custom field label
+				'placeholder' => "", // Add custom field placeholder
+				'required' => true, // if field is required or not
+				'clear' => false, // add clear or not
+				'type' => 'text', // add field type
+				'id' => 'inputVATNumber',
+				'class' => array(' form-row-wide')    // add class name
+			);
+			$fields['bizid'] = array(
+				'custom_attributes' => array('readonly' => 'readonly'),
+				'label' => __('Business ID', 'woocommerce'), // Add custom field label
+				'placeholder' => "", // Add custom field placeholder
+				'required' => true, // if field is required or not
+				'clear' => false, // add clear or not
+				'type' => 'text', // add field type
+				'id' => 'inputBusinessId',
+				'class' => array(' form-row-wide')    // add class name
+			);
+		}
 
-		$fields['vat'] = array(
-			'label' => __('VAT number', 'woocommerce'), // Add custom field label
-			'placeholder' => "", // Add custom field placeholder
-			'required' => true, // if field is required or not
-			'clear' => false, // add clear or not
-			'type' => 'text', // add field type
-			'id' => 'inputVATNumber',
-			'class' => array(' form-row-wide')    // add class name
-		);
-
-		$fields['bizid'] = array(
-			'label' => __('Business ID', 'woocommerce'), // Add custom field label
-			'placeholder' => "", // Add custom field placeholder
-			'required' => true, // if field is required or not
-			'clear' => false, // add clear or not
-			'type' => 'text', // add field type
-			'id' => 'inputBusinessId',
-			'class' => array(' form-row-wide')    // add class name
-		);
 		return $fields;
 	}
 
@@ -428,7 +427,7 @@ class Enterpay_Company_Search_Public
 
 	function wooc_extra_register_fields()
 	{
-	?>
+?>
 		<p class="form-row form-row-first">
 			<label for="reg_billing_first_name"><?php _e('First name', 'woocommerce'); ?><span class="required">*</span></label>
 			<input type="text" class="input-text" name="billing_first_name" id="reg_billing_first_name" value="<?php if (!empty($_POST['billing_first_name'])) esc_attr_e($_POST['billing_first_name']); ?>" />
@@ -445,7 +444,7 @@ class Enterpay_Company_Search_Public
 			<label for="billing_company"><?php _e('VAT number', 'woocommerce'); ?></label>
 			<input type="text" class="input-text" name="vat" id="inputVATNumber" value="<?php esc_attr_e($_POST['vat']); ?>" />
 		</p>
-		<?php $business_id = ! empty( $_POST[ 'bizid' ] ) ? $_POST[ 'bizid' ] : ''; ?>
+		<?php $business_id = !empty($_POST['bizid']) ? $_POST['bizid'] : ''; ?>
 		<p class="form-row form-row-wide">
 			<label for="billing_company"><?php _e('Business ID', 'woocommerce'); ?><span class="required">*</span></label>
 			<input type="text" class="input-text" name="bizid" id="inputBusinessId" value="<?php esc_attr_e($business_id); ?>" />
@@ -464,23 +463,99 @@ class Enterpay_Company_Search_Public
 		</p>
 		<div class="clear"></div>
 		<hr>
-	<?php
+<?php
 	}
 
 	function wooc_extra_register_fields_validation($errors)
 	{
-		if ( empty( $_POST[ 'bizid' ] )) {
-			$errors->add( 'name_err', '<strong>Error</strong>: Please provide a Business ID.' );
+		if (empty($_POST['bizid'])) {
+			$errors->add('name_err', '<strong>Error</strong>: Please provide a Business ID.');
 		}
-        return $errors;
+		return $errors;
 	}
 
 	function request_after_registration_submission($user_id)
 	{
-		if(isset($_POST['bizid'])){
+		if (isset($_POST['bizid'])) {
 			$business_id =  $_POST['bizid'];
-			$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId='.$business_id.'&country=FI&refresh=true';
+			$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
 			$this->send_API_request($endpoint_url, "GET");
 		}
+	}
+
+	// save options to database
+	function enterpay_plugin_options_validate($input)
+	{
+
+		if (empty($input['consumers'])) {
+			$input['consumers'] = 0;
+		}
+		if (empty($input['businesses'])) {
+			$input['businesses'] = 0;
+		}
+
+		$options = get_option('enterpay_plugin_options');
+		$options['username'] = trim($input['username']);
+		$options['password'] = trim($input['password']);
+		$options['start_date'] = trim($input['start_date']);
+		$options['consumers'] = trim($input['consumers']);
+		$options['businesses'] = trim($input['businesses']);
+		return $options;
+	}
+
+	// validate checkout fields
+	function update_billing_phone_requirement($data)
+	{
+		$consumer_or_business = isset($_POST['consumer_or_business']) ? wc_clean($_POST['consumer_or_business']) : '';
+
+		if ($consumer_or_business !== 'businesses') {
+			unset($data['bizid']);
+			unset($data['vat']);
+		}
+		return $data;
+	}
+
+	function custom_checkout_field_select()
+	{
+		$options = get_option('enterpay_plugin_options');
+
+		if (empty($options['checkbox'])) {
+			$options['checkbox'] = array();
+		}
+
+		if (count($options['checkbox']) <= 1) {
+			return;
+		}
+		// add select options
+		$option = array(
+			'businesses' => 'Businesses',
+			'consumers' => 'Consumers',
+		);
+		woocommerce_form_field('consumer_or_business', array(
+			'type'          => 'select',
+			'input_class'         => array(' input-text  '),
+			'label'         => __('Consumers or Businesses'),
+			'options'       => $option,
+			'required'      => true,
+		),  WC()->checkout->get_value('consumer_or_business'));
+	}
+
+	function enterpay_save_custom_checkout_fields($order)
+	{
+		$bizid = sanitize_text_field($_POST['bizid']);
+		$order->update_meta_data('bizid', $bizid);
+
+		$vat = sanitize_text_field($_POST['vat']);
+		$order->update_meta_data('vat', $vat);
+	}
+	function enterpay_save_custom_fields_to_user_meta($order_id)
+	{
+		$order = wc_get_order($order_id);
+		$user_id = $order->get_user_id();
+		$bizid = sanitize_text_field($_POST['bizid']);
+		update_user_meta($user_id, 'enterpay_bsuiness_id', $bizid);
+
+		$vat = sanitize_text_field($_POST['vat']);
+		update_user_meta($user_id, 'enterpay_vat_id', $vat);
 	}
 }

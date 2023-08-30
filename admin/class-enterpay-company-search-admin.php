@@ -20,7 +20,8 @@
  * @subpackage Enterpay_Company_Search/admin
  * @author     Ha Nguyen <nd.dungha@gmail.com>
  */
-class Enterpay_Company_Search_Admin {
+class Enterpay_Company_Search_Admin
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,11 +48,11 @@ class Enterpay_Company_Search_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -59,7 +60,8 @@ class Enterpay_Company_Search_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -73,8 +75,7 @@ class Enterpay_Company_Search_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/enterpay-company-search-admin.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/enterpay-company-search-admin.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -82,7 +83,8 @@ class Enterpay_Company_Search_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -96,8 +98,7 @@ class Enterpay_Company_Search_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/enterpay-company-search-admin.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/enterpay-company-search-admin.js', array('jquery'), $this->version, false);
 	}
 
 	/**
@@ -105,36 +106,112 @@ class Enterpay_Company_Search_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	
-	
-	
 
-	public function add_menu(){
-        // add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
-        add_menu_page( "Enterpay", "Enterpay", 'manage_options', $this->plugin_name . '-enterpay', array( $this, 'page_enterpay_admin' ));
-    }
 
-    public function page_enterpay_admin() {
-        include( plugin_dir_path( __FILE__ ) . 'partials/enterpay-company-search-admin-display.php' );
-    }
 
-    public function admin_register_settings(){
-		
-	    register_setting( 'dbi_example_plugin_options', 'dbi_example_plugin_options', 'dbi_example_plugin_options_validate' );
-	    
-	    add_settings_section( 'api_settings', 'API Credentials', 'dbi_plugin_section_text', 'dbi_example_plugin' );
 
-	    add_settings_field( 'dbi_plugin_setting_username', 'Username', 'dbi_plugin_setting_username', 'dbi_example_plugin', 'api_settings' );
-	    add_settings_field( 'dbi_plugin_setting_password', 'Password', 'dbi_plugin_setting_password', 'dbi_example_plugin', 'api_settings' );
-
-	    add_settings_field( 'dbi_plugin_setting_enterpaytoken', 'Token', 'dbi_plugin_setting_enterpaytoken', 'dbi_example_plugin', 'api_settings' );
-	 
+	public function add_menu()
+	{
+		// add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
+		add_menu_page("Enterpay", "Enterpay", 'manage_options', $this->plugin_name . '-enterpay', array($this, 'page_enterpay_admin'));
 	}
 
-	
+	public function page_enterpay_admin()
+	{
+		include(plugin_dir_path(__FILE__) . 'partials/enterpay-company-search-admin-display.php');
+	}
 
-	
+	public function admin_register_settings()
+	{
 
-	
+		register_setting('enterpay_plugin_options', 'enterpay_plugin_options', 'enterpay_plugin_options_validate');
 
+		add_settings_section('api_settings', 'API Credentials', 'enterpay_plugin_section_text', 'dbi_example_plugin');
+
+		add_settings_field('enterpay_plugin_setting_username', 'Username', 'enterpay_plugin_setting_username', 'dbi_example_plugin', 'api_settings');
+		add_settings_field('enterpay_plugin_setting_password', 'Password', 'enterpay_plugin_setting_password', 'dbi_example_plugin', 'api_settings');
+		add_settings_field('enterpay_plugin_setting_types', 'Types', 'enterpay_plugin_setting_types', 'dbi_example_plugin', 'api_settings');
+
+		add_settings_field('enterpay_plugin_setting_enterpaytoken', 'Token', 'enterpay_plugin_setting_enterpaytoken', 'dbi_example_plugin', 'api_settings');
+
+		// add meta box to user profile page
+		add_action('show_user_profile', array($this, 'enterpay_user_profile_fields'));
+		add_action('edit_user_profile', array($this, 'enterpay_user_profile_fields'));
+		add_action('personal_options_update', array($this, 'enterpay_user_profile_fields_save'));
+		add_action('edit_user_profile_update', array($this, 'enterpay_user_profile_fields_save'));
+	}
+
+	// add meta box to user profile page table Customer Organization  VAT ID, Bsuiness ID
+	public function enterpay_user_profile_fields($user)
+	{ ?>
+		<h3><?php _e("Customer Organization", 'enterpay-company-search'); ?></h3>
+		<table class="form-table">
+			<tr>
+				<th><label for="enterpay_vat_id"><?php _e("VAT ID", 'enterpay-company-search'); ?></label></th>
+				<td>
+					<input type="text" name="enterpay_vat_id" id="enterpay_vat_id" value="<?php echo esc_attr(get_the_author_meta('enterpay_vat_id', $user->ID)); ?>" class="regular-text" /><br />
+					<span class="description"><?php _e("Please enter your Enterpay VAT ID.", "enterpay-company-search"); ?></span>
+				</td>
+			</tr>
+			<tr>
+				<th><label for="enterpay_bsuiness_id"><?php _e("Bsuiness ID", 'enterpay-company-search'); ?></label></th>
+				<td>
+					<input type="text" name="enterpay_bsuiness_id" id="enterpay_bsuiness_id" value="<?php echo esc_attr(get_the_author_meta('enterpay_bsuiness_id', $user->ID)); ?>" class="regular-text" /><br />
+					<span class="description"><?php _e("Please enter your Enterpay Bsuiness ID.", "enterpay-company-search"); ?></span>
+				</td>
+			</tr>
+		</table>
+<?php
+	}
+
+	public function enterpay_user_profile_fields_save($user_id)
+	{
+		if (!current_user_can('edit_user', $user_id)) {
+			return false;
+		}
+		// update_user_meta($user_id, 'enterpay_token', $_POST['enterpay_token']);
+
+		if (
+			!empty($_POST['enterpay_vat_id']) && !empty($_POST['enterpay_bsuiness_id'])
+			&& !empty($_POST['enterpay_vat_id']) && !empty($_POST['enterpay_bsuiness_id'])
+		) {
+			// update_user_meta($user_id, 'enterpay_token', $_POST['enterpay_token']);
+			update_user_meta($user_id, 'enterpay_vat_id', $_POST['enterpay_vat_id']);
+			update_user_meta($user_id, 'enterpay_bsuiness_id', $_POST['enterpay_bsuiness_id']);
+		}
+
+		// update_user_meta($user_id, 'enterpay_vat_id', $_POST['enterpay_vat_id']);
+		// update_user_meta($user_id, 'enterpay_bsuiness_id', $_POST['enterpay_bsuiness_id']);
+
+	}
+	// save checkout fields  Bsuiness ID and VAT ID in user meta
+	public function enterpay_checkout_fields_save($order_id)
+	{
+		$order = wc_get_order($order_id);
+		$user_id = $order->get_user_id();
+		// update_user_meta($user_id, 'enterpay_token', $_POST['enterpay_token']);
+
+		if (
+			!empty($_POST['enterpay_vat_id']) && !empty($_POST['enterpay_bsuiness_id'])
+			&& !empty($_POST['enterpay_vat_id']) && !empty($_POST['enterpay_bsuiness_id'])
+		) {
+			// update_user_meta($user_id, 'enterpay_token', $_POST['enterpay_token']);
+			update_user_meta($user_id, 'enterpay_vat_id', $_POST['enterpay_vat_id']);
+			update_user_meta($user_id, 'enterpay_bsuiness_id', $_POST['enterpay_bsuiness_id']);
+		}
+
+		// update_user_meta($user_id, 'enterpay_vat_id', $_POST['enterpay_vat_id']);
+		// update_user_meta($user_id, 'enterpay_bsuiness_id', $_POST['enterpay_bsuiness_id']);
+
+	}
+
+	// add action woocommerce_new_order save checkout fields  Bsuiness ID and VAT ID in user meta
+
+	public function save_custom_checkout_fields($order)
+	{
+		$bizid = sanitize_text_field($_POST['billing_bizid']);
+		$order->update_meta_data('bizid', $bizid);
+	}
+ 
+	 
 }
