@@ -190,22 +190,22 @@ class Enterpay_Company_Search_Public
 
 	public function search_company()
 	{
-		$name = $_REQUEST["name"];
-		$country_code = 'fi';
+		$name = urlencode($_REQUEST["name"]);
+		$country_code = 'FI';
 
 		$endpoint_url = "https://api.test.entercheck.eu/company/search?country=" . $country_code . "&name=" . $name;
-
-		print_r($this->send_API_request($endpoint_url, "GET"));
+		$data = $this->send_API_request($endpoint_url, "GET");
+		wp_send_json_success($data);
 		die();
 	}
 
 	public function get_company_detail()
 	{
 		$bid = $_REQUEST["bid"];
-		$country_code = 'fi';
+		$country_code = 'FI';
 		$endpoint_url = "https://api.test.entercheck.eu/company/details?country=" . $country_code . "&id=" . $bid;
 
-		print_r($this->send_API_request($endpoint_url, "GET"));
+		wp_send_json_success($this->send_API_request($endpoint_url, "GET"));
 		die();
 	}
 

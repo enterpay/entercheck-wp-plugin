@@ -137,7 +137,7 @@ if (!empty($resp)) :
             <script type="text/javascript">
                 nonce = "<?= wp_create_nonce("my_user_vote_nonce") ?>"
             </script>
-            <div id="test_result"></div>
+            <div id="search_company_result"></div>
 <?php
         else :
             echo "<p><b><i>API credentials are incorrect!</i></b></p>";
