@@ -195,7 +195,7 @@ class Enterpay_Company_Search_Public
 
 		$endpoint_url = "https://api.test.entercheck.eu/company/search?country=" . $country_code . "&name=" . $name;
 		$data = $this->send_API_request($endpoint_url, "GET");
-		wp_send_json_success($data);
+		print_r($data);
 		die();
 	}
 
@@ -205,7 +205,7 @@ class Enterpay_Company_Search_Public
 		$country_code = 'FI';
 		$endpoint_url = "https://api.test.entercheck.eu/company/details?country=" . $country_code . "&id=" . $bid;
 
-		wp_send_json_success($this->send_API_request($endpoint_url, "GET"));
+		print_r($this->send_API_request($endpoint_url, "GET"));
 		die();
 	}
 
