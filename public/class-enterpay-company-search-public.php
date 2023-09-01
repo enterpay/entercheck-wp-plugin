@@ -382,6 +382,14 @@ class Enterpay_Company_Search_Public
 				'id' => 'inputBusinessId',
 				'class' => array(' form-row-wide')    // add class name
 			);
+			$fields['company_info'] = array(
+				'custom_attributes' => array('readonly' => 'readonly'),
+				'placeholder' => "", // Add custom field placeholder
+				'required' => false, // if field is required or not
+				'clear' => false, // add clear or not
+				'type' => 'hidden', // add field type
+				'id' => 'company_info',
+			);
 		}
 
 		return $fields;
@@ -463,7 +471,7 @@ class Enterpay_Company_Search_Public
 		</p>
 		<div class="clear"></div>
 		<hr>
-<?php
+	<?php
 	}
 
 	function wooc_extra_register_fields_validation($errors)
@@ -557,5 +565,72 @@ class Enterpay_Company_Search_Public
 
 		$vat = sanitize_text_field($_POST['vat']);
 		update_user_meta($user_id, 'enterpay_vat_id', $vat);
+	}
+
+	function woocommerce_account_dashboard_customer()
+	{
+		$request_uri = $_SERVER['REQUEST_URI'];
+		// if not billing or shipping show the company info
+		if (strpos($request_uri, 'billing') !== false || strpos($request_uri, 'shipping') !== false) {
+			return;
+		}
+
+	?>
+		<!-- tore the VAT ID, Bsuiness ID, -->
+		<div class="u-column2 col-2 woocommerce-Address">
+			<header class="woocommerce-Address-title title">
+				<h3><?php _e('Company details', 'enterpay-company-search') ?></h3>
+				<a href="https://portal.test.entercheck.eu/companies/85ce6ccb-5dcf-4b5e-9ea3-e5bc2f541e62" class="edit"><?php _e('Customer Details', 'enterpay-company-search') ?></a>
+			</header>
+			<address>
+				<p>
+					<?php
+					$user_id = get_current_user_id();
+					$vat = get_user_meta($user_id, 'enterpay_vat_id', true);
+					$bizid = get_user_meta($user_id, 'enterpay_bsuiness_id', true);
+
+					// get company info
+					$company_info = get_user_meta($user_id, 'company_info', true);
+					if (empty($company_info)) {
+						return;
+					}
+					$company_info = json_decode($company_info);
+					$company_registers = $company_info->registers;
+					$company_status = $company_info->status;
+
+
+
+					echo "VAT ID: " . $vat . "<br>";
+					echo "Bsuiness ID: " . $bizid . "<br>";
+					echo "Company Status: " . $company_status . "<br>";
+					echo "<br>";
+					// create html  table to show company fields registers businessId registered startDate endDate
+					// if company status is active then show the company info
+					echo '<table class="pure-table">';
+					echo '<thead>';
+					echo '<tr>';
+					echo '<th>' . __('Business ID') . '</th>';
+					echo '<th>' . __('Registered') . '</th>';
+					echo '<th>' . __('Start Date') . '</th>';
+					echo '<th>' . __('End Date') . '</th>';
+					echo '<tbody>';
+					foreach ($company_registers as $key => $company_val) {
+						$register = $company_val->registered == 1 ? __('Yes') : __('No');
+						echo '<tr>';
+						echo '<td>' . $company_val->businessId . '</td>';
+						echo '<td>' . $register . '</td>';
+						echo '<td>' . $company_val->startDate . '</td>';
+						echo '<td>' . $company_val->endDate . '</td>';
+						echo '</tr>';
+					}
+					echo '</tbody>';
+					echo '</table>';
+
+					?>
+				</p>
+			</address>
+
+		</div>
+<?php
 	}
 }

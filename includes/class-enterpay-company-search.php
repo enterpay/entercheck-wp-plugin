@@ -189,6 +189,8 @@ class Enterpay_Company_Search {
 		
 		$this->loader->add_action( 'woocommerce_checkout_create_order', $plugin_public, 'enterpay_save_custom_checkout_fields' );
 		$this->loader->add_action( 'woocommerce_new_order', $plugin_public, 'enterpay_save_custom_fields_to_user_meta' );
+	
+		$this->loader->add_action( 'woocommerce_before_edit_account_address_form', $plugin_public, 'woocommerce_account_dashboard_customer' );
 
 
 

@@ -38,7 +38,6 @@
           dataType: "json",
           type: "POST",
         }).done(function (data) {
-          console.log("test");
           result(
             $.map(data, function (item) {
               return item;
@@ -65,6 +64,10 @@
 
     $("#billing_company").bind("typeahead:select", function (ev, suggestion) {
       console.log(suggestion);
+
+      // set suggestion to local storage
+      localStorage.setItem("company", JSON.stringify(suggestion));
+
       $("#inputBusinessId").val(suggestion.businessId);
       jQuery
         .ajax({
@@ -74,6 +77,7 @@
           data: { action: "company_detail", bid: suggestion.businessId },
         })
         .done(function (e) {
+         console.log(e); 
           var ids = e.ids;
           ids.forEach((id) => {
             if (id.idType == "VAT") $("#inputVATNumber").val(id.idValue);
@@ -83,6 +87,7 @@
           $("#billing_address_1").val(address.street);
           $("#billing_city").val(address.city);
           $("#billing_postcode").val(address.postalCode);
+          $("#company_info").val(JSON.stringify(e));
         });
     });
 
