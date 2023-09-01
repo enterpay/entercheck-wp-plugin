@@ -446,32 +446,197 @@ class Enterpay_Company_Search_Public
 		</p>
 		<p class="form-row form-row-wide">
 			<label for="billing_company"><?php _e('Company name', 'woocommerce'); ?></label>
-			<input type="text" class="input-text" name="billing_company" id="billing_company" value="<?php esc_attr_e($_POST['billing_company']); ?>" />
+			<input type="text" class="input-text" name="billing_company" id="billing_company" value="<?php esc_attr_e($_POST['billing_company'] ?? ''); ?>" />
 		</p>
 		<p class="form-row form-row-wide">
 			<label for="billing_company"><?php _e('VAT number', 'woocommerce'); ?></label>
-			<input type="text" class="input-text" name="vat" id="inputVATNumber" value="<?php esc_attr_e($_POST['vat']); ?>" />
+			<input type="text" class="input-text" name="vat" id="inputVATNumber" value="<?php esc_attr_e($_POST['vat'] ?? ''); ?>" />
 		</p>
 		<?php $business_id = !empty($_POST['bizid']) ? $_POST['bizid'] : ''; ?>
 		<p class="form-row form-row-wide">
 			<label for="billing_company"><?php _e('Business ID', 'woocommerce'); ?><span class="required">*</span></label>
-			<input type="text" class="input-text" name="bizid" id="inputBusinessId" value="<?php esc_attr_e($business_id); ?>" />
+			<input type="text" class="input-text" name="bizid" id="inputBusinessId" value="<?php esc_attr_e($business_id ?? ''); ?>" />
 		</p>
 		<p class="form-row form-row-wide">
 			<label for="billing_address_1"><?php _e('Company  address', 'woocommerce'); ?></label>
-			<input type="text" class="input-text" name="billing_address_1" id="billing_address_1" value="<?php esc_attr_e($_POST['billing_address_1']); ?>" />
+			<input type="text" class="input-text" name="billing_address_1" id="billing_address_1" value="<?php esc_attr_e($_POST['billing_address_1'] ?? ''); ?>" />
 		</p>
 		<p class="form-row form-row-wide">
 			<label for="billing_postcode"><?php _e('Postcode', 'woocommerce'); ?></label>
-			<input type="text" class="input-text" name="billing_postcode" id="billing_postcode" value="<?php esc_attr_e($_POST['billing_postcode']); ?>" />
+			<input type="text" class="input-text" name="billing_postcode" id="billing_postcode" value="<?php esc_attr_e($_POST['billing_postcode'] ?? ''); ?>" />
 		</p>
 		<p class="form-row form-row-wide">
 			<label for="billing_city"><?php _e('City', 'woocommerce'); ?></label>
-			<input type="text" class="input-text" name="billing_city" id="billing_city" value="<?php esc_attr_e($_POST['billing_city']); ?>" />
+			<input type="text" class="input-text" name="billing_city" id="billing_city" value="<?php esc_attr_e($_POST['billing_city'] ?? ''); ?>" />
+		</p>
+		<p class="form-row form-row-wide hidden">
+			<input type="hidden" class="input-text" name="company_info" id="company_info" value="<?php esc_attr_e($_POST['company_info'] ?? ''); ?>" />
 		</p>
 		<div class="clear"></div>
 		<hr>
 	<?php
+	}
+
+	function woocommerce_register_post_customer($username, $email, $errors)
+	{
+
+		if (empty($_POST['billing_first_name'])) {
+			$errors->add('billing_first_name_error', 'We really want to know!');
+		}
+	}
+
+	function woocommerce_created_customer_data($customer_id)
+	{
+		// save to database
+		if (isset($_POST['billing_first_name'])) {
+			update_user_meta($customer_id, 'billing_first_name', wc_clean($_POST['billing_first_name']));
+		}
+		if (isset($_POST['billing_last_name'])) {
+			update_user_meta($customer_id, 'billing_last_name', wc_clean($_POST['billing_last_name']));
+		}
+		if (isset($_POST['billing_company'])) {
+			update_user_meta($customer_id, 'billing_company', wc_clean($_POST['billing_company']));
+		}
+		if (isset($_POST['bizid'])) {
+			update_user_meta($customer_id, 'bizid', wc_clean($_POST['bizid']));
+		}
+		if (isset($_POST['vat'])) {
+			update_user_meta($customer_id, 'vat', wc_clean($_POST['var']));
+		}
+		if (isset($_POST['billing_address_1'])) {
+			update_user_meta($customer_id, 'billing_address_1', wc_clean($_POST['billing_address_1']));
+		}
+		if (isset($_POST['billing_postcode'])) {
+			update_user_meta($customer_id, 'billing_postcode', wc_clean($_POST['billing_postcode']));
+		}
+		if (isset($_POST['billing_city'])) {
+			update_user_meta($customer_id, 'billing_city', wc_clean($_POST['billing_city']));
+		}
+		if (isset($_POST['company_info'])) {
+			update_user_meta($customer_id, 'company_info', wc_clean($_POST['company_info']));
+		}
+	}
+
+	function woocommerce_register_form_data()
+	{
+		$this->custom_checkout_field_select();
+
+		woocommerce_form_field(
+			'billing_first_name',
+			array(
+				'type'        => 'text',
+				'id' 		  => 'billing_first_name',
+				'required'    => true, // just adds an "*"
+				'label'       => 'First name'
+			),
+			(isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '')
+		);
+		woocommerce_form_field(
+			'billing_last_name',
+			array(
+				'type'        => 'text',
+				'id' 		  => 'billing_last_name',
+				'required'    => true, // just adds an "*"
+				'label'       => 'Last name'
+			),
+			(isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '')
+		);
+		woocommerce_form_field(
+			'billing_company',
+			array(
+				'type'        => 'text',
+				'id' 		  => 'billing_company',
+				'required'    => true, // just adds an "*"
+				'label'       => 'Company name'
+			),
+			(isset($_POST['billing_company']) ? $_POST['billing_company'] : '')
+		);
+		woocommerce_form_field(
+			'bizid',
+			array(
+				'custom_attributes' => array('data-length' => 500, 'readonly' => 'readonly'),
+				'type' => 'text',
+				'class' => array(
+					'my-field-class form-row-wide'
+				),
+				'id' => 'inputBusinessId',
+				'name' => 'bizid',
+
+				'label' => __('Business ID'),
+				'required' => true
+
+			),
+			(isset($_POST['inputBusinessId']) ? $_POST['inputBusinessId'] : '')
+		);
+		//inputVATNumber
+		woocommerce_form_field(
+			'vat',
+			array(
+				'type' => 'text',
+				'class' => array(
+					'my-field-class form-row-wide'
+				),
+				'custom_attributes' => array('readonly' => 'readonly'),
+				'id' => 'inputVATNumber',
+				'name' => 'VAT',
+				'label' => __('VAT NUMBER'),
+				'required' => true
+			),
+			(isset($_POST['inputVATNumber']) ? $_POST['inputVATNumber'] : '')
+		);
+		woocommerce_form_field(
+			'billing_address_1',
+			array(
+				'type'        => 'text',
+				'id' 		  => 'billing_address_1',
+				'required'    => true, // just adds an "*"
+				'label'       => 'Company address'
+			),
+			(isset($_POST['billing_address_1']) ? $_POST['billing_address_1'] : '')
+		);
+		woocommerce_form_field(
+			'billing_postcode',
+			array(
+				'type'        => 'text',
+				'id' 		  => 'billing_postcode',
+				'required'    => true, // just adds an "*"
+				'label'       => 'Postcode'
+			),
+			(isset($_POST['billing_postcode']) ? $_POST['billing_postcode'] : '')
+		);
+		woocommerce_form_field(
+			'billing_city',
+			array(
+				'type'        => 'text',
+				'id' 		  => 'billing_city',
+				'required'    => true, // just adds an "*"
+				'label'       => 'City'
+			),
+			(isset($_POST['billing_city']) ? $_POST['billing_city'] : '')
+		);
+		woocommerce_form_field(
+			'company_info',
+			array(
+				'type'        => 'hidden',
+				'id' 		  => 'company_info',
+				'required'    => false, // just adds an "*"
+			),
+			(isset($_POST['company_info']) ? $_POST['company_info'] : '')
+		);
+	}
+
+	function woocommerce_register_form_data_pass()
+	{
+		woocommerce_form_field(
+			'password',
+			array(
+				'type'        => 'password',
+				'id' 		  => 'reg_password',
+				'required'    => true, // just adds an "*"
+				'label'       => 'password'
+			),
+			(isset($_POST['password']) ? $_POST['password'] : '')
+		);
 	}
 
 	function wooc_extra_register_fields_validation($errors)

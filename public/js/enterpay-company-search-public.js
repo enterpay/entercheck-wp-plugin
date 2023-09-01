@@ -77,7 +77,7 @@
           data: { action: "company_detail", bid: suggestion.businessId },
         })
         .done(function (e) {
-         console.log(e); 
+          console.log(e);
           var ids = e.ids;
           ids.forEach((id) => {
             if (id.idType == "VAT") $("#inputVATNumber").val(id.idValue);
@@ -96,6 +96,7 @@
       var consumer_or_business = $(this).val();
       if (consumer_or_business == "consumers") {
         // Hide VAT number field
+        $("#billing_company_field").hide();
         $("#inputVATNumber_field").hide();
         // clear VAT number field
         $("#inputVATNumber").val("");
