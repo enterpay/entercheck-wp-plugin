@@ -143,25 +143,55 @@ class Enterpay_Company_Search_Admin
 
 	// add meta box to user profile page table Customer Organization  VAT ID, Bsuiness ID
 	public function enterpay_user_profile_fields($user)
-	{ ?>
-		<h3><?php _e("Customer Organization", 'enterpay-company-search'); ?></h3>
-		<table class="form-table">
-			<tr>
-				<th><label for="enterpay_vat_id"><?php _e("VAT ID", 'enterpay-company-search'); ?></label></th>
-				<td>
-					<input type="text" name="enterpay_vat_id" id="enterpay_vat_id" value="<?php echo esc_attr(get_the_author_meta('enterpay_vat_id', $user->ID)); ?>" class="regular-text" /><br />
-					<span class="description"><?php _e("Please enter your Enterpay VAT ID.", "enterpay-company-search"); ?></span>
-				</td>
-			</tr>
-			<tr>
-				<th><label for="enterpay_bsuiness_id"><?php _e("Bsuiness ID", 'enterpay-company-search'); ?></label></th>
-				<td>
-					<input type="text" name="enterpay_bsuiness_id" id="enterpay_bsuiness_id" value="<?php echo esc_attr(get_the_author_meta('enterpay_bsuiness_id', $user->ID)); ?>" class="regular-text" /><br />
-					<span class="description"><?php _e("Please enter your Enterpay Bsuiness ID.", "enterpay-company-search"); ?></span>
-				</td>
-			</tr>
-		</table>
+	{
+		$user_id = $user->ID;
+		$company_base = get_user_meta($user_id, 'company_base', true);
+		if (!empty($company_base)) {
+			$company_base = json_decode($company_base, true);
+		}
+		$company_info = get_user_meta($user_id, 'company_info', true);
+
+		if (!empty($company_info)) {
+			$company_info = json_decode($company_info, true);
+		}
+		if (!empty($company_info)) {
+			$uuid = $company_base['uuid'];
+
+			// get Bsuiness ID and VAT ID from company_info
+			$business_id = $company_info['ids'][0]['idValue'];
+			$vat_id = $company_info['ids'][1]['idValue'];
+			$status = $company_info['status'];
+
+?>
+			<h3><?php _e("Customer Organization", 'enterpay-company-search'); ?></h3>
+			<table class="form-table">
+				<tr>
+					<th><label for="enterpay_vat_id"><?php _e("Link to Entercheck", 'enterpay-company-search'); ?></label></th>
+					<td>
+						<a target="_blank" href="https://portal.test.entercheck.eu/companies/<?php echo $uuid; ?>">Link to Entercheck</a>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="enterpay_bsuiness_id"><?php _e("Bsuiness ID", 'enterpay-company-search'); ?></label></th>
+					<td>
+						<input type="text" name="enterpay_bsuiness_id" id="enterpay_bsuiness_id" readonly value="<?php echo esc_attr($business_id); ?>" class="regular-text" /><br />
+					</td>
+				</tr>
+				<tr>
+					<th><label for="enterpay_vat_id"><?php _e("VAT ID", 'enterpay-company-search'); ?></label></th>
+					<td>
+						<input type="text" name="enterpay_vat_id" id="enterpay_vat_id" readonly value="<?php echo esc_attr($vat_id); ?>" class="regular-text" /><br />
+					</td>
+				</tr>
+				<tr>
+					<th><label for="enterpay_vat_id"><?php _e("Status", 'enterpay-company-search'); ?></label></th>
+					<td>
+						<input type="text" name="enterpay_vat_id" id="enterpay_vat_id" readonly value="<?php echo esc_attr($status); ?>" class="regular-text" /><br />
+					</td>
+				</tr>
+			</table>
 <?php
+		}
 	}
 
 	public function enterpay_user_profile_fields_save($user_id)
@@ -212,6 +242,4 @@ class Enterpay_Company_Search_Admin
 		$bizid = sanitize_text_field($_POST['billing_bizid']);
 		$order->update_meta_data('bizid', $bizid);
 	}
- 
-	 
 }
