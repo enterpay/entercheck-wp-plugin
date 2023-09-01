@@ -109,5 +109,18 @@
         $("#inputBusinessId_field").show();
       }
     });
+   let consumer_or_business = $("#consumer_or_business").val();
+    console.log(consumer_or_business);
+    if (consumer_or_business == "consumers") {
+      // Hide VAT number field
+      $("#billing_company_field").hide();
+      $("#inputVATNumber_field").hide();
+      // clear VAT number field
+      $("#inputVATNumber").val("");
+      // Hide business id field
+      $("#inputBusinessId_field").hide();
+      // clear business id field
+      $("#inputBusinessId").val("");
+    }
   });
 })(jQuery);

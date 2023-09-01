@@ -199,6 +199,7 @@ class Enterpay_Company_Search {
 
 		$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
 		
+		$this->loader->add_filter( 'woocommerce_save_account_details_required_fields', $plugin_public, 'woocommerce_save_account_details_required_fields_custom' );
 		$this->loader->add_filter( 'woocommerce_billing_fields', $plugin_public, 'custom_woocommerce_billing_fields' );
 		$this->loader->add_filter("woocommerce_checkout_fields", $plugin_public, "custom_override_checkout_fields");
 

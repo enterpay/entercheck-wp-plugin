@@ -477,12 +477,59 @@ class Enterpay_Company_Search_Public
 	<?php
 	}
 
+	function woocommerce_save_account_details_required_fields_custom($required_fields)
+	{
+		$required_fields['billing_first_name'] = __('First name', 'woocommerce');
+		$required_fields['billing_last_name'] = __('First name', 'woocommerce');
+		if (!empty($_POST['billing_company'] && $_POST['billing_company'] != 'consumer')) {
+			$required_fields['billing_company'] = __('First name', 'woocommerce');
+			$required_fields['inputBusinessId'] = __('First name', 'woocommerce');
+			$required_fields['inputVATNumber'] = __('First name', 'woocommerce');
+		}
+		$required_fields['billing_address_1'] = __('First name', 'woocommerce');
+		$required_fields['billing_postcode'] = __('First name', 'woocommerce');
+		$required_fields['billing_city'] = __('First name', 'woocommerce');
+		$required_fields['email'] = __('email First name', 'woocommerce');
+		$required_fields['password'] = __('password First name', 'woocommerce');
+		return $required_fields;
+	}
+
 	function woocommerce_register_post_customer($username, $email, $errors)
 	{
 
-		if (empty($_POST['billing_first_name'])) {
-			$errors->add('billing_first_name_error', 'We really want to know!');
+		if (isset($_POST['billing_first_name']) && empty($_POST['billing_first_name'])) {
+			$errors->add('billing_first_name_error', __('First name is required!'));
 		}
+		if (isset($_POST['billing_last_name']) && empty($_POST['billing_last_name'])) {
+			$errors->add('billing_last_name_error', __('Last name is required!'));
+		}
+		if (!empty($_POST['billing_company'] && $_POST['billing_company'] != 'consumer')) {
+			if (isset($_POST['billing_company']) && empty($_POST['billing_company'])) {
+				$errors->add('billing_last_name_error', __('Company name is required!'));
+			}
+			if (isset($_POST['inputBusinessId']) && empty($_POST['inputBusinessId'])) {
+				$errors->add('billing_last_name_error', __('Business ID is required!'));
+			}
+			if (isset($_POST['inputVATNumber']) && empty($_POST['inputVATNumber'])) {
+				$errors->add('billing_last_name_error', __('VAT NUMBER is required!'));
+			}
+		}
+		if (isset($_POST['billing_address_1']) && empty($_POST['billing_address_1'])) {
+			$errors->add('billing_last_name_error', __('Company address is required!'));
+		}
+		if (isset($_POST['billing_postcode']) && empty($_POST['billing_postcode'])) {
+			$errors->add('billing_last_name_error', __('Postcode is required!'));
+		}
+		if (isset($_POST['billing_city']) && empty($_POST['billing_city'])) {
+			$errors->add('billing_last_name_error', __('City is required!'));
+		}
+		if (isset($_POST['email']) && empty($_POST['email'])) {
+			$errors->add('billing_last_name_error', __('Email address is required!'));
+		}
+		if (isset($_POST['password']) && empty($_POST['password'])) {
+			$errors->add('billing_last_name_error', __('Password is required!'));
+		}
+		return $errors;
 	}
 
 	function woocommerce_created_customer_data($customer_id)
@@ -642,7 +689,7 @@ class Enterpay_Company_Search_Public
 	function wooc_extra_register_fields_validation($errors)
 	{
 		if (empty($_POST['bizid'])) {
-			$errors->add('name_err', '<strong>Error</strong>: Please provide a Business ID.');
+			// $errors->add('bizid_err', '<strong>Error</strong>: Please provide a Business ID.');
 		}
 		return $errors;
 	}
