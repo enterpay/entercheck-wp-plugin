@@ -29,15 +29,11 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
-
-
-
-
 })(jQuery);
 
 
-function test() {
-	var e = document.getElementById("test_result");
+function search_company() {
+	//var e = document.getElementById("search_company_result");
 
 	jQuery.ajax({
 		type: "post",
@@ -45,6 +41,6 @@ function test() {
 		url: ajaxurl+"?name=a",
 		data: { action: "search_company", nonce: nonce }
 	}).done(function (e) {
-		jQuery("#test_result").html("<pre>" + JSON.stringify(e) + "</pre>");
+		jQuery("#search_company_result").html("<pre>" + JSON.stringify(e) + "</pre>");
 	});
 }

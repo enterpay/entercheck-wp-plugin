@@ -13,10 +13,9 @@
  * @package           Enterpay_Company_Search
  *
  * @wordpress-plugin
- * Plugin Name:       Enterpay Company Search and Auto fill
+ * Plugin Name:       Entercheck
  * Plugin URI:        https://demoshop.entercheck.eu/
  * Description:       enterpay company search 
-/company/search endpoint
  * Version:           1.0.0
  * Author:            Ha Nguyen
  * Author URI:        https://demoshop.entercheck.eu/
@@ -36,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'ENTERPAY_COMPANY_SEARCH_VERSION', '1.0.0' );
+define( 'ENTERPAY_COMPANY_SEARCH_VERSION', '1.0.1' );
 
 /**
  * The code that runs during plugin activation.
@@ -81,4 +80,3 @@ function run_enterpay_company_search() {
 
 }
 run_enterpay_company_search();
-

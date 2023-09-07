@@ -17,92 +17,134 @@
 
 
 <form action="options.php" method="post">
-    <?php 
-    settings_fields( 'dbi_example_plugin_options' );
-    do_settings_sections( 'dbi_example_plugin' ); ?>
-    <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e( 'Grant Access' ); ?>" />
+    <?php
+    settings_fields('enterpay_plugin_options');
+    do_settings_sections('dbi_example_plugin'); ?>
+    <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Grant Access'); ?>" />
 
     <?php
-    function dbi_plugin_section_text() {
-        echo '<p>Here you can set all the options for using the API</p>';
+    function enterpay_plugin_section_text()
+    {
+        // translate text 
+        _e('<p>Here you can set all the options for using the API</p>', 'enterpay-company-search');
     }
 
-    function dbi_plugin_setting_username() {
-        $options = get_option( 'dbi_example_plugin_options' );
-        echo "<input id='dbi_plugin_setting_username' name='dbi_example_plugin_options[username]' type='text' value='" . esc_attr( $options['username'] ) . "' />";
+    function enterpay_plugin_setting_username()
+    {
+        $options = get_option('enterpay_plugin_options');
+
+        if (!isset($options['username'])) {
+            $options['username'] = "";
+        }
+
+        echo "<input id='enterpay_plugin_setting_username' name='enterpay_plugin_options[username]' type='text' value='" . esc_attr($options['username']) . "' />";
     }
 
-    function dbi_plugin_setting_password() {
-        $options = get_option( 'dbi_example_plugin_options' );
-        echo "<input id='dbi_plugin_setting_password' name='dbi_example_plugin_options[password]' type='text' value='" . esc_attr( $options['password'] ) . "' />";
+    function enterpay_plugin_setting_password()
+    {
+        $options = get_option('enterpay_plugin_options');
+
+        if (!isset($options['password'])) {
+            $options['password'] = "";
+        }
+
+        echo "<input id='enterpay_plugin_setting_password' name='enterpay_plugin_options[password]' type='text' value='" . esc_attr($options['password']) . "' />";
     }
 
-    function dbi_plugin_setting_start_date() {
-        $options = get_option( 'dbi_example_plugin_options' );
-        echo "<input id='dbi_plugin_setting_start_date' name='dbi_example_plugin_options[start_date]' type='text' value='" . esc_attr( $options['start_date'] ) . "' />";
+    function enterpay_plugin_setting_start_date()
+    {
+        $options = get_option('enterpay_plugin_options');
+
+        if (!isset($options['start_date'])) {
+            $options['start_date'] = "";
+        }
+
+        echo "<input id='enterpay_plugin_setting_start_date' name='enterpay_plugin_options[start_date]' type='text' value='" . esc_attr($options['start_date']) . "' />";
     }
 
-    function dbi_plugin_setting_enterpaytoken(){
+    function enterpay_plugin_setting_types()
+    {
+        $options = get_option('enterpay_plugin_options');
 
+        if (!isset($options['checkbox']['consumers'])) {
+            $options['checkbox']['consumers'] = 0;
+        }
+        if (!isset($options['checkbox']['businesses']) && empty($options['checkbox']['consumers']))  {
+            $options['checkbox']['businesses'] = 1;
+        }
+        if (!isset( $options['checkbox']['businesses']) && !empty( $options['checkbox']['consumers']))  {
+            $options['checkbox']['businesses'] = 0;
+        }
+    ?>
+        <!-- create checbox Consumers and Businesses, Businesses default checked -->
+        <input type="checkbox" id="consumers" name="enterpay_plugin_options[checkbox][consumers]" value="1" <?php checked(1,  $options['checkbox']['consumers'], true); ?> />
+        <label for="consumers"><?php _e('Consumers', 'enterpay-company-search'); ?></label>
+        <input type="checkbox" id="businesses" name="enterpay_plugin_options[checkbox][businesses]" value="1" <?php checked(1,  $options['checkbox']['businesses'], true); ?> />
+        <label for="businesses"><?php _e('Businesses', 'enterpay-company-search'); ?></label>
+    <?php
+    }
+
+    function enterpay_plugin_setting_enterpaytoken()
+    {
     }
     ?>
+
 </form>
 
-<?php 
+<?php
 
 $curl = curl_init();
-$options = get_option( 'dbi_example_plugin_options' );
-
+$options = get_option('enterpay_plugin_options');
+if (!isset($options['username']) || !isset($options['password'])) {
+    echo "<p><b><i>API credentials are not set!</i></b></p>";
+    return;
+}
 $data = array(
     "username" => $options['username'],
     "password" => $options['password']
 );
 $data = json_encode($data);
-$options =array(
+$options = array(
     CURLOPT_RETURNTRANSFER => 1,
     CURLOPT_URL => 'https://api.test.entercheck.eu/v1/auth',
     CURLOPT_POST => true,
     CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
     CURLOPT_POSTFIELDS => $data
- );
+);
 
 curl_setopt_array($curl, $options);
-curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-    'Content-Type: application/json',
-    'Content-Length: ' . strlen($data))
+curl_setopt(
+    $curl,
+    CURLOPT_HTTPHEADER,
+    array(
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($data)
+    )
 );
 
 $resp = curl_exec($curl);
 
-//Kết quả trả tìm kiếm trả về dạng JSON
-if($resp){
-    $token = json_decode($resp)->token;
-    if($token){
-
-        update_option('enterpay_token',$token);
-        //update_option('enterpay_token',"eyJraWQiOiJoS1pSVERObkRJTDVvMGU3aENVb0ZLdGhzZGk4dXlUSWtGcDR6clJTUDQwPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI2NTdiYzUxYi0xNTNiLTQ1NWMtOWQ0OC0zNTZiOTc5N2JjODAiLCJjb2duaXRvOmdyb3VwcyI6WyJhZG1pbiJdLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LWNlbnRyYWwtMS5hbWF6b25hd3MuY29tXC9ldS1jZW50cmFsLTFfM0JPRDRDb1B3IiwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjpmYWxzZSwiY29nbml0bzp1c2VybmFtZSI6Indvb2NvbW1lcmNlX2RlbW8iLCJhdWQiOiI2M3QwN3RwNzFhbXJuZWN2djB0dXU3bmZhciIsImV2ZW50X2lkIjoiYjRlOTlmM2EtMzQ1NS00YTc3LTkyZjctZmRlYmQxNmIwOTlkIiwidG9rZW5fdXNlIjoiaWQiLCJjdXN0b206b3JnIjoiOGIzZDA0M2YtNTk0OS00M2QyLTkxOGEtNjFmMDJiODM4ZTMxIiwiYXV0aF90aW1lIjoxNjgxNDYyNTY3LCJleHAiOjE2ODE0NjYxNjcsImlhdCI6MTY4MTQ2MjU2NywiZW1haWwiOiJ0ZWNobmljYWxAZW50ZXJwYXkuZmkifQ.sQW8tOYAI1H017Abu6zwsUozyKXI8noO6URJIuVDoxpLWmQo-pSc0n4e7kNfZd8lzcInETO72dsLkGIs5YKJl-Qk-G717Aoz8nB5CN4HgVGD04Ac5Gt3g7gcxEKYhd28OAZt6T5YaL_BYqhLFzVMIMH95vJ3qDI2jJpXBkG6O89IRCplGTGThdQYUCum-j_OgeOHpMLULH7h6bC8PULS3G2QgJaM-AZXEvp-S1KHBgyfiShJuhlfAM13dHkIlFf7W7TJOnGVFuxbqmASPW0Tfkn7sDPtZulEueZPQA0ZypfNGtzOJ3J_wo5wk1aQxw5IdQNrLPwcUZ0xV36VjLP333");
-        ?>
-        <p style="border:1px solid gray;padding:10px;margin-top:30px;width:100%;overflow: scroll;max-width: 90%;"><b>Token: </b><?=$token?></p>
-        <br>
-        <button id="test-call-btn" onclick="test()">Make a test API call</button>
-        <script type="text/javascript">
-            nonce = "<?=wp_create_nonce("my_user_vote_nonce")?>"
-        </script>
-        <div id="test_result"></div>
-        <?php
-
-        
-    } else {
-        ?><p><b><i>API credentials are incorrect!</i></b></p><?php
-    }   
-
-
-}
+if (!empty($resp)) :
+    $res =   json_decode($resp);
+    if (!$res->error) :
+        $token = $res->token;
+        if (!empty($token)) :
+            update_option('enterpay_token', $token);
+?>
+            <p style="border:1px solid gray;padding:10px;margin-top:30px;width:100%;overflow: scroll;max-width: 90%;"><b><?php _e('Token') ?>: </b><?= $token ?></p>
+            <br>
+            <button id="test-call-btn" onclick="search_company()"><?php _e('Make a test API call', 'enterpay-company-search') ?></button>
+            <script type="text/javascript">
+                nonce = "<?= wp_create_nonce("my_user_vote_nonce") ?>"
+            </script>
+            <div id="search_company_result"></div>
+<?php
+        else :
+            echo "<p><b><i>API credentials are incorrect!</i></b></p>";
+        endif;
+    endif;
+endif;
 
 
 curl_close($curl);
-
-
-
-?>
 
