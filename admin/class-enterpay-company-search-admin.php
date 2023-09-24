@@ -114,11 +114,17 @@ class Enterpay_Company_Search_Admin
 	{
 		// add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
 		add_menu_page("Enterpay", "Enterpay", 'manage_options', $this->plugin_name . '-enterpay', array($this, 'page_enterpay_admin'));
+		add_submenu_page($this->plugin_name . '-enterpay', 'Enterpay fields', 'Enterpay fields', 'manage_options', $this->plugin_name . '-enterpay-fields', array($this, 'page_enterpay_fields_admin'));
 	}
 
 	public function page_enterpay_admin()
 	{
 		include(plugin_dir_path(__FILE__) . 'partials/enterpay-company-search-admin-display.php');
+	}	
+		
+	public function page_enterpay_fields_admin()
+	{
+		include(plugin_dir_path(__FILE__) . 'partials/enterpay-company-search-admin-fields-settings.php');
 	}
 
 	public function admin_register_settings()

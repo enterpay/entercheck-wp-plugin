@@ -110,8 +110,18 @@ class Enterpay_Company_Search_Public
 
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/enterpay-company-search-public.js', array('jquery'), $this->version, false);
 
+		$options = get_option('enterpay_plugin_options');
+
 		$variables = array(
-			'ajaxurl' => admin_url('admin-ajax.php')
+			'ajaxurl' => admin_url('admin-ajax.php'),
+			'company_name_name' => isset($options['company_name']['name']) ? $options['company_name']['name'] : 'billing_company',
+			'company_name_id' => isset($options['company_name']['id']) ? $options['company_name']['id'] : 'billing_company',
+			'vat_number_name' => isset($options['vat_number']['name']) ? $options['vat_number']['name'] : 'inputVATNumber',
+			'vat_number_id' => isset($options['vat_number']['id']) ? $options['vat_number']['id'] : 'inputVATNumber',
+			'business_id_name' => isset($options['business_id']['name']) ? $options['business_id']['name'] : 'inputBusinessId',
+			'business_id_id' => isset($options['business_id']['id']) ? $options['business_id']['id'] : 'inputBusinessId',
+			'postal_code_name' => isset($options['postal_code']['name']) ? $options['postal_code']['name'] : 'inputBusinessId',
+			'postal_code_id' => isset($options['postal_code']['id']) ? $options['postal_code']['id'] : 'inputBusinessId',
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
