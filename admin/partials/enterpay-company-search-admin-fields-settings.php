@@ -75,25 +75,7 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 						
 			<?php
 		}
-		
-		public function business_id_callback(){
-			$options  = get_option( 'enterpay_plugin_options', array() ); 
-			
-			if (!isset($options['business_id']['name'])) {
-				$options['business_id']['name'] = 'inputBusinessId';
-			}
-			if (!isset($options['business_id']['id'])) {
-				$options['business_id']['id'] = 'inputBusinessId';
-			}
-			?>
-			<label for="business_id-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="business_id-name" name="enterpay_plugin_options[business_id][name]" value="<?php echo $options['business_id']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="business_id-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="business_id-id" name="enterpay_plugin_options[business_id][id]" value="<?php echo $options['business_id']['id']; ?>" />
-						
-			<?php
-		}			
-		
+				
 		public function postal_code_callback(){
 			$options  = get_option( 'enterpay_plugin_options', array() ); 
 			
