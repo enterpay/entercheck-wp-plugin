@@ -62,28 +62,6 @@
         echo "<input id='enterpay_plugin_setting_start_date' name='enterpay_plugin_options[start_date]' type='text' value='" . esc_attr($options['start_date']) . "' />";
     }
 
-    function enterpay_plugin_setting_types()
-    {
-        $options = get_option('enterpay_plugin_options');
-
-        if (!isset($options['checkbox']['consumers'])) {
-            $options['checkbox']['consumers'] = 0;
-        }
-        if (!isset($options['checkbox']['businesses']) && empty($options['checkbox']['consumers']))  {
-            $options['checkbox']['businesses'] = 1;
-        }
-        if (!isset( $options['checkbox']['businesses']) && !empty( $options['checkbox']['consumers']))  {
-            $options['checkbox']['businesses'] = 0;
-        }
-    ?>
-        <!-- create checbox Consumers and Businesses, Businesses default checked -->
-        <input type="checkbox" id="consumers" name="enterpay_plugin_options[checkbox][consumers]" value="1" <?php checked(1,  $options['checkbox']['consumers'], true); ?> />
-        <label for="consumers"><?php _e('Consumers', 'enterpay-company-search'); ?></label>
-        <input type="checkbox" id="businesses" name="enterpay_plugin_options[checkbox][businesses]" value="1" <?php checked(1,  $options['checkbox']['businesses'], true); ?> />
-        <label for="businesses"><?php _e('Businesses', 'enterpay-company-search'); ?></label>
-    <?php
-    }
-
     function enterpay_plugin_setting_enterpaytoken()
     {
     }
@@ -126,7 +104,7 @@ $resp = curl_exec($curl);
 
 if (!empty($resp)) :
     $res =   json_decode($resp);
-    if (!$res->error) :
+    if (!isset($res->error)) :
         $token = $res->token;
         if (!empty($token)) :
             update_option('enterpay_token', $token);

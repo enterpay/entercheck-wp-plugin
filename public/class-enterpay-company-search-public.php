@@ -120,8 +120,19 @@ class Enterpay_Company_Search_Public
 			'vat_number_id' => isset($options['vat_number']['id']) ? $options['vat_number']['id'] : 'inputVATNumber',
 			'business_id_name' => isset($options['business_id']['name']) ? $options['business_id']['name'] : 'inputBusinessId',
 			'business_id_id' => isset($options['business_id']['id']) ? $options['business_id']['id'] : 'inputBusinessId',
-			'postal_code_name' => isset($options['postal_code']['name']) ? $options['postal_code']['name'] : 'inputBusinessId',
-			'postal_code_id' => isset($options['postal_code']['id']) ? $options['postal_code']['id'] : 'inputBusinessId',
+			'business_line_name' => isset($options['business_line']['name']) ? $options['business_line']['name'] : 'companyBusinessLine',
+			'business_line_id' => isset($options['business_line']['id']) ? $options['business_line']['id'] : 'companyBusinessLine',
+			
+			'country_name' => isset($options['country']['name']) ? $options['country']['name'] : 'billing_country',
+			'country_id' => isset($options['country']['id']) ? $options['country']['id'] : 'billing_country',
+			'city_name' => isset($options['city']['name']) ? $options['city']['name'] : 'billing_city',
+			'city_id' => isset($options['city']['id']) ? $options['city']['id'] : 'billing_city',
+			'street_name' => isset($options['street']['name']) ? $options['street']['name'] : 'billing_address_1',
+			'street_id' => isset($options['street']['id']) ? $options['street']['id'] : 'billing_address_1',
+			'street_second_name' => isset($options['street_second']['name']) ? $options['street_second']['name'] : 'billing_address_2',
+			'street_second_id' => isset($options['street_second']['id']) ? $options['street_second']['id'] : 'billing_address_2',
+			'postal_code_name' => isset($options['postal_code']['name']) ? $options['postal_code']['name'] : 'billing_postcode',
+			'postal_code_id' => isset($options['postal_code']['id']) ? $options['postal_code']['id'] : 'billing_postcode',
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
@@ -717,20 +728,10 @@ class Enterpay_Company_Search_Public
 	// save options to database
 	function enterpay_plugin_options_validate($input)
 	{
-
-		if (empty($input['consumers'])) {
-			$input['consumers'] = 0;
-		}
-		if (empty($input['businesses'])) {
-			$input['businesses'] = 0;
-		}
-
 		$options = get_option('enterpay_plugin_options');
 		$options['username'] = trim($input['username']);
 		$options['password'] = trim($input['password']);
 		$options['start_date'] = trim($input['start_date']);
-		$options['consumers'] = trim($input['consumers']);
-		$options['businesses'] = trim($input['businesses']);
 		return $options;
 	}
 

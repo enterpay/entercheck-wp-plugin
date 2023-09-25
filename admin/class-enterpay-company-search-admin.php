@@ -113,8 +113,8 @@ class Enterpay_Company_Search_Admin
 	public function add_menu()
 	{
 		// add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
-		add_menu_page("Enterpay", "Enterpay", 'manage_options', $this->plugin_name . '-enterpay', array($this, 'page_enterpay_admin'));
-		add_submenu_page($this->plugin_name . '-enterpay', 'Enterpay fields', 'Enterpay fields', 'manage_options', $this->plugin_name . '-enterpay-fields', array($this, 'page_enterpay_fields_admin'));
+		add_menu_page("Entercheck", "Entercheck", 'manage_options', $this->plugin_name . '-enterpay', array($this, 'page_enterpay_admin'));
+		add_submenu_page($this->plugin_name . '-enterpay', 'Entercheck fields', 'Entercheck fields', 'manage_options', $this->plugin_name . '-enterpay-fields', array($this, 'page_enterpay_fields_admin'));
 	}
 
 	public function page_enterpay_admin()
@@ -136,7 +136,6 @@ class Enterpay_Company_Search_Admin
 
 		add_settings_field('enterpay_plugin_setting_username', 'Username', 'enterpay_plugin_setting_username', 'dbi_example_plugin', 'api_settings');
 		add_settings_field('enterpay_plugin_setting_password', 'Password', 'enterpay_plugin_setting_password', 'dbi_example_plugin', 'api_settings');
-		add_settings_field('enterpay_plugin_setting_types', 'Types', 'enterpay_plugin_setting_types', 'dbi_example_plugin', 'api_settings');
 
 		add_settings_field('enterpay_plugin_setting_enterpaytoken', 'Token', 'enterpay_plugin_setting_enterpaytoken', 'dbi_example_plugin', 'api_settings');
 

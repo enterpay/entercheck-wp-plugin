@@ -28,6 +28,24 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
+	 
+	 $( document ).on('click', '#preset_wc_fields', function(){
+		 if (confirm('Are you sure you want to replace the current fields?')){
+			 $('#company_name-name').val('billing_company');
+			 $('#company_name-id').val('billing_company');
+			 
+			 $('#country-name').val('billing_country');
+			 $('#country-id').val('billing_country');
+			 $('#city-name').val('billing_city');
+			 $('#city-id').val('billing_city');
+			 $('#street-name').val('billing_address_1');
+			 $('#street-id').val('billing_address_1');
+			 $('#street_second-name').val('billing_address_2');
+			 $('#street_second-id').val('billing_address_2');
+			 $('#postal_code-name').val('billing_postcode');
+			 $('#postal_code-id').val('billing_postcode');
+		 }
+	 });
 
 })(jQuery);
 

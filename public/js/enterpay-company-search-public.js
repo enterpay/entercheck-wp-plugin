@@ -80,47 +80,20 @@
           console.log(e);
           var ids = e.ids;
           ids.forEach((id) => {
-            if (id.idType == "VAT") $("#" + enterpayjs.vat_number_id).val(id.idValue);
+            if (id.idType == "VAT" && $("#" + enterpayjs.vat_number_id).length) $("#" + enterpayjs.vat_number_id).val(id.idValue);
           });
 
-          var address = e.addresses[0];
-          $("#billing_address_1").val(address.street);
-          $("#billing_city").val(address.city);
-          $("#billing_postcode").val(address.postalCode);
+		if ($("#" + enterpayjs.business_line_id).length) $("#" + enterpayjs.business_line_id).val(e.companyBusinessLineValue);
+
+          var address = e.postalAddress[0];
+          if ($("#" + enterpayjs.country_id).length) $("#" + enterpayjs.country_id).val(address.country);
+		  if ($("#" + enterpayjs.city_id).length) $("#" + enterpayjs.city_id).val(address.city);
+		  if ($("#" + enterpayjs.street_id).length) $("#" + enterpayjs.street_id).val(address.street);
+		  if ($("#" + enterpayjs.street_second_id).length) $("#" + enterpayjs.street_second_id).val(address.streetSecondRow);
+		  if ($("#" + enterpayjs.postal_code_id).length) $("#" + enterpayjs.postal_code_id).val(address.postalCode);
+		  
           $("#company_info").val(JSON.stringify(e));
         });
     });
-
-    // if select consumer_or_business get value consumers then hide inputVATNumber_field and inputBusinessId_field
-    $("#consumer_or_business").change(function () {
-      var consumer_or_business = $(this).val();
-      if (consumer_or_business == "consumers") {
-        // Hide VAT number field
-        $("#billing_company_field").hide();
-        $("#" + enterpayjs.vat_number_id + "_field").hide();
-        // clear VAT number field
-        $("#" + enterpayjs.vat_number_id).val("");
-        // Hide business id field
-        $("#" + enterpayjs.business_id_id + "_field").hide();
-        // clear business id field
-        $("#" + enterpayjs.business_id_id).val("");
-      } else {
-        $("#" + enterpayjs.vat_number_id + "_field").show();
-        $("#" + enterpayjs.business_id_id + "_field").show();
-      }
-    });
-   let consumer_or_business = $("#consumer_or_business").val();
-    console.log(consumer_or_business);
-    if (consumer_or_business == "consumers") {
-      // Hide VAT number field
-      $("#billing_company_field").hide();
-      $("#" + enterpayjs.vat_number_id + "_field").hide();
-      // clear VAT number field
-      $("#" + enterpayjs.vat_number_id).val("");
-      // Hide business id field
-      $("#" + enterpayjs.business_id_id + "_field").hide();
-      // clear business id field
-      $("#" + enterpayjs.business_id_id).val("");
-    }
   });
 })(jQuery);
