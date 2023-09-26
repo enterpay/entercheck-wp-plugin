@@ -53,6 +53,8 @@ class Enterpay_Company_Search_Admin
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		
+		include(plugin_dir_path(__FILE__) . 'partials/enterpay-company-search-admin-fields-settings.php');
 	}
 
 	/**
@@ -115,7 +117,7 @@ class Enterpay_Company_Search_Admin
 		// add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
 		add_menu_page("Entercheck", "Entercheck", 'manage_options', $this->plugin_name . '-entercheck', array($this, 'page_enterpay_admin'));
 		add_submenu_page($this->plugin_name . '-entercheck', 'Credentials', 'Credentials', 'manage_options', $this->plugin_name . '-credentials', array($this, 'page_enterpay_admin'));
-		add_submenu_page($this->plugin_name . '-entercheck', 'Field settings', 'Field settings', 'manage_options', $this->plugin_name . '-enterpay-fields', array($this, 'page_enterpay_fields_admin'));
+		//add_submenu_page($this->plugin_name . '-entercheck', 'Field settings', 'Field settings', 'manage_options', $this->plugin_name . '-enterpay-fields', array($this, 'page_enterpay_fields_admin'));
 		remove_submenu_page($this->plugin_name . '-entercheck', $this->plugin_name . '-entercheck');
 	}
 
