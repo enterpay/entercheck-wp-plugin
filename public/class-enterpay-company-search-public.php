@@ -115,24 +115,24 @@ class Enterpay_Company_Search_Public
 		$variables = array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'company_name_name' => isset($options['company_name']['name']) ? $options['company_name']['name'] : 'billing_company',
-			'company_name_id' => isset($options['company_name']['id']) ? $options['company_name']['id'] : 'billing_company',
+			'company_name_id' => isset($options['company_name']['id']) ? str_ireplace('|', ', #', $options['company_name']['id']) : 'billing_company',
 			'vat_number_name' => isset($options['vat_number']['name']) ? $options['vat_number']['name'] : 'inputVATNumber',
-			'vat_number_id' => isset($options['vat_number']['id']) ? $options['vat_number']['id'] : 'inputVATNumber',
+			'vat_number_id' => isset($options['vat_number']['id']) ? str_ireplace('|', ', #', $options['vat_number']['id']) : 'inputVATNumber',
 			'business_id_name' => isset($options['business_id']['name']) ? $options['business_id']['name'] : 'inputBusinessId',
-			'business_id_id' => isset($options['business_id']['id']) ? $options['business_id']['id'] : 'inputBusinessId',
+			'business_id_id' => isset($options['business_id']['id']) ? str_ireplace('|', ', #', $options['business_id']['id']) : 'inputBusinessId',
 			'business_line_name' => isset($options['business_line']['name']) ? $options['business_line']['name'] : 'companyBusinessLine',
-			'business_line_id' => isset($options['business_line']['id']) ? $options['business_line']['id'] : 'companyBusinessLine',
+			'business_line_id' => isset($options['business_line']['id']) ? str_ireplace('|', ', #', $options['business_line']['id']) : 'companyBusinessLine',
 			
 			'country_name' => isset($options['country']['name']) ? $options['country']['name'] : 'billing_country',
-			'country_id' => isset($options['country']['id']) ? $options['country']['id'] : 'billing_country',
+			'country_id' => isset($options['country']['id']) ? str_ireplace('|', ', #', $options['country']['id']) : 'billing_country',
 			'city_name' => isset($options['city']['name']) ? $options['city']['name'] : 'billing_city',
-			'city_id' => isset($options['city']['id']) ? $options['city']['id'] : 'billing_city',
+			'city_id' => isset($options['city']['id']) ? str_ireplace('|', ', #', $options['city']['id']) : 'billing_city',
 			'street_name' => isset($options['street']['name']) ? $options['street']['name'] : 'billing_address_1',
-			'street_id' => isset($options['street']['id']) ? $options['street']['id'] : 'billing_address_1',
+			'street_id' => isset($options['street']['id']) ? str_ireplace('|', ', #', $options['street']['id']) : 'billing_address_1',
 			'street_second_name' => isset($options['street_second']['name']) ? $options['street_second']['name'] : 'billing_address_2',
-			'street_second_id' => isset($options['street_second']['id']) ? $options['street_second']['id'] : 'billing_address_2',
+			'street_second_id' => isset($options['street_second']['id']) ? str_ireplace('|', ', #', $options['street_second']['id']) : 'billing_address_2',
 			'postal_code_name' => isset($options['postal_code']['name']) ? $options['postal_code']['name'] : 'billing_postcode',
-			'postal_code_id' => isset($options['postal_code']['id']) ? $options['postal_code']['id'] : 'billing_postcode',
+			'postal_code_id' => isset($options['postal_code']['id']) ? str_ireplace('|', ', #', $options['postal_code']['id']) : 'billing_postcode',
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
@@ -719,30 +719,38 @@ class Enterpay_Company_Search_Public
 	{
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 		
-		$field_name = isset($options['business_id']['name']) ? $options['business_id']['name'] : 'bizid';
+		$field_names = isset($options['business_id']['name']) ? explode("|", $options['business_id']['name']) : ['bizid'];
 		
-		if (isset($_POST[$field_name])) {
-			$business_id =  $_POST[$field_name];
-			$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
-			$data =	$this->send_API_request($endpoint_url, "GET");
-			update_user_meta($user_id, 'company_base', $data);
+		foreach ($field_names as $field_name){
+			if (isset($_POST[$field_name])) {
+				$business_id =  $_POST[$field_name];
+				$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+				$data =	$this->send_API_request($endpoint_url, "GET");
+				update_user_meta($user_id, 'company_base', $data);
+				
+				break;
+			}
 		}
 	}
 	
 	function request_after_submission_form()
 	{		
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
-		$field_name = isset($options['business_id']['name']) ? $options['business_id']['name'] : 'bizid';
+		$field_names = isset($options['business_id']['name']) ? explode("|", $options['business_id']['name']) : ['bizid'];
 		
-		if (isset($_REQUEST[$field_name])){
-			$current_user = wp_get_current_user();
-			
-			if ($current_user instanceof WP_User && $current_user->ID > 0){				
-				if (isset($_REQUEST[$field_name])) {
-					$business_id =  $_REQUEST[$field_name];
-					$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
-					$data =	$this->send_API_request($endpoint_url, "GET");
-					update_user_meta($current_user->ID, 'company_base', $data);
+		foreach ($field_names as $field_name){
+			if (isset($_REQUEST[$field_name])){
+				$current_user = wp_get_current_user();
+				
+				if ($current_user instanceof WP_User && $current_user->ID > 0){				
+					if (isset($_REQUEST[$field_name])) {
+						$business_id =  $_REQUEST[$field_name];
+						$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+						$data =	$this->send_API_request($endpoint_url, "GET");
+						update_user_meta($current_user->ID, 'company_base', $data);
+						
+						break;
+					}
 				}
 			}
 		}

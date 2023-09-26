@@ -24,7 +24,7 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 		}
 		
 		public function register_settings(){
-			register_setting( 'enterpay_plugin_options_fields', 'enterpay_plugin_options_fields' );
+			register_setting( 'enterpay_plugin_options_fields', 'enterpay_plugin_options_fields', [$this, 'sanitize'] );
 						
 			
 			add_settings_section('enterpay-company-search-fields_settings', '' /*__('Fields settings', 'enterpay-company-search')*/, array($this, 'settings_section_callback'), 'enterpay_plugin_options_fields' );
@@ -41,6 +41,41 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			add_settings_field( 'postal_code', __('Postal code', 'enterpay-company-search'), array($this, 'postal_code_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-relevant-company-fields_settings' );
 		}
 		
+		public function sanitize( $input )
+		{
+			//$options = get_option('enterpay_plugin_options_fields');	
+			$fields = ['company_name', 'vat_number', 'business_id', 'business_line', 'country', 'city', 'street', 'street_second', 'postal_code']; 
+						
+			foreach ($fields as $field){
+				if( isset( $input[$field]['id'] ) ){ $input[$field]['id'] = implode('|', array_unique(array_map('trim', explode('|', $input[$field]['id'])))); }
+				if( isset( $input[$field]['name'] ) ){ $input[$field]['name'] = implode('|', array_unique(array_map('trim', explode('|', $input[$field]['name'])))); }
+			}
+			/*
+			if( isset( $input['company_name']['id'] ) ){ 
+				array_map('trim', explode('|', $input['company_name']['id'])); 
+				$options['company_name']['id'] = 
+			}
+			if( isset( $input['company_name']['name'] ) ){ $options['company_name']['name'] = array_map('trim', explode('|', $input['company_name']['name'])); }
+			if( isset( $input['vat_number']['id'] ) ){ $options['vat_number']['id'] = array_map('trim', explode('|', $input['vat_number']['id'])); }
+			if( isset( $input['vat_number']['name'] ) ){ $options['vat_number']['name'] = array_map('trim', explode('|', $input['vat_number']['name'])); }
+			if( isset( $input['business_id']['id'] ) ){ $options['business_id']['id'] = array_map('trim', explode('|', $input['business_id']['id'])); }
+			if( isset( $input['business_id']['name'] ) ){ $options['business_id']['name'] = array_map('trim', explode('|', $input['business_id']['name'])); }
+			if( isset( $input['business_line']['id'] ) ){ $options['business_line']['id'] = array_map('trim', explode('|', $input['business_line']['id'])); }
+			if( isset( $input['business_line']['name'] ) ){ $options['business_line']['name'] = array_map('trim', explode('|', $input['business_line']['name'])); }
+			
+			if( isset( $input['country']['id'] ) ){ $options['country']['id'] = array_map('trim', explode('|', $input['country']['id'])); }
+			if( isset( $input['country']['name'] ) ){ $options['country']['name'] = array_map('trim', explode('|', $input['country']['name'])); }
+			if( isset( $input['city']['id'] ) ){ $options['city']['id'] = array_map('trim', explode('|', $input['city']['id'])); }
+			if( isset( $input['city']['name'] ) ){ $options['city']['name'] = array_map('trim', explode('|', $input['city']['name'])); }
+			if( isset( $input['street']['id'] ) ){ $options['street']['id'] = array_map('trim', explode('|', $input['street']['id'])); }
+			if( isset( $input['street']['name'] ) ){ $options['street']['name'] = array_map('trim', explode('|', $input['street']['name'])); }
+			if( isset( $input['street_second']['id'] ) ){ $options['street_second']['id'] = array_map('trim', explode('|', $input['street_second']['id'])); }
+			if( isset( $input['street_second']['name'] ) ){ $options['street_second']['name'] = array_map('trim', explode('|', $input['street_second']['name'])); }
+			if( isset( $input['postal_code']['id'] ) ){ $options['postal_code']['id'] = array_map('trim', explode('|', $input['postal_code']['id'])); }
+			if( isset( $input['postal_code']['name'] ) ){ $options['postal_code']['name'] = array_map('trim', explode('|', $input['postal_code']['name'])); }
+*/
+			return $input;
+		}
 		
 		public function company_name_callback(){
 			$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
@@ -53,12 +88,17 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			if (!isset($options['company_name']['id'])) {
 				$options['company_name']['id'] = 'billing_company';
 			}
+			
+			// class="regular-text" 
 			?>
-			<label for="company_name-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="company_name-name" name="enterpay_plugin_options_fields[company_name][name]" value="<?php echo $options['company_name']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="company_name-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="company_name-id" name="enterpay_plugin_options_fields[company_name][id]" value="<?php echo $options['company_name']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="company_name-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="company_name-name" name="enterpay_plugin_options_fields[company_name][name]" value="<?php echo $options['company_name']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="company_name-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="company_name-id" name="enterpay_plugin_options_fields[company_name][id]" value="<?php echo $options['company_name']['id']; ?>" />
+			</div>			
 			<?php
 		}	
 
@@ -72,11 +112,14 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['vat_number']['id'] = 'inputVATNumber';
 			}
 			?>
-			<label for="vat_number-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="vat_number-name" name="enterpay_plugin_options_fields[vat_number][name]" value="<?php echo $options['vat_number']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="vat_number-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="vat_number-id" name="enterpay_plugin_options_fields[vat_number][id]" value="<?php echo $options['vat_number']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="vat_number-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="vat_number-name" name="enterpay_plugin_options_fields[vat_number][name]" value="<?php echo $options['vat_number']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="vat_number-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="vat_number-id" name="enterpay_plugin_options_fields[vat_number][id]" value="<?php echo $options['vat_number']['id']; ?>" />
+			</div>			
 			<?php
 		}	
 		
@@ -90,11 +133,14 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['business_id']['id'] = 'inputBusinessId';
 			}
 			?>
-			<label for="business_id-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="business_id-name" name="enterpay_plugin_options_fields[business_id][name]" value="<?php echo $options['business_id']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="business_id-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="business_id-id" name="enterpay_plugin_options_fields[business_id][id]" value="<?php echo $options['business_id']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="business_id-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="business_id-name" name="enterpay_plugin_options_fields[business_id][name]" value="<?php echo $options['business_id']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="business_id-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="business_id-id" name="enterpay_plugin_options_fields[business_id][id]" value="<?php echo $options['business_id']['id']; ?>" />
+			</div>			
 			<?php
 		}
 		
@@ -108,11 +154,14 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['business_line']['id'] = 'companyBusinessLine';
 			}
 			?>
-			<label for="business_line-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="business_line-name" name="enterpay_plugin_options_fields[business_line][name]" value="<?php echo $options['business_line']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="business_line-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="business_line-id" name="enterpay_plugin_options_fields[business_line][id]" value="<?php echo $options['business_line']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="business_line-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="business_line-name" name="enterpay_plugin_options_fields[business_line][name]" value="<?php echo $options['business_line']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="business_line-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="business_line-id" name="enterpay_plugin_options_fields[business_line][id]" value="<?php echo $options['business_line']['id']; ?>" />
+			</div>			
 			<?php
 		}
 		
@@ -128,11 +177,14 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['country']['id'] = 'billing_country';
 			}
 			?>
-			<label for="country-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="country-name" name="enterpay_plugin_options_fields[country][name]" value="<?php echo $options['country']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="country-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="country-id" name="enterpay_plugin_options_fields[country][id]" value="<?php echo $options['country']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="country-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="country-name" name="enterpay_plugin_options_fields[country][name]" value="<?php echo $options['country']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="country-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="country-id" name="enterpay_plugin_options_fields[country][id]" value="<?php echo $options['country']['id']; ?>" />
+			</div>			
 			<?php
 		}
 
@@ -146,11 +198,14 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['city']['id'] = 'billing_city';
 			}
 			?>
-			<label for="city-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="city-name" name="enterpay_plugin_options_fields[city][name]" value="<?php echo $options['city']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="city-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="city-id" name="enterpay_plugin_options_fields[city][id]" value="<?php echo $options['city']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="city-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="city-name" name="enterpay_plugin_options_fields[city][name]" value="<?php echo $options['city']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="city-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="city-id" name="enterpay_plugin_options_fields[city][id]" value="<?php echo $options['city']['id']; ?>" />
+			</div>			
 			<?php
 		}
 
@@ -164,11 +219,14 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['street']['id'] = 'billing_address_1';
 			}
 			?>
-			<label for="street-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="street-name" name="enterpay_plugin_options_fields[street][name]" value="<?php echo $options['street']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="street-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="street-id" name="enterpay_plugin_options_fields[street][id]" value="<?php echo $options['street']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="street-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="street-name" name="enterpay_plugin_options_fields[street][name]" value="<?php echo $options['street']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="street-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="street-id" name="enterpay_plugin_options_fields[street][id]" value="<?php echo $options['street']['id']; ?>" />
+			</div>			
 			<?php
 		}
 
@@ -182,11 +240,14 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['street_second']['id'] = 'billing_address_2';
 			}
 			?>
-			<label for="street_second-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="street_second-name" name="enterpay_plugin_options_fields[street_second][name]" value="<?php echo $options['street_second']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="street_second-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="street_second-id" name="enterpay_plugin_options_fields[street_second][id]" value="<?php echo $options['street_second']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="street_second-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="street_second-name" name="enterpay_plugin_options_fields[street_second][name]" value="<?php echo $options['street_second']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="street_second-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="street_second-id" name="enterpay_plugin_options_fields[street_second][id]" value="<?php echo $options['street_second']['id']; ?>" />
+			</div>	
 			<?php
 		}		
 				
@@ -200,11 +261,14 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['postal_code']['id'] = 'billing_postcode';
 			}
 			?>
-			<label for="postal_code-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
-			<input type="text" id="postal_code-name" name="enterpay_plugin_options_fields[postal_code][name]" value="<?php echo $options['postal_code']['name']; ?>" />&nbsp;&nbsp;&nbsp;
-			<label for="postal_code-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
-			<input type="text" id="postal_code-id" name="enterpay_plugin_options_fields[postal_code][id]" value="<?php echo $options['postal_code']['id']; ?>" />
-						
+			<div class="box_row">
+				<label for="postal_code-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+				<input type="text" id="postal_code-name" name="enterpay_plugin_options_fields[postal_code][name]" value="<?php echo $options['postal_code']['name']; ?>" />
+			</div>
+			<div class="box_row">
+				<label for="postal_code-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="postal_code-id" name="enterpay_plugin_options_fields[postal_code][id]" value="<?php echo $options['postal_code']['id']; ?>" />
+			</div>			
 			<?php
 		}
 		
@@ -213,6 +277,26 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 		public function settings_section_callback(){}
 				
 		function display_settings(){ ?>
+			<style>
+				.form-table .box_row {
+					float: left;
+					width: 100%;
+					padding: 0 0 5px 0;
+				}
+				
+				.form-table .box_row label {
+					width: 80px;
+					display: inline-block;
+					text-align: right;
+				}
+				
+				.form-table .box_row input {
+					width: 400px;
+					text-align: left;
+					margin: 0;
+				}				
+				
+			</style>
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<div id="preset_wc_fields"><?php _e('Click here to add fields to WooCommerce checkout', 'enterpay-company-search'); ?></div>
 			
