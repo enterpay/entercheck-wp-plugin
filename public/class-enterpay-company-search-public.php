@@ -717,7 +717,11 @@ class Enterpay_Company_Search_Public
 
 	function request_after_registration_submission($user_id)
 	{
-		if (isset($_POST['bizid'])) {
+		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
+		
+		$field_name = isset($options['company_name']['name']) ? $options['company_name']['name'] : 'bizid';
+		
+		if (isset($_POST[$field_name])) {
 			$business_id =  $_POST['bizid'];
 			$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
 			$data =	$this->send_API_request($endpoint_url, "GET");
@@ -738,12 +742,14 @@ class Enterpay_Company_Search_Public
 	// validate checkout fields
 	function update_billing_phone_requirement($data)
 	{
+		/*
 		$consumer_or_business = isset($_POST['consumer_or_business']) ? wc_clean($_POST['consumer_or_business']) : '';
 
 		if ($consumer_or_business !== 'businesses') {
 			unset($data['bizid']);
 			unset($data['vat']);
 		}
+		*/
 		return $data;
 	}
 
