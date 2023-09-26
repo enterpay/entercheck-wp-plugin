@@ -110,7 +110,7 @@ class Enterpay_Company_Search_Public
 
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/enterpay-company-search-public.js', array('jquery'), $this->version, false);
 
-		$options = get_option('enterpay_plugin_options');
+		$options = get_option('enterpay_plugin_options_fields');
 
 		$variables = array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
@@ -719,15 +719,34 @@ class Enterpay_Company_Search_Public
 	{
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 		
-		$field_name = isset($options['company_name']['name']) ? $options['company_name']['name'] : 'bizid';
+		$field_name = isset($options['business_id']['name']) ? $options['business_id']['name'] : 'bizid';
 		
 		if (isset($_POST[$field_name])) {
-			$business_id =  $_POST['bizid'];
+			$business_id =  $_POST[$field_name];
 			$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
 			$data =	$this->send_API_request($endpoint_url, "GET");
 			update_user_meta($user_id, 'company_base', $data);
 		}
 	}
+	
+	function request_after_submission_form()
+	{		
+		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
+		$field_name = isset($options['business_id']['name']) ? $options['business_id']['name'] : 'bizid';
+		
+		if (isset($_REQUEST[$field_name])){
+			$current_user = wp_get_current_user();
+			
+			if ($current_user instanceof WP_User && $current_user->ID > 0){				
+				if (isset($_REQUEST[$field_name])) {
+					$business_id =  $_REQUEST[$field_name];
+					$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+					$data =	$this->send_API_request($endpoint_url, "GET");
+					update_user_meta($current_user->ID, 'company_base', $data);
+				}
+			}
+		}
+	}	
 
 	// save options to database
 	function enterpay_plugin_options_validate($input)
