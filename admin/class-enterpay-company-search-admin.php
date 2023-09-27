@@ -243,12 +243,4 @@ class Enterpay_Company_Search_Admin
 		// update_user_meta($user_id, 'enterpay_bsuiness_id', $_POST['enterpay_bsuiness_id']);
 
 	}
-
-	// add action woocommerce_new_order save checkout fields  Bsuiness ID and VAT ID in user meta
-
-	public function save_custom_checkout_fields($order)
-	{
-		$bizid = sanitize_text_field($_POST['billing_bizid']);
-		$order->update_meta_data('bizid', $bizid);
-	}
 }

@@ -181,28 +181,28 @@ class Enterpay_Company_Search {
 
 		$this->loader->add_action( 'wp_ajax_company_detail', $plugin_public, 'get_company_detail' );
 		$this->loader->add_action( 'wp_ajax_nopriv_company_detail', $plugin_public, 'get_company_detail' );
-		$this->loader->add_action( 'woocommerce_register_form_start', $plugin_public, 'woocommerce_register_form_data');
-		$this->loader->add_action( 'woocommerce_register_form', $plugin_public, 'woocommerce_register_form_data_pass');
+		////$this->loader->add_action( 'woocommerce_register_form_start', $plugin_public, 'woocommerce_register_form_data');
+		////$this->loader->add_action( 'woocommerce_register_form', $plugin_public, 'woocommerce_register_form_data_pass');
 		$this->loader->add_action( 'woocommerce_created_customer', $plugin_public, 'woocommerce_created_customer_data');
-		$this->loader->add_action( 'woocommerce_registration_errors', $plugin_public, 'wooc_extra_register_fields_validation');
+		////$this->loader->add_action( 'woocommerce_registration_errors', $plugin_public, 'wooc_extra_register_fields_validation');
 		$this->loader->add_action( 'user_register', $plugin_public, 'request_after_registration_submission' );
 		$this->loader->add_action( 'template_redirect', $plugin_public, 'request_after_submission_form' );
 		$this->loader->add_action( 'woocommerce_register_post', $plugin_public, 'woocommerce_register_post_customer', 10, 3  );
 		
-		$this->loader->add_action( 'woocommerce_before_checkout_billing_form', $plugin_public, 'custom_checkout_field_select' );
+		////$this->loader->add_action( 'woocommerce_before_checkout_billing_form', $plugin_public, 'custom_checkout_field_select' );
 		
 		$this->loader->add_action( 'woocommerce_checkout_create_order', $plugin_public, 'enterpay_save_custom_checkout_fields' );
 		$this->loader->add_action( 'woocommerce_new_order', $plugin_public, 'enterpay_save_custom_fields_to_user_meta' );
 
 		$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
 		
-		$this->loader->add_filter( 'woocommerce_save_account_details_required_fields', $plugin_public, 'woocommerce_save_account_details_required_fields_custom' );
-		$this->loader->add_filter( 'woocommerce_billing_fields', $plugin_public, 'custom_woocommerce_billing_fields' );
-		$this->loader->add_filter("woocommerce_checkout_fields", $plugin_public, "custom_override_checkout_fields");
+		////$this->loader->add_filter( 'woocommerce_save_account_details_required_fields', $plugin_public, 'woocommerce_save_account_details_required_fields_custom' );
+		////$this->loader->add_filter( 'woocommerce_billing_fields', $plugin_public, 'custom_woocommerce_billing_fields' );
+		////$this->loader->add_filter("woocommerce_checkout_fields", $plugin_public, "custom_override_checkout_fields");
 
-		$this->loader->add_filter( 'woocommerce_checkout_posted_data', $plugin_public, 'update_billing_phone_requirement' );
+		////$this->loader->add_filter( 'woocommerce_checkout_posted_data', $plugin_public, 'update_billing_phone_requirement' );
 
-		$this->loader->add_filter("woocommerce_get_price_html", $plugin_public, "bbloomer_hide_price_addcart_not_logged_in",10,2);
+		////$this->loader->add_filter("woocommerce_get_price_html", $plugin_public, "bbloomer_hide_price_addcart_not_logged_in",10,2);
 		
 		
 	}
