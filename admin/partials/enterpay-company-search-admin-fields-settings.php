@@ -47,32 +47,32 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			$fields = ['company_name', 'vat_number', 'business_id', 'business_line', 'country', 'city', 'street', 'street_second', 'postal_code']; 
 						
 			foreach ($fields as $field){
-				if( isset( $input[$field]['id'] ) ){ $input[$field]['id'] = implode('|', array_unique(array_map('trim', explode('|', $input[$field]['id'])))); }
-				if( isset( $input[$field]['name'] ) ){ $input[$field]['name'] = implode('|', array_unique(array_map('trim', explode('|', $input[$field]['name'])))); }
+				if( isset( $input[$field]['id'] ) ){ $input[$field]['id'] = implode(',', array_unique(array_map('trim', explode(',', $input[$field]['id'])))); }
+				if( isset( $input[$field]['name'] ) ){ $input[$field]['name'] = implode(',', array_unique(array_map('trim', explode(',', $input[$field]['name'])))); }
 			}
 			/*
 			if( isset( $input['company_name']['id'] ) ){ 
-				array_map('trim', explode('|', $input['company_name']['id'])); 
+				array_map('trim', explode(',', $input['company_name']['id'])); 
 				$options['company_name']['id'] = 
 			}
-			if( isset( $input['company_name']['name'] ) ){ $options['company_name']['name'] = array_map('trim', explode('|', $input['company_name']['name'])); }
-			if( isset( $input['vat_number']['id'] ) ){ $options['vat_number']['id'] = array_map('trim', explode('|', $input['vat_number']['id'])); }
-			if( isset( $input['vat_number']['name'] ) ){ $options['vat_number']['name'] = array_map('trim', explode('|', $input['vat_number']['name'])); }
-			if( isset( $input['business_id']['id'] ) ){ $options['business_id']['id'] = array_map('trim', explode('|', $input['business_id']['id'])); }
-			if( isset( $input['business_id']['name'] ) ){ $options['business_id']['name'] = array_map('trim', explode('|', $input['business_id']['name'])); }
-			if( isset( $input['business_line']['id'] ) ){ $options['business_line']['id'] = array_map('trim', explode('|', $input['business_line']['id'])); }
-			if( isset( $input['business_line']['name'] ) ){ $options['business_line']['name'] = array_map('trim', explode('|', $input['business_line']['name'])); }
+			if( isset( $input['company_name']['name'] ) ){ $options['company_name']['name'] = array_map('trim', explode(',', $input['company_name']['name'])); }
+			if( isset( $input['vat_number']['id'] ) ){ $options['vat_number']['id'] = array_map('trim', explode(',', $input['vat_number']['id'])); }
+			if( isset( $input['vat_number']['name'] ) ){ $options['vat_number']['name'] = array_map('trim', explode(',', $input['vat_number']['name'])); }
+			if( isset( $input['business_id']['id'] ) ){ $options['business_id']['id'] = array_map('trim', explode(',', $input['business_id']['id'])); }
+			if( isset( $input['business_id']['name'] ) ){ $options['business_id']['name'] = array_map('trim', explode(',', $input['business_id']['name'])); }
+			if( isset( $input['business_line']['id'] ) ){ $options['business_line']['id'] = array_map('trim', explode(',', $input['business_line']['id'])); }
+			if( isset( $input['business_line']['name'] ) ){ $options['business_line']['name'] = array_map('trim', explode(',', $input['business_line']['name'])); }
 			
-			if( isset( $input['country']['id'] ) ){ $options['country']['id'] = array_map('trim', explode('|', $input['country']['id'])); }
-			if( isset( $input['country']['name'] ) ){ $options['country']['name'] = array_map('trim', explode('|', $input['country']['name'])); }
-			if( isset( $input['city']['id'] ) ){ $options['city']['id'] = array_map('trim', explode('|', $input['city']['id'])); }
-			if( isset( $input['city']['name'] ) ){ $options['city']['name'] = array_map('trim', explode('|', $input['city']['name'])); }
-			if( isset( $input['street']['id'] ) ){ $options['street']['id'] = array_map('trim', explode('|', $input['street']['id'])); }
-			if( isset( $input['street']['name'] ) ){ $options['street']['name'] = array_map('trim', explode('|', $input['street']['name'])); }
-			if( isset( $input['street_second']['id'] ) ){ $options['street_second']['id'] = array_map('trim', explode('|', $input['street_second']['id'])); }
-			if( isset( $input['street_second']['name'] ) ){ $options['street_second']['name'] = array_map('trim', explode('|', $input['street_second']['name'])); }
-			if( isset( $input['postal_code']['id'] ) ){ $options['postal_code']['id'] = array_map('trim', explode('|', $input['postal_code']['id'])); }
-			if( isset( $input['postal_code']['name'] ) ){ $options['postal_code']['name'] = array_map('trim', explode('|', $input['postal_code']['name'])); }
+			if( isset( $input['country']['id'] ) ){ $options['country']['id'] = array_map('trim', explode(',', $input['country']['id'])); }
+			if( isset( $input['country']['name'] ) ){ $options['country']['name'] = array_map('trim', explode(',', $input['country']['name'])); }
+			if( isset( $input['city']['id'] ) ){ $options['city']['id'] = array_map('trim', explode(',', $input['city']['id'])); }
+			if( isset( $input['city']['name'] ) ){ $options['city']['name'] = array_map('trim', explode(',', $input['city']['name'])); }
+			if( isset( $input['street']['id'] ) ){ $options['street']['id'] = array_map('trim', explode(',', $input['street']['id'])); }
+			if( isset( $input['street']['name'] ) ){ $options['street']['name'] = array_map('trim', explode(',', $input['street']['name'])); }
+			if( isset( $input['street_second']['id'] ) ){ $options['street_second']['id'] = array_map('trim', explode(',', $input['street_second']['id'])); }
+			if( isset( $input['street_second']['name'] ) ){ $options['street_second']['name'] = array_map('trim', explode(',', $input['street_second']['name'])); }
+			if( isset( $input['postal_code']['id'] ) ){ $options['postal_code']['id'] = array_map('trim', explode(',', $input['postal_code']['id'])); }
+			if( isset( $input['postal_code']['name'] ) ){ $options['postal_code']['name'] = array_map('trim', explode(',', $input['postal_code']['name'])); }
 */
 			return $input;
 		}
@@ -298,7 +298,8 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				
 			</style>
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<div id="preset_wc_fields"><?php _e('Click here to add fields to WooCommerce checkout', 'enterpay-company-search'); ?></div>
+			<h4>Please enter the unique identifier of the element you want to modify in both the field_id and field_name cells. To enable functionality in multiple forms, you can add multiple values separated by a comma.</h4>
+			<!--<div id="preset_wc_fields"><?php _e('Click here to add fields to WooCommerce checkout', 'enterpay-company-search'); ?></div>-->
 			
 			<form action='options.php' method='post'> <?php
 				//settings_fields( 'enterpay-company-search-fields' );
@@ -308,6 +309,8 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				do_settings_sections( 'enterpay_plugin_options_company_fields' );
 				submit_button(); ?>
 			</form>
+			
+			<input type="button" class="button button-primary" id="preset_wc_fields" value="Add default WooCommerce fields">
 			
 			<?php
 		}		

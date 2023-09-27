@@ -31,19 +31,19 @@
 	 
 	 $( document ).on('click', '#preset_wc_fields', function(){
 		 if (confirm('Are you sure you want to replace the current fields?')){
-			 $('#company_name-name').val('billing_company');
-			 $('#company_name-id').val('billing_company');
+			 $('#company_name-name').val($('#company_name-name').val() + ($('#company_name-name').val().length > 0 ? ',billing_company' : 'billing_company'));
+			 $('#company_name-id').val($('#company_name-id').val() + ($('#company_name-id').val().length > 0 ? ',billing_company' : 'billing_company'));
 			 
-			 $('#country-name').val('billing_country');
-			 $('#country-id').val('billing_country');
-			 $('#city-name').val('billing_city');
-			 $('#city-id').val('billing_city');
-			 $('#street-name').val('billing_address_1');
-			 $('#street-id').val('billing_address_1');
-			 $('#street_second-name').val('billing_address_2');
-			 $('#street_second-id').val('billing_address_2');
-			 $('#postal_code-name').val('billing_postcode');
-			 $('#postal_code-id').val('billing_postcode');
+			 $('#country-name').val($('#country-name').val() + ($('#country-name').val().length > 0 ? ',billing_country' : 'billing_country'));
+			 $('#country-id').val($('#country-id').val() + ($('#country-id').val().length > 0 ? ',billing_country' : 'billing_country'));
+			 $('#city-name').val($('#city-name').val() + ($('#city-name').val().length > 0 ? ',billing_city' : 'billing_city'));
+			 $('#city-id').val($('#city-id').val() + ($('#city-id').val().length > 0 ? ',billing_city' : 'billing_city'));
+			 $('#street-name').val($('#street-name').val() + ($('#street-name').val().length > 0 ? ',billing_address_1' : 'billing_address_1'));
+			 $('#street-id').val($('#street-id').val() + ($('#street-id').val().length > 0 ? ',billing_address_1' : 'billing_address_1'));
+			 $('#street_second-name').val($('#street_second-name').val() + ($('#street_second-name').val().length > 0 ? ',billing_address_2' : 'billing_address_2'));
+			 $('#street_second-id').val($('#street_second-id').val() + ($('#street_second-id').val().length > 0 ? ',billing_address_2' : 'billing_address_2'));
+			 $('#postal_code-name').val($('#postal_code-name').val() + ($('#postal_code-name').val().length > 0 ? ',billing_postcode' : 'billing_postcode'));
+			 $('#postal_code-id').val($('#postal_code-id').val() + ($('#postal_code-id').val().length > 0 ? ',billing_postcode' : 'billing_postcode'));
 		 }
 	 });
 
