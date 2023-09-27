@@ -277,26 +277,6 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 		public function settings_section_callback(){}
 				
 		function display_settings(){ ?>
-			<style>
-				.form-table .box_row {
-					float: left;
-					width: 100%;
-					padding: 0 0 5px 0;
-				}
-				
-				.form-table .box_row label {
-					width: 80px;
-					display: inline-block;
-					text-align: right;
-				}
-				
-				.form-table .box_row input {
-					width: 400px;
-					text-align: left;
-					margin: 0;
-				}				
-				
-			</style>
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<h4>Please enter the unique identifier of the element you want to modify in both the field_id and field_name cells. To enable functionality in multiple forms, you can add multiple values separated by a comma.</h4>
 			<!--<div id="preset_wc_fields"><?php _e('Click here to add fields to WooCommerce checkout', 'enterpay-company-search'); ?></div>-->

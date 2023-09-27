@@ -46,6 +46,11 @@
 			 $('#postal_code-id').val($('#postal_code-id').val() + ($('#postal_code-id').val().length > 0 ? ',billing_postcode' : 'billing_postcode'));
 		 }
 	 });
+	 
+	 $( document ).on('click', '#display_password', function(){
+		 $('#enterpay_plugin_setting_password').attr('type', 'text');
+	 });
+	 
 
 })(jQuery);
 

@@ -42,6 +42,15 @@ class Enterpay_Company_Search_Public
 	private $version;
 
 	/**
+	 * The domain API.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $version    The current version of this plugin.
+	 */
+	private $api_domain;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -53,6 +62,13 @@ class Enterpay_Company_Search_Public
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		
+		$options = get_option('enterpay_plugin_options');
+		if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
+			$this->api_domain = "api.test.entercheck.eu"; 
+		} else {
+			$this->api_domain = "api.entercheck.eu";
+		}		
 	}
 
 	/**
@@ -149,7 +165,7 @@ class Enterpay_Company_Search_Public
 		$data = json_encode($data);
 		$options = array(
 			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_URL => 'https://api.test.entercheck.eu/v1/auth',
+			CURLOPT_URL => 'https://".$this->api_domain."/v1/auth',
 			CURLOPT_POST => true,
 			CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
 			CURLOPT_POSTFIELDS => $data
@@ -214,19 +230,24 @@ class Enterpay_Company_Search_Public
 		$name = urlencode($_REQUEST["name"]);
 		$country_code = 'FI';
 
-		$endpoint_url = "https://api.test.entercheck.eu/company/search?country=" . $country_code . "&name=" . $name;
+		$endpoint_url = "https://".$this->api_domain."/company/search?country=" . $country_code . "&name=" . $name;
 		$data = $this->send_API_request($endpoint_url, "GET");
+		
 		print_r($data);
 		die();
 	}
 
-	public function get_company_detail()
+	public function get_company_detail($is_return = false)
 	{
 		$bid = $_REQUEST["bid"];
 		$country_code = 'FI';
-		$endpoint_url = "https://api.test.entercheck.eu/company/details?country=" . $country_code . "&id=" . $bid;
+		$endpoint_url = "https://".$this->api_domain."/company/details?country=" . $country_code . "&id=" . $bid;
+		$data = $this->send_API_request($endpoint_url, "GET");
 
-		print_r($this->send_API_request($endpoint_url, "GET"));
+		if ($is_return)
+			return $data;
+
+		print_r($data);
 		die();
 	}
 
@@ -385,9 +406,15 @@ class Enterpay_Company_Search_Public
 		foreach ($field_names as $field_name){
 			if (isset($_POST[$field_name])) {
 				$business_id =  $_POST[$field_name];
-				$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+				$endpoint_url = 'https://".$this->api_domain."/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
 				$data =	$this->send_API_request($endpoint_url, "GET");
 				update_user_meta($user_id, 'company_base', $data);
+				
+				$_REQUEST['bid'] = $business_id;				
+				$data = $this->get_company_detail(true);
+				if (!empty($data)) {
+					update_user_meta($user_id, 'company_info', wc_clean($data));
+				}
 				
 				break;
 			}
@@ -406,9 +433,15 @@ class Enterpay_Company_Search_Public
 				if ($current_user instanceof WP_User && $current_user->ID > 0){				
 					if (isset($_REQUEST[$field_name])) {
 						$business_id =  $_REQUEST[$field_name];
-						$endpoint_url = 'https://api.test.entercheck.eu/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+						$endpoint_url = 'https://".$this->api_domain."/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
 						$data =	$this->send_API_request($endpoint_url, "GET");
 						update_user_meta($current_user->ID, 'company_base', $data);
+						
+						$_REQUEST['bid'] = $business_id;				
+						$data = $this->get_company_detail(true);
+						if (!empty($data)) {
+							update_user_meta($current_user->ID, 'company_info', wc_clean($data));
+						}
 						
 						break;
 					}
@@ -423,6 +456,7 @@ class Enterpay_Company_Search_Public
 		$options = get_option('enterpay_plugin_options');
 		$options['username'] = trim($input['username']);
 		$options['password'] = trim($input['password']);
+		$options['environment'] = trim($input['environment']);
 		$options['start_date'] = trim($input['start_date']);
 		return $options;
 	}
