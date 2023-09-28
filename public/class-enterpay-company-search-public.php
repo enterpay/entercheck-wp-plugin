@@ -165,7 +165,7 @@ class Enterpay_Company_Search_Public
 		$data = json_encode($data);
 		$options = array(
 			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_URL => 'https://".$this->api_domain."/v1/auth',
+			CURLOPT_URL => 'https://'.$this->api_domain.'/v1/auth',
 			CURLOPT_POST => true,
 			CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
 			CURLOPT_POSTFIELDS => $data
@@ -406,7 +406,7 @@ class Enterpay_Company_Search_Public
 		foreach ($field_names as $field_name){
 			if (isset($_POST[$field_name])) {
 				$business_id =  $_POST[$field_name];
-				$endpoint_url = 'https://".$this->api_domain."/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
 				$data =	$this->send_API_request($endpoint_url, "GET");
 				update_user_meta($user_id, 'company_base', $data);
 				
@@ -433,7 +433,7 @@ class Enterpay_Company_Search_Public
 				if ($current_user instanceof WP_User && $current_user->ID > 0){				
 					if (isset($_REQUEST[$field_name])) {
 						$business_id =  $_REQUEST[$field_name];
-						$endpoint_url = 'https://".$this->api_domain."/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+						$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
 						$data =	$this->send_API_request($endpoint_url, "GET");
 						update_user_meta($current_user->ID, 'company_base', $data);
 						

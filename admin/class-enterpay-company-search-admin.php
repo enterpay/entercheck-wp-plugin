@@ -165,7 +165,8 @@ class Enterpay_Company_Search_Admin
 			$company_info = json_decode($company_info, true);
 		}
 		if (!empty($company_info)) {
-			$uuid = $company_base['uuid'];
+			//$uuid = $company_base['uuid'];
+			$companyId = $company_base['companyId'];			
 
 			// get Bsuiness ID and VAT ID from company_info
 			$business_id = $company_info['ids'][0]['idValue'];
@@ -184,7 +185,7 @@ class Enterpay_Company_Search_Admin
 				<tr>
 					<th><label for="enterpay_vat_id"><?php _e("Link to Entercheck", 'enterpay-company-search'); ?></label></th>
 					<td>
-						<a target="_blank" href="https://<?php echo $api_domain; ?>/companies/<?php echo $uuid; ?>">Link to Entercheck</a>
+						<a target="_blank" href="https://<?php echo $api_domain; ?>/companies/<?php echo $companyId; ?>">Link to Entercheck</a>
 					</td>
 				</tr>
 				<tr>
