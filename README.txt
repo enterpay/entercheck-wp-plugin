@@ -1,5 +1,5 @@
-=== Enterpay Company Search ===
-Contributors: Enterpay 
+=== Entercheck Company Search ===
+Contributors: Entercheck 
 Donate link: https://demoshop.entercheck.eu/
 Tags: company, search, registration, form
 Requires at least: x
@@ -12,33 +12,28 @@ Fetch company names and details from company registry API to integrate with your
 
 == Description ==
 
-Enterpay's Company Search plugin allows behind-the-scenes integration with company registry APIs to populate and augment WordPress registration form fields. The plugin offers features to fetch company names and details, fetch company status and other processed details when a form is submitted, and add this information to a WordPress user during registration. The information is available at the WordPress user page and in the Entercheck backend portal. Using the Plugin requires registering at portal.entercheck.eu/register
+Entercheck's Company Search plugin allows behind-the-scenes integration with company registry APIs to populate and augment WordPress registration form fields. The plugin offers features to fetch company names and details, fetch company status and other processed details when a form is submitted, and add this information to a WordPress user during registration. The information is available at the WordPress user page and in the Entercheck backend portal. Using the Plugin requires registering at portal.entercheck.eu/register
 
 == Installation ==
 
-1. Upload `enterpay-company-search.php` to the `/wp-content/plugins/` directory
+1. Upload `entercheck-company-search.php` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Use the provided hooks or shortcodes in your forms to integrate the company search functionality.
+3. Sign up for the Entercheck service if you haven't already done so. Visit [Entercheck website](https://portal.entercheck.eu) to create an account.
+4. Identify the HTML field IDs in the forms where you want to enable the functionality of the Enterpay Company Search plugin. Enter the HTML field IDs in the appropriate field or box provided.
 
 == Frequently Asked Questions ==
 
 = How do I integrate the company search functionality with my form? =
 
-To integrate the company search functionality with your form, use the following shortcodes:
+To integrate the company search functionality with your form, enter the HTML field IDs in the appropriate field in the settings.
 
-**[company_name_dropdown]**
+= How do I submit the company data to Entercheck? =
 
-This shortcode displays a dropdown list of company names fetched from the company registry API.
+You must include the "business id" field in the form. The field can be hidden.
 
-**[company_details company_id='123']**
+= How do I submit the company data to during WooCommerce checkout? =
 
-This shortcode fetches and displays details for a specific selected company based on its ID.
-
-**[company_status company_id='123']**
-
-This shortcode retrieves and displays the status of a company based on its ID.
-
-Use these shortcodes appropriately within your form to provide the desired functionality.
+You must include the "business id" field in the form. The field can be hidden.
 
 == Screenshots ==
 
