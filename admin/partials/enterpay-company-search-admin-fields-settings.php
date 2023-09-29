@@ -49,6 +49,7 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			foreach ($fields as $field){
 				if( isset( $input[$field]['id'] ) ){ $input[$field]['id'] = implode(',', array_unique(array_map('trim', explode(',', $input[$field]['id'])))); }
 				if( isset( $input[$field]['name'] ) ){ $input[$field]['name'] = implode(',', array_unique(array_map('trim', explode(',', $input[$field]['name'])))); }
+				//if( isset( $input[$field]['tooltip'] ) ){ $input[$field]['tooltip'] = $input[$field]['name']; }
 			}
 			/*
 			if( isset( $input['company_name']['id'] ) ){ 
@@ -88,6 +89,9 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			if (!isset($options['company_name']['id'])) {
 				$options['company_name']['id'] = 'billing_company';
 			}
+			if (!isset($options['company_name']['tooltip'])) {
+				$options['company_name']['tooltip'] = 'Search for your company details by typing a search phrase to the box';
+			}
 			
 			// class="regular-text" 
 			?>
@@ -98,7 +102,11 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			<div class="box_row">
 				<label for="company_name-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
 				<input type="text" id="company_name-id" name="enterpay_plugin_options_fields[company_name][id]" value="<?php echo $options['company_name']['id']; ?>" />
-			</div>			
+			</div>
+			<div class="box_row">
+				<label for="company_name-tooltip"><?php _e('ToolTip', 'enterpay-company-search'); ?>:</label>			
+				<input type="text" id="company_name-tooltip" name="enterpay_plugin_options_fields[company_name][tooltip]" value="<?php echo $options['company_name']['tooltip']; ?>" />
+			</div>				
 			<?php
 		}	
 

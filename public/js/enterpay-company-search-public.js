@@ -30,6 +30,8 @@
    */
 
   $(document).ready(function () {
+	$("#" + enterpayjs.company_name_id).attr('title', enterpayjs.company_name_tootltip);
+	$('<div id="company_loader"></div>').insertAfter($("#" + enterpayjs.company_name_id));
     $("#" + enterpayjs.company_name_id).typeahead({
       source: function (query, result) {
         $.ajax({
@@ -60,10 +62,27 @@
       name: "company-search",
       display: "name",
       source: dataset,
+	  templates: {
+		empty: [
+		  '<div class="empty-message">No results found</div>'
+		]		
+	  }	  
     });
+
+	$("#" + enterpayjs.company_name_id).bind("typeahead:asyncrequest", function (ev, query, dataset) {
+		$('#company_loader').addClass('spinner');
+	});
+	$("#" + enterpayjs.company_name_id).bind("typeahead:asynccancel", function (ev, query, dataset) {
+		$('#company_loader').removeClass('spinner');
+	});
+	$("#" + enterpayjs.company_name_id).bind("typeahead:asyncreceive", function (ev, query, dataset) {
+		$('#company_loader').removeClass('spinner');
+	});
+
 
     $("#" + enterpayjs.company_name_id).bind("typeahead:select", function (ev, suggestion) {
       console.log(suggestion);
+	  $('#company_loader').addClass('spinner');
 
       // set suggestion to local storage
       localStorage.setItem("company", JSON.stringify(suggestion));
@@ -93,6 +112,8 @@
 		  if ($("#" + enterpayjs.postal_code_id).length) $("#" + enterpayjs.postal_code_id).val(address.postalCode);
 		  
           $("#company_info").val(JSON.stringify(e));
+		  
+		  $('#company_loader').removeClass('spinner');
         });
     });
   });

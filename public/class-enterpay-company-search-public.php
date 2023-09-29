@@ -132,6 +132,7 @@ class Enterpay_Company_Search_Public
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'company_name_name' => isset($options['company_name']['name']) ? $options['company_name']['name'] : 'billing_company',
 			'company_name_id' => isset($options['company_name']['id']) ? str_ireplace(',', ', #', $options['company_name']['id']) : 'billing_company',
+			'company_name_tootltip' => isset($options['company_name']['tooltip']) ? $options['company_name']['tooltip'] : 'Search for your company details by typing a search phrase to the box',
 			'vat_number_name' => isset($options['vat_number']['name']) ? $options['vat_number']['name'] : 'inputVATNumber',
 			'vat_number_id' => isset($options['vat_number']['id']) ? str_ireplace(',', ', #', $options['vat_number']['id']) : 'inputVATNumber',
 			'business_id_name' => isset($options['business_id']['name']) ? $options['business_id']['name'] : 'inputBusinessId',
@@ -232,7 +233,7 @@ class Enterpay_Company_Search_Public
 
 		$endpoint_url = "https://".$this->api_domain."/company/search?country=" . $country_code . "&name=" . $name;
 		$data = $this->send_API_request($endpoint_url, "GET");
-		
+				
 		print_r($data);
 		die();
 	}
