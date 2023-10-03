@@ -53,6 +53,8 @@ class Enterpay_Company_Search_Admin
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		
+		include(plugin_dir_path(__FILE__) . 'partials/enterpay-company-search-admin-fields-settings.php');
 	}
 
 	/**
@@ -113,8 +115,10 @@ class Enterpay_Company_Search_Admin
 	public function add_menu()
 	{
 		// add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
-		add_menu_page("Enterpay", "Enterpay", 'manage_options', $this->plugin_name . '-enterpay', array($this, 'page_enterpay_admin'));
-		add_submenu_page($this->plugin_name . '-enterpay', 'Enterpay fields', 'Enterpay fields', 'manage_options', $this->plugin_name . '-enterpay-fields', array($this, 'page_enterpay_fields_admin'));
+		add_menu_page("Entercheck", "Entercheck", 'manage_options', $this->plugin_name . '-entercheck', array($this, 'page_enterpay_admin'));
+		add_submenu_page($this->plugin_name . '-entercheck', 'Credentials', 'Credentials', 'manage_options', $this->plugin_name . '-credentials', array($this, 'page_enterpay_admin'));
+		//add_submenu_page($this->plugin_name . '-entercheck', 'Field settings', 'Field settings', 'manage_options', $this->plugin_name . '-enterpay-fields', array($this, 'page_enterpay_fields_admin'));
+		remove_submenu_page($this->plugin_name . '-entercheck', $this->plugin_name . '-entercheck');
 	}
 
 	public function page_enterpay_admin()
@@ -136,7 +140,7 @@ class Enterpay_Company_Search_Admin
 
 		add_settings_field('enterpay_plugin_setting_username', 'Username', 'enterpay_plugin_setting_username', 'dbi_example_plugin', 'api_settings');
 		add_settings_field('enterpay_plugin_setting_password', 'Password', 'enterpay_plugin_setting_password', 'dbi_example_plugin', 'api_settings');
-		add_settings_field('enterpay_plugin_setting_types', 'Types', 'enterpay_plugin_setting_types', 'dbi_example_plugin', 'api_settings');
+		add_settings_field('enterpay_plugin_setting_environment', 'Type of environment', 'enterpay_plugin_setting_environment', 'dbi_example_plugin', 'api_settings');
 
 		add_settings_field('enterpay_plugin_setting_enterpaytoken', 'Token', 'enterpay_plugin_setting_enterpaytoken', 'dbi_example_plugin', 'api_settings');
 
@@ -161,12 +165,19 @@ class Enterpay_Company_Search_Admin
 			$company_info = json_decode($company_info, true);
 		}
 		if (!empty($company_info)) {
-			$uuid = $company_base['uuid'];
+			//$uuid = $company_base['uuid'];
+			$companyId = $company_base['companyId'];			
 
 			// get Bsuiness ID and VAT ID from company_info
 			$business_id = $company_info['ids'][0]['idValue'];
 			$vat_id = $company_info['ids'][1]['idValue'];
 			$status = $company_info['status'];
+			
+			$options = get_option('enterpay_plugin_options');
+			$api_domain = "portal.entercheck.eu"; 
+			if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
+				$api_domain = "portal.test.entercheck.eu"; 
+			}	
 
 ?>
 			<h3><?php _e("Customer Organization", 'enterpay-company-search'); ?></h3>
@@ -174,7 +185,7 @@ class Enterpay_Company_Search_Admin
 				<tr>
 					<th><label for="enterpay_vat_id"><?php _e("Link to Entercheck", 'enterpay-company-search'); ?></label></th>
 					<td>
-						<a target="_blank" href="https://portal.test.entercheck.eu/companies/<?php echo $uuid; ?>">Link to Entercheck</a>
+						<a target="_blank" href="https://<?php echo $api_domain; ?>/companies/<?php echo $companyId; ?>">Link to Entercheck</a>
 					</td>
 				</tr>
 				<tr>
@@ -239,13 +250,5 @@ class Enterpay_Company_Search_Admin
 		// update_user_meta($user_id, 'enterpay_vat_id', $_POST['enterpay_vat_id']);
 		// update_user_meta($user_id, 'enterpay_bsuiness_id', $_POST['enterpay_bsuiness_id']);
 
-	}
-
-	// add action woocommerce_new_order save checkout fields  Bsuiness ID and VAT ID in user meta
-
-	public function save_custom_checkout_fields($order)
-	{
-		$bizid = sanitize_text_field($_POST['billing_bizid']);
-		$order->update_meta_data('bizid', $bizid);
 	}
 }

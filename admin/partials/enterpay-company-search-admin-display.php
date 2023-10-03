@@ -48,8 +48,22 @@
             $options['password'] = "";
         }
 
-        echo "<input id='enterpay_plugin_setting_password' name='enterpay_plugin_options[password]' type='text' value='" . esc_attr($options['password']) . "' />";
+        echo "<input id='enterpay_plugin_setting_password' name='enterpay_plugin_options[password]' type='password' value='" . esc_attr($options['password']) . "' />";
+		echo "<img id='display_password' src='".plugin_dir_url( dirname( __FILE__ ) )."images/hidden_eye_icon.png' width='24' heigth='24'>";
     }
+	
+	function enterpay_plugin_setting_environment(){
+		$options = get_option('enterpay_plugin_options');
+		
+		if (!isset($options['environment'])) { $options['environment'] = "test"; }
+?>
+		<select name="enterpay_plugin_options[environment]">
+			<option value="test" <?php if ($options['environment'] == 'test') echo 'selected="selected"'; ?>>Test</option>
+			<option value="production" <?php if ($options['environment'] == 'production') echo 'selected="selected"'; ?>>Production</option>
+		</select>
+<?php 		
+		
+	}
 
     function enterpay_plugin_setting_start_date()
     {
@@ -60,28 +74,6 @@
         }
 
         echo "<input id='enterpay_plugin_setting_start_date' name='enterpay_plugin_options[start_date]' type='text' value='" . esc_attr($options['start_date']) . "' />";
-    }
-
-    function enterpay_plugin_setting_types()
-    {
-        $options = get_option('enterpay_plugin_options');
-
-        if (!isset($options['checkbox']['consumers'])) {
-            $options['checkbox']['consumers'] = 0;
-        }
-        if (!isset($options['checkbox']['businesses']) && empty($options['checkbox']['consumers']))  {
-            $options['checkbox']['businesses'] = 1;
-        }
-        if (!isset( $options['checkbox']['businesses']) && !empty( $options['checkbox']['consumers']))  {
-            $options['checkbox']['businesses'] = 0;
-        }
-    ?>
-        <!-- create checbox Consumers and Businesses, Businesses default checked -->
-        <input type="checkbox" id="consumers" name="enterpay_plugin_options[checkbox][consumers]" value="1" <?php checked(1,  $options['checkbox']['consumers'], true); ?> />
-        <label for="consumers"><?php _e('Consumers', 'enterpay-company-search'); ?></label>
-        <input type="checkbox" id="businesses" name="enterpay_plugin_options[checkbox][businesses]" value="1" <?php checked(1,  $options['checkbox']['businesses'], true); ?> />
-        <label for="businesses"><?php _e('Businesses', 'enterpay-company-search'); ?></label>
-    <?php
     }
 
     function enterpay_plugin_setting_enterpaytoken()
@@ -95,6 +87,12 @@
 
 $curl = curl_init();
 $options = get_option('enterpay_plugin_options');
+
+$api_domain = "api.entercheck.eu"; 
+if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
+	$api_domain = "api.test.entercheck.eu"; 
+}	
+
 if (!isset($options['username']) || !isset($options['password'])) {
     echo "<p><b><i>API credentials are not set!</i></b></p>";
     return;
@@ -106,7 +104,7 @@ $data = array(
 $data = json_encode($data);
 $options = array(
     CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => 'https://api.test.entercheck.eu/v1/auth',
+    CURLOPT_URL => 'https://'.$api_domain.'/v1/auth',
     CURLOPT_POST => true,
     CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
     CURLOPT_POSTFIELDS => $data
@@ -126,7 +124,7 @@ $resp = curl_exec($curl);
 
 if (!empty($resp)) :
     $res =   json_decode($resp);
-    if (!$res->error) :
+    if (!isset($res->error)) :
         $token = $res->token;
         if (!empty($token)) :
             update_option('enterpay_token', $token);
