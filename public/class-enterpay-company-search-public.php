@@ -414,7 +414,7 @@ class Enterpay_Company_Search_Public
 				$_REQUEST['bid'] = $business_id;				
 				$data = $this->get_company_detail(true);
 				if (!empty($data)) {
-					update_user_meta($user_id, 'company_info', wc_clean($data));
+					update_user_meta($user_id, 'company_info', sanitize_text_field($data));
 				}
 				
 				break;
@@ -427,26 +427,22 @@ class Enterpay_Company_Search_Public
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['bizid'];
 		
-		foreach ($field_names as $field_name){
-			if (isset($_REQUEST[$field_name])){
+		foreach ($field_names as $field_name){			
+			if (isset($_REQUEST[$field_name])) {
+				$business_id =  $_REQUEST[$field_name];
+				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+				$data =	$this->send_API_request($endpoint_url, "GET");
 				$current_user = wp_get_current_user();
-				
 				if ($current_user instanceof WP_User && $current_user->ID > 0){				
-					if (isset($_REQUEST[$field_name])) {
-						$business_id =  $_REQUEST[$field_name];
-						$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
-						$data =	$this->send_API_request($endpoint_url, "GET");
-						update_user_meta($current_user->ID, 'company_base', $data);
-						
-						$_REQUEST['bid'] = $business_id;				
-						$data = $this->get_company_detail(true);
-						if (!empty($data)) {
-							update_user_meta($current_user->ID, 'company_info', wc_clean($data));
-						}
-						
-						break;
+					update_user_meta($current_user->ID, 'company_base', $data);					
+					$_REQUEST['bid'] = $business_id;				
+					$data = $this->get_company_detail(true);
+					if (!empty($data)) {
+						update_user_meta($current_user->ID, 'company_info', sanitize_text_field($data));
 					}
 				}
+				
+				break;
 			}
 		}
 	}	
