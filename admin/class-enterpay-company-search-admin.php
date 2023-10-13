@@ -173,6 +173,25 @@ class Enterpay_Company_Search_Admin
 			$vat_id = $company_info['ids'][1]['idValue'];
 			$status = $company_info['status'];
 			
+			$invoiceAddresses = [];			
+			/*
+			$company_name = "";
+			$address = "";
+			$operatorCode = "";
+			$operator = "";
+			$ovt = "";
+			*/
+			foreach($company_info['receivingFinvoiceAddress'] as $invoice){
+				$invoiceAddresses[] = [
+					'company_name' => $invoice['name'],
+					'address' => $invoice['address'],
+					'operatorCode' => $invoice['operatorCode'],
+					'operator' => $invoice['operator'],
+					'ovt' => $invoice['ovt']	
+				];
+			}
+			$status = $company_info['status'];
+			
 			$options = get_option('enterpay_plugin_options');
 			$api_domain = "portal.entercheck.eu"; 
 			if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
@@ -207,6 +226,47 @@ class Enterpay_Company_Search_Admin
 					</td>
 				</tr>
 			</table>
+			
+			<?php 
+			$ind = 1;
+			foreach ($invoiceAddresses as $invoiceAddress) { ?>			
+				<h3><?php _e("Invoice Address", 'enterpay-company-search'); ?> <?php echo $ind; ?></h3>
+				<table class="form-table">
+					<tr>
+						<th><label for="enterpay_bsuiness_id"><?php _e("Company name", 'enterpay-company-search'); ?></label></th>
+						<td>
+							<input type="text" readonly value="<?php echo esc_attr($invoiceAddress['company_name']); ?>" class="regular-text" /><br />
+						</td>
+					</tr>
+					<tr>
+						<th><label for="enterpay_bsuiness_id"><?php _e("Address", 'enterpay-company-search'); ?></label></th>
+						<td>
+							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['address']); ?>" class="regular-text" /><br />
+						</td>
+					</tr>
+					<tr>
+						<th><label for="enterpay_vat_id"><?php _e("Operator code", 'enterpay-company-search'); ?></label></th>
+						<td>
+							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['operatorCode']); ?>" class="regular-text" /><br />
+						</td>
+					</tr>
+					<tr>
+						<th><label for="enterpay_vat_id"><?php _e("Operator", 'enterpay-company-search'); ?></label></th>
+						<td>
+							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['operator']); ?>" class="regular-text" /><br />
+						</td>
+					</tr>	
+					<tr>
+					<th><label for="enterpay_vat_id"><?php _e("OVT", 'enterpay-company-search'); ?></label></th>
+						<td>
+							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['ovt']); ?>" class="regular-text" /><br />
+						</td>				
+					</tr>
+				</table>
+			<?php 
+				$ind++;
+			} 
+			?> 			
 <?php
 		}
 	}
