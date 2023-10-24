@@ -185,7 +185,8 @@ class Enterpay_Company_Search {
 		////$this->loader->add_action( 'woocommerce_register_form', $plugin_public, 'woocommerce_register_form_data_pass');
 		$this->loader->add_action( 'woocommerce_created_customer', $plugin_public, 'woocommerce_created_customer_data');
 		////$this->loader->add_action( 'woocommerce_registration_errors', $plugin_public, 'wooc_extra_register_fields_validation');
-		$this->loader->add_action( 'user_register', $plugin_public, 'request_after_registration_submission' );
+		$this->loader->add_action( 'user_register', $plugin_public, 'request_after_registration_submission', 10, 1 );
+		$this->loader->add_action( 'gform_user_registered', $plugin_public, 'request_after_registration_submission', 10, 1 );
 		//$this->loader->add_action( 'template_redirect', $plugin_public, 'request_after_submission_form' );
 		$this->loader->add_action( 'init', $plugin_public, 'request_after_submission_form' );
 		$this->loader->add_action( 'woocommerce_register_post', $plugin_public, 'woocommerce_register_post_customer', 10, 3  );
