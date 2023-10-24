@@ -405,8 +405,8 @@ class Enterpay_Company_Search_Public
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['bizid'];
 		
 		foreach ($field_names as $field_name){
-			if (isset($_POST[$field_name])) {
-				$business_id =  $_POST[$field_name];
+			if (isset($_REQUEST[$field_name])) {
+				$business_id =  $_REQUEST[$field_name];
 				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
 				$data =	$this->send_API_request($endpoint_url, "GET");
 				update_user_meta($user_id, 'company_base', $data);
