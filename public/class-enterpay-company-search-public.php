@@ -136,7 +136,10 @@ class Enterpay_Company_Search_Public
 			'vat_number_name' => isset($options['vat_number']['name']) ? $options['vat_number']['name'] : 'inputVATNumber',
 			'vat_number_id' => isset($options['vat_number']['id']) ? str_ireplace(',', ', #', $options['vat_number']['id']) : 'inputVATNumber',
 			'business_id_name' => isset($options['business_id']['name']) ? $options['business_id']['name'] : 'inputBusinessId',
+			'business_id_name_first' => isset($options['business_id']['name']) ? array_map('trim', explode(',', $options['business_id']['name']))[0] : 'inputBusinessId',
 			'business_id_id' => isset($options['business_id']['id']) ? str_ireplace(',', ', #', $options['business_id']['id']) : 'inputBusinessId',
+			'business_id_id_first' => isset($options['business_id']['id']) ? array_map('trim', explode(',', $options['business_id']['id']))[0] : 'inputBusinessId',
+			'business_id_auto' => isset($options['business_id']['auto']) && is_numeric($options['business_id']['auto']) ? intval($options['business_id']['auto']) : 0,
 			'business_line_name' => isset($options['business_line']['name']) ? $options['business_line']['name'] : 'companyBusinessLine',
 			'business_line_id' => isset($options['business_line']['id']) ? str_ireplace(',', ', #', $options['business_line']['id']) : 'companyBusinessLine',
 			

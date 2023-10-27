@@ -50,6 +50,10 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				if( isset( $input[$field]['id'] ) ){ $input[$field]['id'] = implode(',', array_unique(array_map('trim', explode(',', $input[$field]['id'])))); }
 				if( isset( $input[$field]['name'] ) ){ $input[$field]['name'] = implode(',', array_unique(array_map('trim', explode(',', $input[$field]['name'])))); }
 				//if( isset( $input[$field]['tooltip'] ) ){ $input[$field]['tooltip'] = $input[$field]['name']; }
+				
+				if ($field == 'business_id'){
+					if( isset( $input[$field]['auto'] ) && $input[$field]['auto'] == 1 ) $input[$field]['auto'] = 1; else $input[$field]['auto'] = 0;
+				}
 			}
 			/*
 			if( isset( $input['company_name']['id'] ) ){ 
@@ -140,6 +144,9 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			if (!isset($options['business_id']['id'])) {
 				$options['business_id']['id'] = 'inputBusinessId';
 			}
+			if (!isset($options['business_id']['auto'])) {
+				$options['business_id']['auto'] = '0';
+			}
 			?>
 			<div class="box_row">
 				<label for="business_id-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
@@ -148,7 +155,11 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			<div class="box_row">
 				<label for="business_id-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
 				<input type="text" id="business_id-id" name="enterpay_plugin_options_fields[business_id][id]" value="<?php echo $options['business_id']['id']; ?>" />
-			</div>			
+			</div>
+			<div class="box_row">					
+				<input type="checkbox" <?php if ($options['business_id']['auto'] == 1) echo 'checked'; ?> id="business_id-auto" name="enterpay_plugin_options_fields[business_id][auto]" value="1" />
+				<label class="chb" for="business_id-auto"><?php _e('Add automatically', 'enterpay-company-search'); ?></label>
+			</div>				
 			<?php
 		}
 		
