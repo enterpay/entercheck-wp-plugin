@@ -356,7 +356,7 @@ class Enterpay_Company_Search_Public
 			}
 		}
 		
-		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['bizid'];		
+		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name])) {
 				update_user_meta($customer_id, 'bizid', wc_clean($_POST[$field_name]));
@@ -405,7 +405,7 @@ class Enterpay_Company_Search_Public
 	{
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 		
-		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['bizid'];
+		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
 		foreach ($field_names as $field_name){
 			if (isset($_REQUEST[$field_name])) {
@@ -428,7 +428,7 @@ class Enterpay_Company_Search_Public
 	function request_after_submission_form()
 	{		
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
-		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['bizid'];
+		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
 		foreach ($field_names as $field_name){			
 			if (isset($_REQUEST[$field_name])) {
@@ -465,7 +465,7 @@ class Enterpay_Company_Search_Public
 	{
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 		
-		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['bizid'];
+		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
 		foreach ($field_names as $field_name){
 			if (isset($_POST[$field_name])) {		
@@ -493,7 +493,7 @@ class Enterpay_Company_Search_Public
 		$user_id = $order->get_user_id();
 		
 		$options  = get_option( 'enterpay_plugin_options_fields', array() );		
-		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['bizid'];
+		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
 		foreach ($field_names as $field_name){
 			if (isset($_POST[$field_name])) {		

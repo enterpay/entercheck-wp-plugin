@@ -14,12 +14,20 @@
 	display: inline-block;
 	text-align: right;
 }
+.form-table .box_row label.chb {
+	width: 180px;
+	text-align: left;
+	vertical-align: initial;
+}
 
-.form-table .box_row input {
+.form-table .box_row input[type="text"] {
 	width: 400px;
 	text-align: left;
 	margin: 0;
 }	
+.form-table .box_row input[type="checkbox"] {
+	margin-left: 85px;
+}
  
  .form-table img {
 	 vertical-align: text-bottom;
