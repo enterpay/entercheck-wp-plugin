@@ -30,6 +30,19 @@
    */
 
   $(document).ready(function () {
+	 if (enterpayjs.business_id_auto == 1){
+		$('form').each(function(){
+			var form = $( this );
+			var form_comp_fields = form.find("#" + enterpayjs.company_name_id);
+			if (form_comp_fields.length > 0){
+				var form_buisness_fields = form.find("#" + enterpayjs.business_id_id);
+				if (!form_buisness_fields.length){
+					$('<input type="hidden" id="' + enterpayjs.business_id_id_first + '" name="' + enterpayjs.business_id_name_first + '">').insertAfter($("#" + enterpayjs.company_name_id));
+				}
+			}
+		});
+	 } 
+	  
 	$("#" + enterpayjs.company_name_id).attr('title', enterpayjs.company_name_tootltip);
 	$('<div id="company_loader"></div>').insertAfter($("#" + enterpayjs.company_name_id));
     $("#" + enterpayjs.company_name_id).typeahead({
