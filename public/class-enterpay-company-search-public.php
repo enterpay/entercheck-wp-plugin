@@ -153,6 +153,10 @@ class Enterpay_Company_Search_Public
 			'street_second_id' => isset($options['street_second']['id']) ? str_ireplace(',', ', #', $options['street_second']['id']) : 'billing_address_2',
 			'postal_code_name' => isset($options['postal_code']['name']) ? $options['postal_code']['name'] : 'billing_postcode',
 			'postal_code_id' => isset($options['postal_code']['id']) ? str_ireplace(',', ', #', $options['postal_code']['id']) : 'billing_postcode',
+			
+			'display_invoice_address' => isset($options['display_invoice_address']) && is_numeric($options['display_invoice_address']) ? intval($options['display_invoice_address']) : 0,
+			'invoice_address_name' => isset($options['invoice_address']['name']) ? $options['invoice_address']['name'] : 'companyBusinessLine',
+			'invoice_address_id' => isset($options['invoice_address']['id']) ? str_ireplace(',', ', #', $options['invoice_address']['id']) : 'companyBusinessLine',
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
@@ -242,7 +246,7 @@ class Enterpay_Company_Search_Public
 	}
 
 	public function get_company_detail($is_return = false)
-	{
+	{				
 		$bid = $_REQUEST["bid"];
 		$country_code = 'FI';
 		$endpoint_url = "https://".$this->api_domain."/company/details?country=" . $country_code . "&id=" . $bid;
