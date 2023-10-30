@@ -137,7 +137,7 @@
 				for (var i=0;i<invoiceAddress.length;++i){
 					if (i != 0)	invoiceAddressData += '\n';
 					
-					invoiceAddressData += 'Company name:  ' + invoiceAddress[i].company_name + '\n';
+					invoiceAddressData += 'Company name:  ' + invoiceAddress[i].name + '\n';
 					invoiceAddressData += 'Address:  ' + invoiceAddress[i].address + '\n';
 					invoiceAddressData += 'Operator code:  ' + invoiceAddress[i].operatorCode + '\n';
 					invoiceAddressData += 'Operator:  ' + invoiceAddress[i].operator + '\n';
