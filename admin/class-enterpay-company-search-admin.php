@@ -156,6 +156,7 @@ class Enterpay_Company_Search_Admin
 	{
 		$user_id = $user->ID;
 		$company_base = get_user_meta($user_id, 'company_base', true);
+		$invoice_address = get_user_meta($user_id, 'invoice_address', true);
 		if (!empty($company_base)) {
 			$company_base = json_decode($company_base, true);
 		}
@@ -182,13 +183,15 @@ class Enterpay_Company_Search_Admin
 			$ovt = "";
 			*/
 			foreach($company_info['receivingFinvoiceAddress'] as $invoice){
-				$invoiceAddresses[] = [
-					'company_name' => $invoice['name'],
-					'address' => $invoice['address'],
-					'operatorCode' => $invoice['operatorCode'],
-					'operator' => $invoice['operator'],
-					'ovt' => $invoice['ovt']	
-				];
+				if (empty($invoice_address) || $invoice_address == $invoice['address'].' / '.$invoice['operatorCode']){
+					$invoiceAddresses[] = [
+						'company_name' => $invoice['name'],
+						'address' => $invoice['address'],
+						'operatorCode' => $invoice['operatorCode'],
+						'operator' => $invoice['operator'],
+						'ovt' => $invoice['ovt']	
+					];
+				}
 			}
 			$status = $company_info['status'];
 			
@@ -230,7 +233,7 @@ class Enterpay_Company_Search_Admin
 			<?php 
 			$ind = 1;
 			foreach ($invoiceAddresses as $invoiceAddress) { ?>			
-				<h3><?php _e("Invoice Address", 'enterpay-company-search'); ?> <?php echo $ind; ?></h3>
+				<h3><?php _e("Invoice Address", 'enterpay-company-search'); ?> <?php if (count($invoiceAddresses) > 1) echo $ind; ?></h3>
 				<table class="form-table">
 					<tr>
 						<th><label for="enterpay_bsuiness_id"><?php _e("Company name", 'enterpay-company-search'); ?></label></th>

@@ -155,8 +155,8 @@ class Enterpay_Company_Search_Public
 			'postal_code_id' => isset($options['postal_code']['id']) ? str_ireplace(',', ', #', $options['postal_code']['id']) : 'billing_postcode',
 			
 			'display_invoice_address' => isset($options['display_invoice_address']) && is_numeric($options['display_invoice_address']) ? intval($options['display_invoice_address']) : 0,
-			'invoice_address_name' => isset($options['invoice_address']['name']) ? $options['invoice_address']['name'] : 'companyBusinessLine',
-			'invoice_address_id' => isset($options['invoice_address']['id']) ? str_ireplace(',', ', #', $options['invoice_address']['id']) : 'companyBusinessLine',
+			'invoice_address_name' => isset($options['invoice_address']['name']) ? $options['invoice_address']['name'] : 'invoice_address',
+			'invoice_address_id' => isset($options['invoice_address']['id']) ? str_ireplace(',', ', #', $options['invoice_address']['id']) : 'invoice_address',
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
@@ -407,8 +407,9 @@ class Enterpay_Company_Search_Public
 
 	function request_after_registration_submission($user_id)
 	{
-		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
+		$this->save_custom_data();
 		
+		$options  = get_option( 'enterpay_plugin_options_fields', array() );		
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
 		foreach ($field_names as $field_name){
@@ -431,6 +432,8 @@ class Enterpay_Company_Search_Public
 	
 	function request_after_submission_form()
 	{		
+		$this->save_custom_data();
+	
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
@@ -453,6 +456,24 @@ class Enterpay_Company_Search_Public
 			}
 		}
 	}	
+
+	function save_custom_data($user_id = -1){
+		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
+		$field_names = isset($options['invoice_address']['name']) ? explode(",", $options['invoice_address']['name']) : ['invoice_address'];
+		
+		foreach ($field_names as $field_name){
+			if (isset($_REQUEST[$field_name])) {
+				if ($user_id > 0){
+					update_user_meta($user_id, 'invoice_address', sanitize_text_field($_REQUEST[$field_name]));
+				} else {
+					$current_user = wp_get_current_user();
+					if ($current_user instanceof WP_User && $current_user->ID > 0){	
+						update_user_meta($current_user->ID, 'invoice_address', sanitize_text_field($_REQUEST[$field_name]));
+					}
+				}
+			}
+		}
+	}
 
 	// save options to database
 	function enterpay_plugin_options_validate($input)

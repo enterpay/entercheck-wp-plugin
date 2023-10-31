@@ -43,10 +43,11 @@
 				}
 			});
 		} 
-		  
+		 /*
 		if ($("#" + enterpayjs.invoice_address_id).length){ 
 			$("#" + enterpayjs.invoice_address_id).attr('readonly','readonly');
-		}		
+		}	
+*/		
 		
 		$("#" + enterpayjs.company_name_id).attr('title', enterpayjs.company_name_tootltip);
 		$('<div id="company_loader"></div>').insertAfter($("#" + enterpayjs.company_name_id));	
@@ -102,6 +103,8 @@
 		  console.log(suggestion);
 		  $('#company_loader').addClass('spinner');
 
+		  //var current_form = $(this).closest('form');
+
 		  // set suggestion to local storage
 		  localStorage.setItem("company", JSON.stringify(suggestion));
 
@@ -130,6 +133,31 @@
 			  if ($("#" + enterpayjs.postal_code_id).length) $("#" + enterpayjs.postal_code_id).val(address.postalCode);
 			  
 			  if (/*enterpayjs.display_invoice_address == 1 &&*/ $("#" + enterpayjs.invoice_address_id).length){
+				  
+				var invoiceAddressData = [];
+				var invoiceAddress = e.receivingFinvoiceAddress;  
+				
+				for (var i=0;i<invoiceAddress.length;++i){
+					invoiceAddressData.push(invoiceAddress[i].address + ' / ' + invoiceAddress[i].operatorCode);
+				}
+				  
+				if ($("#" + enterpayjs.invoice_address_id).is("input") ){
+					$("#" + enterpayjs.invoice_address_id).val(invoiceAddressData[0]);
+				}  else if ($("#" + enterpayjs.invoice_address_id).is("select") ){
+					$("#" + enterpayjs.invoice_address_id).html('');
+					$.each(invoiceAddressData, function(key, value) {
+						 $("#" + enterpayjs.invoice_address_id)
+							 .append($("<option></option>")
+										.attr("value", value)
+										.text(value)); 
+					});					
+					/*
+					for (var i=0;i<invoiceAddressData.length;++i){
+						
+					}
+					*/
+				}
+				  /*
 				$("#" + enterpayjs.invoice_address_id).val('');
 				var invoiceAddressData = $("#" + enterpayjs.invoice_address_id).val();
 				var invoiceAddress = e.receivingFinvoiceAddress;  
@@ -144,6 +172,7 @@
 					invoiceAddressData += 'OVT:  ' + invoiceAddress[i].ovt + '\n';
 				}
 				$("#" + enterpayjs.invoice_address_id).val(invoiceAddressData);
+				*/
 			  }
 			  
 			  $("#company_info").val(JSON.stringify(e));
