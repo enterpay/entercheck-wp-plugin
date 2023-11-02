@@ -2,9 +2,9 @@
 Contributors: Entercheck 
 Donate link: https://demoshop.entercheck.eu/
 Tags: company, search, registration, form
-Requires at least: x
-Tested up to: x
-Stable tag: x
+Requires at least: WordPress 6.1.4
+Tested up to: WordPress 6.1.4
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,11 +29,21 @@ To integrate the company search functionality with your form, enter the HTML fie
 
 = How do I submit the company data to Entercheck? =
 
-You must include the "business id" field in the form. The field can be hidden.
+You must include the "business id" field in the form. You can add a hidden business id field by selecting "Add automatically" from the settings.
 
 = How do I submit the company data to during WooCommerce checkout? =
 
-You must include the "business id" field in the form. The field can be hidden.
+You must include the "business id" field in the form. You can add a hidden business id field by selecting "Add automatically" from the settings.
+
+= How do I add e-invoice details? =
+
+To create a dropdown you can add select type form element
+<select id="invoice_address" name="invoice_address"></select><br><br>
+
+if you want to allow user to edit and write, you can use input type
+<label for="invoice_address">e-invoice address: </label>
+<input type="text" id="invoice_address" name="invoice_address"><br><br>
+
 
 == Screenshots ==
 
