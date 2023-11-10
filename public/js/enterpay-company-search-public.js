@@ -43,11 +43,17 @@
 				}
 			});
 		} 
-		 /*
-		if ($("#" + enterpayjs.invoice_address_id).length){ 
-			$("#" + enterpayjs.invoice_address_id).attr('readonly','readonly');
+		 
+		if ($("#" + enterpayjs.invoice_selector_id).length && $("#" + enterpayjs.invoice_selector_id).is('select')){ 
+			//$("#" + enterpayjs.invoice_selector_id).attr('readonly','readonly');
+			
+			$("#" + enterpayjs.invoice_selector_id).on('change', function(){
+				var select = $("#" + enterpayjs.invoice_selector_id + " option:selected").val().split(' / ');
+				if (select.length > 0) $("#" + enterpayjs.invoice_address_id).val(select[0]);
+				if (select.length > 1) $("#" + enterpayjs.invoice_operator_code_id).val(select[1]);					
+			});
 		}	
-*/		
+		
 		
 		$("#" + enterpayjs.company_name_id).attr('title', enterpayjs.company_name_tootltip);
 		$('<div id="company_loader"></div>').insertAfter($("#" + enterpayjs.company_name_id));	
@@ -132,21 +138,31 @@
 			  if ($("#" + enterpayjs.street_second_id).length) $("#" + enterpayjs.street_second_id).val(address.streetSecondRow);
 			  if ($("#" + enterpayjs.postal_code_id).length) $("#" + enterpayjs.postal_code_id).val(address.postalCode);
 			  
-			  if (/*enterpayjs.display_invoice_address == 1 &&*/ $("#" + enterpayjs.invoice_address_id).length){
+			  if (/*enterpayjs.display_invoice_address == 1 &&*/ $("#" + enterpayjs.invoice_selector_id).length){
 				  
 				var invoiceAddressData = [];
 				var invoiceAddress = e.receivingFinvoiceAddress;  
 				
-				for (var i=0;i<invoiceAddress.length;++i){
-					invoiceAddressData.push(invoiceAddress[i].address + ' / ' + invoiceAddress[i].operatorCode);
+				if (invoiceAddress.length){
+					for (var i=0;i<invoiceAddress.length;++i){
+						invoiceAddressData.push(invoiceAddress[i].address + ' / ' + invoiceAddress[i].operatorCode);
+						
+						if (i==0){
+							if ($("#" + enterpayjs.invoice_address_id).length) $("#" + enterpayjs.invoice_address_id).val(invoiceAddress[i].address);
+							if ($("#" + enterpayjs.invoice_operator_code_id).length) $("#" + enterpayjs.invoice_operator_code_id).val(invoiceAddress[i].operatorCode);
+						}
+					}
 				}
 				  
-				if ($("#" + enterpayjs.invoice_address_id).is("input") ){
-					$("#" + enterpayjs.invoice_address_id).val(invoiceAddressData[0]);
-				}  else if ($("#" + enterpayjs.invoice_address_id).is("select") ){
-					$("#" + enterpayjs.invoice_address_id).html('');
+				if ($("#" + enterpayjs.invoice_selector_id).is("input") ){
+					if (invoiceAddressData.length)
+						$("#" + enterpayjs.invoice_selector_id).val(invoiceAddressData[0]);
+					else
+						$("#" + enterpayjs.invoice_selector_id).val('');
+				}  else if ($("#" + enterpayjs.invoice_selector_id).is("select") ){
+					$("#" + enterpayjs.invoice_selector_id).html('');
 					$.each(invoiceAddressData, function(key, value) {
-						 $("#" + enterpayjs.invoice_address_id)
+						 $("#" + enterpayjs.invoice_selector_id)
 							 .append($("<option></option>")
 										.attr("value", value)
 										.text(value)); 
@@ -158,8 +174,8 @@
 					*/
 				}
 				  /*
-				$("#" + enterpayjs.invoice_address_id).val('');
-				var invoiceAddressData = $("#" + enterpayjs.invoice_address_id).val();
+				$("#" + enterpayjs.invoice_selector_id).val('');
+				var invoiceAddressData = $("#" + enterpayjs.invoice_selector_id).val();
 				var invoiceAddress = e.receivingFinvoiceAddress;  
 				
 				for (var i=0;i<invoiceAddress.length;++i){
@@ -171,8 +187,15 @@
 					invoiceAddressData += 'Operator:  ' + invoiceAddress[i].operator + '\n';
 					invoiceAddressData += 'OVT:  ' + invoiceAddress[i].ovt + '\n';
 				}
-				$("#" + enterpayjs.invoice_address_id).val(invoiceAddressData);
+				$("#" + enterpayjs.invoice_selector_id).val(invoiceAddressData);
 				*/
+			  } else {
+					if ($("#" + enterpayjs.invoice_address_id).length) {						
+						$("#" + enterpayjs.invoice_address_id).val(e.receivingFinvoiceAddress.length ? e.receivingFinvoiceAddress[0].address : '');
+					}
+					if ($("#" + enterpayjs.invoice_operator_code_id).length) {
+						$("#" + enterpayjs.invoice_operator_code_id).val(e.receivingFinvoiceAddress.length ? e.receivingFinvoiceAddress[0].operatorCode : '');
+					}
 			  }
 			  
 			  $("#company_info").val(JSON.stringify(e));

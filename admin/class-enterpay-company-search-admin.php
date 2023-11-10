@@ -193,6 +193,18 @@ class Enterpay_Company_Search_Admin
 					];
 				}
 			}
+			
+			if (empty($invoiceAddresses) && !empty($invoice_address)){
+				$invoice_address_arr = explode(' / ', $invoice_address);
+				$invoiceAddresses[] = [
+					'company_name' => "",
+					'address' => $invoice_address_arr[0] ?? '',
+					'operatorCode' => $invoice_address_arr[1] ?? '',
+					'operator' => '',
+					'ovt' => ''
+				];
+			}
+			
 			$status = $company_info['status'];
 			
 			$options = get_option('enterpay_plugin_options');
