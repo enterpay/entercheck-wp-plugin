@@ -51,7 +51,7 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 		public function sanitize( $input )
 		{
 			//$options = get_option('enterpay_plugin_options_fields');	
-			$fields = ['company_name', 'vat_number', 'business_id', 'business_line', 'country', 'city', 'street', 'street_second', 'postal_code']; 
+			$fields = ['company_name', 'vat_number', 'business_id', 'business_line', 'country', 'city', 'street', 'street_second', 'postal_code', 'invoice_selector', 'invoice_address', 'invoice_operator_code']; 
 						
 			foreach ($fields as $field){
 				if( isset( $input[$field]['id'] ) ){ $input[$field]['id'] = implode(',', array_unique(array_map('trim', explode(',', $input[$field]['id'])))); }
