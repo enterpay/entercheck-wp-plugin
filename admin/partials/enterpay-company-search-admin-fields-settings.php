@@ -42,14 +42,16 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			
 			add_settings_section('enterpay-invoice-company-fields_settings', __('Invoice address', 'enterpay-company-search'), array($this, 'settings_section_callback'), 'enterpay_plugin_options_fields' );
 			//add_settings_field( 'display_invoice_address', __('Display invoice address', 'enterpay-company-search'), array($this, 'display_invoice_address_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
+			add_settings_field( 'invoice_selector', __('Invoice selector', 'enterpay-company-search'), array($this, 'invoice_selector_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
 			add_settings_field( 'invoice_address', __('Invoice address', 'enterpay-company-search'), array($this, 'invoice_address_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
+			add_settings_field( 'invoice_operator_code', __('Invoice operator code', 'enterpay-company-search'), array($this, 'invoice_operator_code_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
 			
 		}
 		
 		public function sanitize( $input )
 		{
 			//$options = get_option('enterpay_plugin_options_fields');	
-			$fields = ['company_name', 'vat_number', 'business_id', 'business_line', 'country', 'city', 'street', 'street_second', 'postal_code']; 
+			$fields = ['company_name', 'vat_number', 'business_id', 'business_line', 'country', 'city', 'street', 'street_second', 'postal_code', 'invoice_selector', 'invoice_address', 'invoice_operator_code']; 
 						
 			foreach ($fields as $field){
 				if( isset( $input[$field]['id'] ) ){ $input[$field]['id'] = implode(',', array_unique(array_map('trim', explode(',', $input[$field]['id'])))); }
@@ -59,10 +61,11 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				if ($field == 'business_id'){
 					if( isset( $input[$field]['auto'] ) && $input[$field]['auto'] == 1 ) $input[$field]['auto'] = 1; else $input[$field]['auto'] = 0;
 				}
-				
+				/*
 				if ($field == 'display_invoice_address'){
 					if( isset( $input['display_invoice_address'] ) && $input['display_invoice_address'] == 1 ) $input['display_invoice_address'] = 1; else $input['display_invoice_address'] = 0;
 				}
+				*/
 			}
 			/*
 			if( isset( $input['company_name']['id'] ) ){ 
@@ -314,6 +317,29 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			<?php
 		}
 		
+		public function invoice_selector_callback(){
+			$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
+			
+			if (!isset($options['invoice_selector']['name'])) {
+				$options['invoice_selector']['name'] = 'invoice_selector';
+			}
+			if (!isset($options['invoice_selector']['id'])) {
+				$options['invoice_selector']['id'] = 'invoice_selector';
+			}
+			?>
+			<div id="display_invoice_box">
+				<div class="box_row">
+					<label for="invoice_selector-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+					<input type="text" id="invoice_selector-name" name="enterpay_plugin_options_fields[invoice_selector][name]" value="<?php echo $options['invoice_selector']['name']; ?>" />
+				</div>
+				<div class="box_row">
+					<label for="invoice_selector-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+					<input type="text" id="invoice_selector-id" name="enterpay_plugin_options_fields[invoice_selector][id]" value="<?php echo $options['invoice_selector']['id']; ?>" />
+				</div>
+			</div>
+			<?php
+		}
+		
 		public function invoice_address_callback(){
 			$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 			
@@ -332,6 +358,29 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				<div class="box_row">
 					<label for="invoice_address-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
 					<input type="text" id="invoice_address-id" name="enterpay_plugin_options_fields[invoice_address][id]" value="<?php echo $options['invoice_address']['id']; ?>" />
+				</div>
+			</div>
+			<?php
+		}
+		
+		public function invoice_operator_code_callback(){
+			$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
+			
+			if (!isset($options['invoice_operator_code']['name'])) {
+				$options['invoice_operator_code']['name'] = 'invoice_operator_code';
+			}
+			if (!isset($options['invoice_operator_code']['id'])) {
+				$options['invoice_operator_code']['id'] = 'invoice_operator_code';
+			}
+			?>
+			<div id="display_invoice_box">
+				<div class="box_row">
+					<label for="invoice_operator_code-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
+					<input type="text" id="invoice_operator_code-name" name="enterpay_plugin_options_fields[invoice_operator_code][name]" value="<?php echo $options['invoice_operator_code']['name']; ?>" />
+				</div>
+				<div class="box_row">
+					<label for="invoice_operator_code-id"><?php _e('Field ID', 'enterpay-company-search'); ?>:</label>			
+					<input type="text" id="invoice_operator_code-id" name="enterpay_plugin_options_fields[invoice_operator_code][id]" value="<?php echo $options['invoice_operator_code']['id']; ?>" />
 				</div>
 			</div>
 			<?php

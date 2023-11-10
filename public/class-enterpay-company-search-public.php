@@ -155,8 +155,12 @@ class Enterpay_Company_Search_Public
 			'postal_code_id' => isset($options['postal_code']['id']) ? str_ireplace(',', ', #', $options['postal_code']['id']) : 'billing_postcode',
 			
 			'display_invoice_address' => isset($options['display_invoice_address']) && is_numeric($options['display_invoice_address']) ? intval($options['display_invoice_address']) : 0,
+			'invoice_selector_name' => isset($options['invoice_selector']['name']) ? $options['invoice_selector']['name'] : 'invoice_selector',
+			'invoice_selector_id' => isset($options['invoice_selector']['id']) ? str_ireplace(',', ', #', $options['invoice_selector']['id']) : 'invoice_selector',
 			'invoice_address_name' => isset($options['invoice_address']['name']) ? $options['invoice_address']['name'] : 'invoice_address',
 			'invoice_address_id' => isset($options['invoice_address']['id']) ? str_ireplace(',', ', #', $options['invoice_address']['id']) : 'invoice_address',
+			'invoice_operator_code_name' => isset($options['invoice_operator_code']['name']) ? $options['invoice_operator_code']['name'] : 'invoice_operator_code',
+			'invoice_operator_code_id' => isset($options['invoice_operator_code']['id']) ? str_ireplace(',', ', #', $options['invoice_operator_code']['id']) : 'invoice_operator_code',
 		);
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
@@ -459,20 +463,45 @@ class Enterpay_Company_Search_Public
 
 	function save_custom_data($user_id = -1){
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
-		$field_names = isset($options['invoice_address']['name']) ? explode(",", $options['invoice_address']['name']) : ['invoice_address'];
+		$field_invoice_selector = isset($options['invoice_selector']['name']) ? explode(",", $options['invoice_selector']['name']) : ['invoice_selector'];
+		$field_invoice_address = isset($options['invoice_address']['name']) ? explode(",", $options['invoice_address']['name']) : ['invoice_address'];
+		$field_invoice_operator_code = isset($options['invoice_operator_code']['name']) ? explode(",", $options['invoice_operator_code']['name']) : ['invoice_operator_code'];
 		
-		foreach ($field_names as $field_name){
+		$invoice_address = "";
+		$invoice_operator_code = "";
+		
+		foreach ($field_invoice_address as $field_name){
 			if (isset($_REQUEST[$field_name])) {
-				if ($user_id > 0){
-					update_user_meta($user_id, 'invoice_address', sanitize_text_field($_REQUEST[$field_name]));
-				} else {
-					$current_user = wp_get_current_user();
-					if ($current_user instanceof WP_User && $current_user->ID > 0){	
-						update_user_meta($current_user->ID, 'invoice_address', sanitize_text_field($_REQUEST[$field_name]));
-					}
+				$invoice_address = $_REQUEST[$field_name];
+			}
+		}
+		
+		foreach ($field_invoice_operator_code as $field_name){
+			if (isset($_REQUEST[$field_name])) {
+				$invoice_operator_code = $_REQUEST[$field_name];
+			}
+		}
+		
+		if (!empty($invoice_address) && !empty($invoice_operator_code)){
+			$invoice_address = $invoice_address.' / '.$invoice_operator_code;
+		} else {
+			foreach ($field_invoice_selector as $field_name){
+				if (isset($_REQUEST[$field_name])) {
+					$invoice_address = $_REQUEST[$field_name];
 				}
 			}
 		}
+		
+		if (!empty($invoice_address)) {
+			if ($user_id > 0){
+				update_user_meta($user_id, 'invoice_address', sanitize_text_field($_REQUEST[$field_name]));
+			} else {
+				$current_user = wp_get_current_user();
+				if ($current_user instanceof WP_User && $current_user->ID > 0){	
+					update_user_meta($current_user->ID, 'invoice_address', sanitize_text_field($invoice_address));
+				}
+			}
+		}		
 	}
 
 	// save options to database
