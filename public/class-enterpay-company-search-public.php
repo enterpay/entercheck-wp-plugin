@@ -161,7 +161,26 @@ class Enterpay_Company_Search_Public
 			'invoice_address_id' => isset($options['invoice_address']['id']) ? str_ireplace(',', ', #', $options['invoice_address']['id']) : 'invoice_address',
 			'invoice_operator_code_name' => isset($options['invoice_operator_code']['name']) ? $options['invoice_operator_code']['name'] : 'invoice_operator_code',
 			'invoice_operator_code_id' => isset($options['invoice_operator_code']['id']) ? str_ireplace(',', ', #', $options['invoice_operator_code']['id']) : 'invoice_operator_code',
+			
+			'allow_search_country' => isset($options['allow_search_country']) && is_numeric($options['allow_search_country']) ? intval($options['allow_search_country']) : 0,
+			'default_country' => !empty($options['default_country']) ? $options['default_country'] : 'FI',
+			'search_country_name' => isset($options['search_country']['name']) ? $options['search_country']['name'] : 'search_country',
+			'search_country_id' => isset($options['search_country']['id']) ? str_ireplace(',', ', #', $options['search_country']['id']) : 'search_country',
+			'search_country_list' => [],
+			
 		);
+		
+		if (isset($options['allow_search_country']) && is_numeric($options['allow_search_country']) && $options['allow_search_country'] == 1){
+			$search_country_list = array_filter(explode(',', $options['search_country_list']));
+			
+			$variables['search_country_list'] = array_filter(
+														EnterpayCountry::getInstance()->get_country_list(),
+														function ($key) use ($search_country_list) {return in_array($key, $search_country_list);} ,
+														ARRAY_FILTER_USE_KEY
+													);
+		}
+		
+		
 		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
 	}
 
@@ -240,11 +259,13 @@ class Enterpay_Company_Search_Public
 	public function search_company()
 	{
 		$name = urlencode($_REQUEST["name"]);
-		$country_code = 'FI';
+		
+		$options = get_option('enterpay_plugin_options_fields');
+		$country_code = !empty($_REQUEST["country"]) ? $_REQUEST["country"] : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
 
 		$endpoint_url = "https://".$this->api_domain."/company/search?country=" . $country_code . "&name=" . $name;
 		$data = $this->send_API_request($endpoint_url, "GET");
-				
+		file_put_contents('al_test.txt', $endpoint_url);		
 		print_r($data);
 		die();
 	}
@@ -252,7 +273,10 @@ class Enterpay_Company_Search_Public
 	public function get_company_detail($is_return = false)
 	{				
 		$bid = $_REQUEST["bid"];
-		$country_code = 'FI';
+		
+		$options = get_option('enterpay_plugin_options_fields');
+		$country_code = !empty($_REQUEST["country"]) ? $_REQUEST["country"] : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
+		
 		$endpoint_url = "https://".$this->api_domain."/company/details?country=" . $country_code . "&id=" . $bid;
 		$data = $this->send_API_request($endpoint_url, "GET");
 
@@ -409,6 +433,25 @@ class Enterpay_Company_Search_Public
 		}
 	}
 
+	function get_form_search_country(){
+		$options  = get_option( 'enterpay_plugin_options_fields', array() );	
+		
+		$field_country = isset($options['search_country']['name']) ? explode(",", $options['search_country']['name']) : ['search_country'];
+		$field_allow_search_country = isset($options['allow_search_country']) && is_numeric($options['allow_search_country']) && $options['allow_search_country'] == 1;
+		
+		$country = !empty($options['default_country']) ? $options['default_country'] : 'FI';
+		
+		if ($field_allow_search_country){
+			foreach ($field_country as $field_name){
+				if (!empty($_REQUEST[$field_name])) {
+					$country = sanitize_text_field($_REQUEST[$field_name]);
+				}
+			}
+		}
+		
+		return $country;
+	}
+
 	function request_after_registration_submission($user_id)
 	{
 		$this->save_custom_data();
@@ -416,10 +459,12 @@ class Enterpay_Company_Search_Public
 		$options  = get_option( 'enterpay_plugin_options_fields', array() );		
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
+		$country = $this->get_form_search_country();
+		
 		foreach ($field_names as $field_name){
 			if (isset($_REQUEST[$field_name])) {
 				$business_id =  $_REQUEST[$field_name];
-				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
 				$data =	$this->send_API_request($endpoint_url, "GET");
 				update_user_meta($user_id, 'company_base', $data);
 				
@@ -441,10 +486,12 @@ class Enterpay_Company_Search_Public
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
+		$country = $this->get_form_search_country();
+		
 		foreach ($field_names as $field_name){			
 			if (isset($_REQUEST[$field_name])) {
 				$business_id =  $_REQUEST[$field_name];
-				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country=FI&refresh=true';
+				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
 				$data =	$this->send_API_request($endpoint_url, "GET");
 				$current_user = wp_get_current_user();
 				if ($current_user instanceof WP_User && $current_user->ID > 0){				

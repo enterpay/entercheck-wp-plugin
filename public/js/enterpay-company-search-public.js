@@ -52,8 +52,7 @@
 				if (select.length > 0) $("#" + enterpayjs.invoice_address_id).val(select[0]);
 				if (select.length > 1) $("#" + enterpayjs.invoice_operator_code_id).val(select[1]);					
 			});
-		}	
-		
+		}
 		
 		$("#" + enterpayjs.company_name_id).attr('title', enterpayjs.company_name_tootltip);
 		$('<div id="company_loader"></div>').insertAfter($("#" + enterpayjs.company_name_id));	
@@ -73,13 +72,36 @@
 			});
 		  },
 		});
+		
+		if (enterpayjs.allow_search_country == 1){
+			$("#" + enterpayjs.search_country_id).html('');
+			if ($("#" + enterpayjs.search_country_id).length && $("#" + enterpayjs.search_country_id).is('select')){ 
+				$.each(enterpayjs.search_country_list, function(key, value) {
+					 $("#" + enterpayjs.search_country_id)
+						.append($("<option></option>")
+						.attr("value", key)
+						.text(value)); 
+				});	
+				$("#" + enterpayjs.search_country_id).val(enterpayjs.default_country);	
+			}
+		}
+
+		function enterpayCountry(){
+			if ($("#" + enterpayjs.search_country_id).length) return $("#" + enterpayjs.search_country_id).val();
+			else if (enterpayjs.default_country.length) return enterpayjs.default_country;
+			
+			return 'FI';
+		}
 
 		var dataset = new Bloodhound({
 		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace("value"),
 		  queryTokenizer: Bloodhound.tokenizers.whitespace,
 		  remote: {
-			url: enterpayjs.ajaxurl + "?action=search_company&name=%QUERY",
-			wildcard: "%QUERY",
+			url: enterpayjs.ajaxurl + "?action=search_company", //&name=%QUERY&country=FI",
+			wildcard: "%QUERY",			
+			replace: function (url, query) {
+				return url + "&name=" + encodeURI($("#" + enterpayjs.company_name_id).val()) + "&country=" + enterpayCountry(); //%QUERY
+			},			
 		  },
 		});
 
@@ -109,8 +131,6 @@
 		  console.log(suggestion);
 		  $('#company_loader').addClass('spinner');
 
-		  //var current_form = $(this).closest('form');
-
 		  // set suggestion to local storage
 		  localStorage.setItem("company", JSON.stringify(suggestion));
 
@@ -120,7 +140,7 @@
 			  type: "post",
 			  dataType: "json",
 			  url: enterpayjs.ajaxurl,
-			  data: { action: "company_detail", bid: suggestion.businessId },
+			  data: { action: "company_detail", bid: suggestion.businessId, country: enterpayCountry },
 			})
 			.done(function (e) {
 			  console.log(e);
@@ -166,12 +186,7 @@
 							 .append($("<option></option>")
 										.attr("value", value)
 										.text(value)); 
-					});					
-					/*
-					for (var i=0;i<invoiceAddressData.length;++i){
-						
-					}
-					*/
+					});
 				}
 				  /*
 				$("#" + enterpayjs.invoice_selector_id).val('');
@@ -203,6 +218,8 @@
 			  $('#company_loader').removeClass('spinner');
 			});
 		});
+		
+		
 	}
   });
 })(jQuery);

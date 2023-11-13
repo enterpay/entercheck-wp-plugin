@@ -28,7 +28,41 @@
 .form-table .box_row input[type="checkbox"] {
 	margin-left: 85px;
 }
+.form-table .box_row select {
+	margin-left: 85px;
+}
  
  .form-table img {
 	 vertical-align: text-bottom;
  }
+ 
+.form-table .box_row .search_country_container{
+	background-color: white;
+	display: flex;
+	flex: content;
+	flex-direction: column;
+	margin-left: 85px;
+	width: 400px;
+	height: 300px;
+	/*overflow-y: auto;*/
+	min-height: 100px;
+	flex-flow: row wrap;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.form-table .box_row .search_country_container .search_country_item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 3px 0;
+}
+
+.form-table .box_row .search_country_container .search_country_item input[type="checkbox"]{
+	margin-left: 10px !important;
+	margin: 0 10px;
+}
+
+.form-table .box_row .search_country_container .search_country_item label.chb{
+	width: 350px;
+}

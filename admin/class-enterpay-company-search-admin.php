@@ -141,7 +141,7 @@ class Enterpay_Company_Search_Admin
 		add_settings_field('enterpay_plugin_setting_username', 'Username', 'enterpay_plugin_setting_username', 'dbi_example_plugin', 'api_settings');
 		add_settings_field('enterpay_plugin_setting_password', 'Password', 'enterpay_plugin_setting_password', 'dbi_example_plugin', 'api_settings');
 		add_settings_field('enterpay_plugin_setting_environment', 'Type of environment', 'enterpay_plugin_setting_environment', 'dbi_example_plugin', 'api_settings');
-
+		
 		add_settings_field('enterpay_plugin_setting_enterpaytoken', 'Token', 'enterpay_plugin_setting_enterpaytoken', 'dbi_example_plugin', 'api_settings');
 
 		// add meta box to user profile page

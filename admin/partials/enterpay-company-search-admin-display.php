@@ -64,7 +64,7 @@
 <?php 		
 		
 	}
-
+	
     function enterpay_plugin_setting_start_date()
     {
         $options = get_option('enterpay_plugin_options');

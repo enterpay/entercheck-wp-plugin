@@ -50,23 +50,23 @@
 	 $( document ).on('click', '#display_password', function(){
 		 $('#enterpay_plugin_setting_password').attr('type', 'text');
 	 });
-	 /*
+	 
 	 $( document ).ready(function(){
-		 if ($('#display_invoice_address').is(':checked')){
-			$('#display_invoice_box').closest('tr').show();
+		 if ($('#allow_search_country').is(':checked')){
+			$('.display_search_country_box').closest('tr').show();
 		 } else {
-			 $('#display_invoice_box').closest('tr').hide();
+			 $('.display_search_country_box').closest('tr').hide();
 		 }
 	 });
 	 
-	 $( document ).on('click', '#display_invoice_address', function(){
-		 if ($('#display_invoice_address').is(':checked')){
-			$('#display_invoice_box').closest('tr').show();
+	 $( document ).on('click', '#allow_search_country', function(){
+		 if ($('#allow_search_country').is(':checked')){
+			$('.display_search_country_box').closest('tr').show();
 		 } else {
-			 $('#display_invoice_box').closest('tr').hide();
+			 $('.display_search_country_box').closest('tr').hide();
 		 }
 	 });
-	 */
+	 
 
 })(jQuery);
 
