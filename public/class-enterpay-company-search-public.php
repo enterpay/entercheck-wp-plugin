@@ -265,7 +265,7 @@ class Enterpay_Company_Search_Public
 
 		$endpoint_url = "https://".$this->api_domain."/company/search?country=" . $country_code . "&name=" . $name;
 		$data = $this->send_API_request($endpoint_url, "GET");
-		file_put_contents('al_test.txt', $endpoint_url);		
+		
 		print_r($data);
 		die();
 	}
