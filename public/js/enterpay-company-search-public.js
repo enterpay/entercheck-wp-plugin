@@ -87,7 +87,7 @@
 		}
 
 		function enterpayCountry(){
-			if ($("#" + enterpayjs.search_country_id).length) return $("#" + enterpayjs.search_country_id).val();
+			if (enterpayjs.allow_search_country == 1 && $("#" + enterpayjs.search_country_id).length) return $("#" + enterpayjs.search_country_id).val();
 			else if (enterpayjs.default_country.length) return enterpayjs.default_country;
 			
 			return 'FI';

@@ -17,6 +17,15 @@ if ( !class_exists( 'EnterpayCountry' ) ) {
 		public function get_country_list()
 		{
 			return array(
+				'AT' => 'Austria',
+				'DE' => 'Germany',
+				'FI' => 'Finland',
+				'NO' => 'Norway',
+				'SE' => 'Sweden'
+			);
+			
+			
+			return array(
 				'AF' => 'Afghanistan',
 				'AX' => 'Aland Islands',
 				'AL' => 'Albania',
