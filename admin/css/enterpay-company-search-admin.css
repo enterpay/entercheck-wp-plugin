@@ -43,7 +43,7 @@
 	flex-direction: column;
 	margin-left: 85px;
 	width: 400px;
-	height: 300px;
+	height: 150px;
 	/*overflow-y: auto;*/
 	min-height: 100px;
 	flex-flow: row wrap;
