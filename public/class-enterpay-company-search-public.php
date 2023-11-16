@@ -46,9 +46,18 @@ class Enterpay_Company_Search_Public
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
+	 * @var      string    $version    The URL of API.
 	 */
 	private $api_domain;
+	
+	/**
+	 * The portal domain API.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $version    The URL of portal API.
+	 */
+	private $portal_api_domain;	
 
 	/**
 	 * Initialize the class and set its properties.
@@ -66,8 +75,10 @@ class Enterpay_Company_Search_Public
 		$options = get_option('enterpay_plugin_options');
 		if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
 			$this->api_domain = "api.test.entercheck.eu"; 
+			$this->portal_api_domain = "portal.test.entercheck.eu";
 		} else {
 			$this->api_domain = "api.entercheck.eu";
+			$this->portal_api_domain = "portal.entercheck.eu";
 		}		
 	}
 
@@ -464,6 +475,9 @@ class Enterpay_Company_Search_Public
 		foreach ($field_names as $field_name){
 			if (isset($_REQUEST[$field_name])) {
 				$business_id =  $_REQUEST[$field_name];
+				$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
+				$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
+				
 				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
 				$data =	$this->send_API_request($endpoint_url, "GET");
 				update_user_meta($user_id, 'company_base', $data);
@@ -491,6 +505,9 @@ class Enterpay_Company_Search_Public
 		foreach ($field_names as $field_name){			
 			if (isset($_REQUEST[$field_name])) {
 				$business_id =  $_REQUEST[$field_name];
+				$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
+				$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
+				
 				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
 				$data =	$this->send_API_request($endpoint_url, "GET");
 				$current_user = wp_get_current_user();
