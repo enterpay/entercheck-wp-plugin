@@ -58,6 +58,8 @@ function deactivate_enterpay_company_search() {
 register_activation_hook( __FILE__, 'activate_enterpay_company_search' );
 register_deactivation_hook( __FILE__, 'deactivate_enterpay_company_search' );
 
+
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-enterpay-country.php';
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
