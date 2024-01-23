@@ -27,7 +27,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			add_settings_field( 'jobTitle', 'Job Title', array($this, 'jobTitle_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
 			add_settings_field( 'dateOfBirth', 'Date of Birth', array($this, 'dateOfBirth_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
 			add_settings_field( 'preferredContactMethod', 'Preferred Contact Method', array($this, 'preferredContactMethod_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
-			add_settings_field( 'allowMarketing', 'allowMarketing', array($this, 'allowMarketing_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
+			add_settings_field( 'allowMarketing', 'Allow Marketing', array($this, 'allowMarketing_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
 			add_settings_field( 'subscribeToNewsLetter', 'Subscribe to NewsLetter', array($this, 'subscribeToNewsLetter_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
 			add_settings_field( 'acceptedTos', 'Accepted TOS', array($this, 'acceptedTos_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
 			add_settings_field( 'acceptedPrivacyPolicy', 'Accepted Privacy Policy', array($this, 'acceptedPrivacyPolicy_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
@@ -457,15 +457,17 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 				
 		function display_settings(){ ?>
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-									
-			<form action='options.php' method='post'> <?php
-				//settings_fields( 'enterpay-company-search-fields' );
-				settings_fields( 'enterpay_plugin_options_form_mapping' );
-				
-				do_settings_sections( 'enterpay_plugin_options_form_mapping' );
-				//do_settings_sections( 'enterpay_plugin_options_company_fields' );
-				submit_button(); ?>
-			</form>		
+						
+			<div id="mapping_form_block">
+				<form action='options.php' method='post'> <?php
+					//settings_fields( 'enterpay-company-search-fields' );
+					settings_fields( 'enterpay_plugin_options_form_mapping' );
+					
+					do_settings_sections( 'enterpay_plugin_options_form_mapping' );
+					//do_settings_sections( 'enterpay_plugin_options_company_fields' );
+					submit_button(); ?>
+				</form>
+			</div>
 
 
 			<style>
