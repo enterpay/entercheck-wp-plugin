@@ -14,10 +14,10 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Entercheck
- * Plugin URI:        https://demoshop.entercheck.eu/
+ * Plugin URI:        https://entercheck.eu/en
  * Description:       enterpay company search 
- * Version:           1.0.0
- * Author:            Ha Nguyen
+ * Version:           1.0.1
+ * Author:            Ha Nguyen <nd.dungha@gmail.com>
  * Author URI:        https://demoshop.entercheck.eu/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt

@@ -33,6 +33,12 @@
   background-color: #0073aa;
   color: #fff;
 }
+.tt-suggestion.tt-selectable {
+  color: #363636;
+}
+.tt-suggestion.tt-selectable:hover {
+  color: #fff;
+}
 .twitter-typeahead {
   width: 100%;
 }
