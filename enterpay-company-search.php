@@ -16,8 +16,8 @@
  * Plugin Name:       Entercheck
  * Plugin URI:        https://entercheck.eu/en
  * Description:       enterpay company search 
- * Version:           1.0.1
- * Author:            Ha Nguyen <nd.dungha@gmail.com>
+ * Version:           1.0.2
+ * Author:            Enterpay <technical@enterpay.fi>
  * Author URI:        https://demoshop.entercheck.eu/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
