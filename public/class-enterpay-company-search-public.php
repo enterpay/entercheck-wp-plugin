@@ -233,7 +233,7 @@ class Enterpay_Company_Search_Public
 		}
 	}
 
-	public function send_API_request($endpoint_url, $method)
+	public function send_API_request($endpoint_url, $method, $fileds = [])
 	{
 		$token_str = get_option('enterpay_token');
 
@@ -250,6 +250,14 @@ class Enterpay_Company_Search_Public
 			'Authorization: Bearer ' . $token_str
 		));
 
+		if ($method == "POST"){
+			$fileds = json_encode($fileds);
+			
+			curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $fileds);
+		}
+		
 		// get stringified data/output. See CURLOPT_RETURNTRANSFER
 		$data = curl_exec($ch);
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -462,33 +470,106 @@ class Enterpay_Company_Search_Public
 		
 		return $country;
 	}
+	
+	function send_post_request(){		
+		if (isset($GLOBALS["post_request_already_sent"]) && $GLOBALS["post_request_already_sent"] == 1)
+			return;
+		
+		//file_put_contents('al_json.txt', '1');
+		
+		$options  = get_option( 'enterpay_plugin_options', array() );
+						
+		if (isset($options["request_mode"]) && $options["request_mode"] == "smart"){
+			$options_fields  = get_option( 'enterpay_plugin_options_fields', array() );			
+			$company_name_fields = isset($options_fields['company_name']['name']) ? explode(",", $options_fields['company_name']['name']) : ['billing_company'];
+			//file_put_contents('al_json.txt', print_r($_POST, 1));
+			/*if (isset($form_mapping_options["smartFormId"]) && $form_mapping_options["smartFormId"]['value'] != ""){*/
+			foreach ($company_name_fields as $company_name_field){	
+				if (isset($_REQUEST[$company_name_field])){
+					//file_put_contents('al_json.txt', '3');
+					$form_mapping_options  = get_option( 'enterpay_plugin_options_form_mapping', array() );	
+					//$field_name = isset($form_mapping_options['smartFormId']['field']) ? $form_mapping_options['smartFormId']['field'] : ['smartFormId'];
+					//if (isset($_REQUEST[$field_name]) && $_REQUEST[$field_name] == $form_mapping_options['smartFormId']['value']) {
+						$smartFormId = !empty($options["smart_form_id"]) ? $options["smart_form_id"] : '';
+						$businessId = "";
+						$country = $this->get_form_search_country();
+							
+						$field_names = isset($options_fields['business_id']['name']) ? explode(",", $options_fields['business_id']['name']) : ['inputBusinessId'];
+						foreach ($field_names as $field_name){
+							if (isset($_REQUEST[$field_name])) {
+								$businessId = $_REQUEST[$field_name];
+							}
+						}
+						
+						$fields = ["businessId" => $businessId, "country" => $country, "smartFormId" => $smartFormId];
+						$additional_data = ["field1" => "", "field2" => ""];
+						
+						foreach($form_mapping_options as $post_field_name => $form_mapping_field){
+							if (isset($form_mapping_field["field"])) {
+								if (($post_field_name == 'additionalData1')){
+									$additional_data["field1"] = isset($_REQUEST[$form_mapping_field["field"]]) ? $_REQUEST[$form_mapping_field["field"]] : "";
+								} else if (($post_field_name == 'additionalData2')){
+									$additional_data["field2"] = isset($_REQUEST[$form_mapping_field["field"]]) ? $_REQUEST[$form_mapping_field["field"]] : "";
+								} else if (($post_field_name == 'country')){
+									$additional_data["field2"] = isset($_REQUEST[$form_mapping_field["field"]]) ? $_REQUEST[$form_mapping_field["field"]] : "FI";							
+								} else if (($post_field_name == 'phoneNumber')){
+									if (!empty($_REQUEST[$form_mapping_field["field"]]))
+										$additional_data["field2"] = $_REQUEST[$form_mapping_field["field"]];
+								} else {
+									$fields[$post_field_name] = isset($_REQUEST[$form_mapping_field["field"]]) ? $_REQUEST[$form_mapping_field["field"]] : "";
+								}
+							}
+						}
+
+						$fields["additionalData"] = $additional_data;
+						
+						//file_put_contents('al_json.txt', print_r($fields, 1));
+						//return;
+										
+						$endpoint_url = 'https://'.$this->api_domain.'/forms/submit';
+						$data =	$this->send_API_request($endpoint_url, "POST", $fields);
+						
+						$GLOBALS["post_request_already_sent"] = 1;
+					//}
+					
+					break;
+				}
+			}
+		}		
+	}
 
 	function request_after_registration_submission($user_id)
 	{
 		$this->save_custom_data();
+		$this->send_post_request();
 		
-		$options  = get_option( 'enterpay_plugin_options_fields', array() );		
-		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
+		//return;
 		
-		$country = $this->get_form_search_country();
-		
-		foreach ($field_names as $field_name){
-			if (isset($_REQUEST[$field_name])) {
-				$business_id =  $_REQUEST[$field_name];
-				$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
-				$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
-				
-				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
-				$data =	$this->send_API_request($endpoint_url, "GET");
-				update_user_meta($user_id, 'company_base', $data);
-				
-				$_REQUEST['bid'] = $business_id;				
-				$data = $this->get_company_detail(true);
-				if (!empty($data)) {
-					update_user_meta($user_id, 'company_info', sanitize_text_field($data));
+		$options  = get_option( 'enterpay_plugin_options', array() );						
+		if (!isset($options["request_mode"]) || $options["request_mode"] != "smart"){		
+			$options_fields  = get_option( 'enterpay_plugin_options_fields', array() );		
+			$field_names = isset($options_fields['business_id']['name']) ? explode(",", $options_fields['business_id']['name']) : ['inputBusinessId'];
+			
+			$country = $this->get_form_search_country();
+			
+			foreach ($field_names as $field_name){
+				if (isset($_REQUEST[$field_name])) {
+					$business_id =  $_REQUEST[$field_name];
+					$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
+					$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
+					
+					$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
+					$data =	$this->send_API_request($endpoint_url, "GET");
+					update_user_meta($user_id, 'company_base', $data);
+					
+					$_REQUEST['bid'] = $business_id;				
+					$data = $this->get_company_detail(true);
+					if (!empty($data)) {
+						update_user_meta($user_id, 'company_info', sanitize_text_field($data));
+					}
+					
+					break;
 				}
-				
-				break;
 			}
 		}
 	}
@@ -496,6 +577,9 @@ class Enterpay_Company_Search_Public
 	function request_after_submission_form()
 	{		
 		$this->save_custom_data();
+		$this->send_post_request();
+		
+		//return;
 	
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
@@ -576,6 +660,8 @@ class Enterpay_Company_Search_Public
 		$options['password'] = trim($input['password']);
 		$options['environment'] = trim($input['environment']);
 		$options['start_date'] = trim($input['start_date']);
+		$options['request_mode'] = trim($input['request_mode']);
+		$options['smart_form_id'] = trim($input['smart_form_id']);
 		return $options;
 	}
 

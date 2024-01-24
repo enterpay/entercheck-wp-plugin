@@ -55,6 +55,11 @@ class Enterpay_Company_Search_Admin
 		$this->version = $version;
 		
 		include(plugin_dir_path(__FILE__) . 'partials/enterpay-company-search-admin-fields-settings.php');
+		
+		$options = get_option('enterpay_plugin_options');
+		
+		if (isset($options['request_mode']) && $options['request_mode'] == 'smart')
+			include(plugin_dir_path(__FILE__) . 'partials/enterpay-company-search-admin-form-mapping-settings.php');
 	}
 
 	/**
@@ -140,9 +145,16 @@ class Enterpay_Company_Search_Admin
 
 		add_settings_field('enterpay_plugin_setting_username', 'Username', 'enterpay_plugin_setting_username', 'dbi_example_plugin', 'api_settings');
 		add_settings_field('enterpay_plugin_setting_password', 'Password', 'enterpay_plugin_setting_password', 'dbi_example_plugin', 'api_settings');
-		add_settings_field('enterpay_plugin_setting_environment', 'Type of environment', 'enterpay_plugin_setting_environment', 'dbi_example_plugin', 'api_settings');
+		add_settings_field('enterpay_plugin_setting_environment', 'Environment', 'enterpay_plugin_setting_environment', 'dbi_example_plugin', 'api_settings');
 		
-		add_settings_field('enterpay_plugin_setting_enterpaytoken', 'Token', 'enterpay_plugin_setting_enterpaytoken', 'dbi_example_plugin', 'api_settings');
+		add_settings_section('processing_settings', 'Processing settings', 'enterpay_plugin_processing_section_text', 'dbi_example_plugin');
+		
+		add_settings_field('enterpay_plugin_setting_request_mode', 'Processing Mode', 'enterpay_plugin_setting_request_mode', 'dbi_example_plugin', 'processing_settings');
+		add_settings_field('enterpay_plugin_setting_smart_form_id', 'Smart Form Id', 'enterpay_plugin_setting_smart_form_id', 'dbi_example_plugin', 'processing_settings');
+		
+		//add_settings_section('api_call', 'Test API call', 'enterpay_plugin_api_call_section_text', 'dbi_example_plugin');
+		
+		//add_settings_field('enterpay_plugin_setting_enterpaytoken', 'Token', 'enterpay_plugin_setting_enterpaytoken', 'dbi_example_plugin', 'api_call');
 
 		// add meta box to user profile page
 		add_action('show_user_profile', array($this, 'enterpay_user_profile_fields'));

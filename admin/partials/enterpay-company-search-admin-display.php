@@ -20,14 +20,31 @@
     <?php
     settings_fields('enterpay_plugin_options');
     do_settings_sections('dbi_example_plugin'); ?>
-    <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Grant Access'); ?>" />
+    <p><input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Save'); ?>" /></p>
+	
+	<style>
+		.form-table th {
+			vertical-align: bottom !important;
+			padding: 5px 10px 5px 0 !important;
+		}
+		
+		.form-table td {
+			padding: 5px 10px 5px 10px !important;
+		}
+	</style>
 
     <?php
     function enterpay_plugin_section_text()
     {
         // translate text 
-        _e('<p>Here you can set all the options for using the API</p>', 'enterpay-company-search');
+        echo '<p>'.__('Here you can set all the options for using the API', 'enterpay-company-search').'</p>';
+		echo '<p>'.__('Read more at', 'enterpay-company-search').' <a href="https://docs.entercheck.eu/">https://docs.entercheck.eu/</a></p>';
     }
+	
+	function enterpay_plugin_processing_section_text(){
+		echo '<p>'.__('<strong>Simple</strong> processing registers new business to the Entercheck backend.<br>', 'enterpay-company-search');		
+		echo __('<strong>Smart</strong> processing mode forwards data specified on the form mapping page and executes the "Smart Form" workflow.', 'enterpay-company-search').'</p>';
+	}
 
     function enterpay_plugin_setting_username()
     {
@@ -51,6 +68,44 @@
         echo "<input id='enterpay_plugin_setting_password' name='enterpay_plugin_options[password]' type='password' value='" . esc_attr($options['password']) . "' />";
 		echo "<img id='display_password' src='".plugin_dir_url( dirname( __FILE__ ) )."images/hidden_eye_icon.png' width='24' heigth='24'>";
     }
+	
+    function enterpay_plugin_setting_request_mode()
+    {
+		$options = get_option('enterpay_plugin_options');
+		
+		if (!isset($options['request_mode'])) { $options['request_mode'] = "simple"; }
+?>
+		<select name="enterpay_plugin_options[request_mode]">
+			<option value="simple" <?php if ($options['request_mode'] == 'simple') echo 'selected="selected"'; ?>>Simple</option>
+			<option value="smart" <?php if ($options['request_mode'] == 'smart') echo 'selected="selected"'; ?>>Smart</option>
+		</select>
+<?php 	
+/*
+        $options = get_option('enterpay_plugin_options');
+
+        if (!isset($options['display_form_mapping'])) {
+			$options['display_form_mapping'] = '0';
+		}
+*/
+       ?>			
+						
+			<!--<input type="checkbox" <?php if ($options['display_form_mapping'] == 1) echo 'checked'; ?> id="display_form_mapping" name="enterpay_plugin_options[display_form_mapping]" value="1" />-->
+			<!--<label class="chb" for="display_invoice_address"><?php _e('Allow form mapping', 'enterpay-company-search'); ?></label>-->
+			
+		<?php
+    }
+	
+	function enterpay_plugin_setting_smart_form_id(){
+		$options = get_option('enterpay_plugin_options');
+
+        if (!isset($options['smart_form_id'])) {
+            $options['smart_form_id'] = "";
+        }
+
+		echo '<label for="company_name-id">'.__('Smart form ID - null uses default value', 'enterpay-company-search').'</label><br>';
+		echo "<input id='enterpay_plugin_setting_smart_form_id' name='enterpay_plugin_options[smart_form_id]' type='text' value='" . esc_attr($options['smart_form_id']) . "' />";
+	}
+	
 	
 	function enterpay_plugin_setting_environment(){
 		$options = get_option('enterpay_plugin_options');
@@ -129,6 +184,8 @@ if (!empty($resp)) :
         if (!empty($token)) :
             update_option('enterpay_token', $token);
 ?>
+			<h2>Test API call</h2>
+			<?php _e('<p>You can verify that your credentials are valid for the given environment by sending a test request.</p>', 'enterpay-company-search'); ?>
             <p style="border:1px solid gray;padding:10px;margin-top:30px;width:100%;overflow: scroll;max-width: 90%;"><b><?php _e('Token') ?>: </b><?= $token ?></p>
             <br>
             <button id="test-call-btn" onclick="search_company()"><?php _e('Make a test API call', 'enterpay-company-search') ?></button>

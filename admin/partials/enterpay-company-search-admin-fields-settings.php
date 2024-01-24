@@ -27,30 +27,46 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			register_setting( 'enterpay_plugin_options_fields', 'enterpay_plugin_options_fields', [$this, 'sanitize'] );
 						
 			
-			add_settings_section('enterpay-company-search-fields_settings', '' /*__('Fields settings', 'enterpay-company-search')*/, array($this, 'settings_section_callback'), 'enterpay_plugin_options_fields' );
-			add_settings_field( 'company_name', __('Company name', 'enterpay-company-search'), array($this, 'company_name_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-fields_settings' );
-			add_settings_field( 'vat_number', __('VAT Number', 'enterpay-company-search'), array($this, 'vat_number_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-fields_settings' );
-			add_settings_field( 'business_id', __('Business Id', 'enterpay-company-search'), array($this, 'business_id_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-fields_settings' );
-			add_settings_field( 'business_line', __('Business Line', 'enterpay-company-search'), array($this, 'business_line_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-fields_settings' );
+			add_settings_section('enterpay-company-search-company_search', __('Company search', 'enterpay-company-search'), array($this, 'company_name_section_callback'), 'enterpay_plugin_options_fields', [
+				'after_section' => '<p class="after_field">Company id can be prefilled for the customer and backend processing by defining the field name and id.</p>'
+			] );
+			add_settings_field( 'company_name', __('Company name', 'enterpay-company-search'), array($this, 'company_name_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-company_search' );
 			
-			add_settings_section('enterpay-company-search-relevant-company-fields_settings', __('Relevant company fields', 'enterpay-company-search'), array($this, 'settings_section_callback'), 'enterpay_plugin_options_fields' );
+			add_settings_section('enterpay-company-search-business_id_search', '' /*__('Company search', 'enterpay-company-search')*/, array($this, 'business_id_name_section_callback'), 'enterpay_plugin_options_fields' );
+			add_settings_field( 'business_id', __('Business Id', 'enterpay-company-search'), array($this, 'business_id_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-business_id_search' );
+			
+			
+
+			
+			add_settings_section('enterpay-search-country_fields_settings', __('Regional Settings', 'enterpay-company-search'), array($this, 'settings_section_callback'), 'enterpay_plugin_options_fields' );
+			add_settings_field( 'search_country', __('Country Selection', 'enterpay-company-search'), array($this, 'search_country_callback'), 'enterpay_plugin_options_fields', 'enterpay-search-country_fields_settings' );
+			add_settings_field( 'default_country', __('Default country', 'enterpay-company-search'), array($this, 'default_country_callback'), 'enterpay_plugin_options_fields', 'enterpay-search-country_fields_settings');
+			add_settings_field( 'allow_search_country', __('Enable Searching Multiple Regions', 'enterpay-company-search'), array($this, 'allow_search_country_callback'), 'enterpay_plugin_options_fields', 'enterpay-search-country_fields_settings' );
+			add_settings_field( 'search_country_list', __('Allowed Countries', 'enterpay-company-search'), array($this, 'search_country_list_callback'), 'enterpay_plugin_options_fields', 'enterpay-search-country_fields_settings' );
+
+
+
+
+						
+			add_settings_section('enterpay-company-search-prefill_settings', __('Prefill Settings', 'enterpay-company-search'), array($this, 'prefill_settings_section_callback'), 'enterpay_plugin_options_fields' );
+			//echo '<h3>Relevant company fields</h3>';
+			add_settings_field( 'business_line', __('Business Line', 'enterpay-company-search'), array($this, 'business_line_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-prefill_settings' );
+			add_settings_field( 'vat_number', __('VAT Number', 'enterpay-company-search'), array($this, 'vat_number_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-prefill_settings' );
+			
+			//echo '<h3>Billing address</h3>';
+			add_settings_section('enterpay-company-search-relevant-company-fields_settings', '' /*__('Relevant company fields', 'enterpay-company-search')*/, array($this, 'billing_section_callback'), 'enterpay_plugin_options_fields' );
 			add_settings_field( 'country', __('Country', 'enterpay-company-search'), array($this, 'country_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-relevant-company-fields_settings' );
 			add_settings_field( 'city', __('City', 'enterpay-company-search'), array($this, 'city_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-relevant-company-fields_settings' );
 			add_settings_field( 'street', __('Street', 'enterpay-company-search'), array($this, 'street_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-relevant-company-fields_settings' );
-			add_settings_field( 'street_second', __('Street second row', 'enterpay-company-search'), array($this, 'street_second_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-relevant-company-fields_settings' );
+			add_settings_field( 'street_second', __('Street second row', 'enterpay-company-search'), array($this, 'street_second_callback'), 'enterpay-company-search-relevant-company-fields_settings' );
 			add_settings_field( 'postal_code', __('Postal code', 'enterpay-company-search'), array($this, 'postal_code_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-relevant-company-fields_settings' );
 			
-			add_settings_section('enterpay-invoice-company-fields_settings', __('Invoice address', 'enterpay-company-search'), array($this, 'settings_section_callback'), 'enterpay_plugin_options_fields' );
+			//echo '<h3>Invoice address</h3>';
+			add_settings_section('enterpay-invoice-company-fields_settings', '' /*__('Invoice address', 'enterpay-company-search')*/, array($this, 'invoice_section_callback'), 'enterpay_plugin_options_fields' );
 			//add_settings_field( 'display_invoice_address', __('Display invoice address', 'enterpay-company-search'), array($this, 'display_invoice_address_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
 			add_settings_field( 'invoice_selector', __('Invoice selector', 'enterpay-company-search'), array($this, 'invoice_selector_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
 			add_settings_field( 'invoice_address', __('Invoice address', 'enterpay-company-search'), array($this, 'invoice_address_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
 			add_settings_field( 'invoice_operator_code', __('Invoice operator code', 'enterpay-company-search'), array($this, 'invoice_operator_code_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
-			
-			add_settings_section('enterpay-search-country-fields_settings', __('Search country', 'enterpay-company-search'), array($this, 'settings_section_callback'), 'enterpay_plugin_options_fields' );
-			add_settings_field( 'default_country', __('Default country', 'enterpay-company-search'), array($this, 'default_country_callback'), 'enterpay_plugin_options_fields', 'enterpay-search-country-fields_settings');
-			add_settings_field( 'allow_search_country', __('Allow search countries', 'enterpay-company-search'), array($this, 'allow_search_country_callback'), 'enterpay_plugin_options_fields', 'enterpay-search-country-fields_settings' );
-			add_settings_field( 'search_country', __('Search country', 'enterpay-company-search'), array($this, 'search_country_callback'), 'enterpay_plugin_options_fields', 'enterpay-search-country-fields_settings' );
-			add_settings_field( 'search_country_list', __('Country list', 'enterpay-company-search'), array($this, 'search_country_list_callback'), 'enterpay_plugin_options_fields', 'enterpay-search-country-fields_settings' );
 
 		}
 		
@@ -103,6 +119,28 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 */
 			return $input;
 		}
+		
+		public function company_name_section_callback(){
+			echo '<p class="before_field">Definie a field here and the company search dropdown will appear to the specified form element.</p>';
+		}
+		public function business_id_name_section_callback(){
+			echo '<p class="before_field">It can be automatically specified as a hidden field for backend processing by selecting "add automatically"</p>';
+		}
+		
+		public function prefill_settings_section_callback(){
+			echo '<h3>Relevant company fields</h3>';
+		}
+		
+		public function invoice_section_callback(){
+			//echo '<h3>Relevant company fields</h3>';
+			echo '<h3>Invoice address</h3>';
+		}
+		
+		public function billing_section_callback(){
+			//echo '<h3>Relevant company fields</h3>';
+			echo '<h3>Billing address</h3>';
+		}
+		
 		
 		public function company_name_callback(){
 			$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
@@ -218,6 +256,7 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				$options['country']['id'] = 'billing_country';
 			}
 			?>
+			
 			<div class="box_row">
 				<label for="country-name"><?php _e('Field name', 'enterpay-company-search'); ?>:</label>
 				<input type="text" id="country-name" name="enterpay_plugin_options_fields[country][name]" value="<?php echo $options['country']['name']; ?>" />
@@ -484,16 +523,19 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 		function display_settings(){ ?>
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<h4>Please enter the unique identifier of the element you want to modify in both the field_id and field_name cells. To enable functionality in multiple forms, you can add multiple values separated by a comma.</h4>
+			<h4>Company search funcntionality is mandatory</h4>
 			<!--<div id="preset_wc_fields"><?php _e('Click here to add fields to WooCommerce checkout', 'enterpay-company-search'); ?></div>-->
 			
-			<form action='options.php' method='post'> <?php
-				//settings_fields( 'enterpay-company-search-fields' );
-				settings_fields( 'enterpay_plugin_options_fields' );
-				
-				do_settings_sections( 'enterpay_plugin_options_fields' );
-				do_settings_sections( 'enterpay_plugin_options_company_fields' );
-				submit_button(); ?>
-			</form>
+			<div id="field_settings_block">
+				<form action='options.php' method='post'> <?php
+					//settings_fields( 'enterpay-company-search-fields' );
+					settings_fields( 'enterpay_plugin_options_fields' );
+					
+					do_settings_sections( 'enterpay_plugin_options_fields' );
+					do_settings_sections( 'enterpay_plugin_options_company_fields' );
+					submit_button(); ?>
+				</form>
+			</div>
 			
 			<input type="button" class="button button-primary" id="preset_wc_fields" value="Add default WooCommerce fields">
 			
