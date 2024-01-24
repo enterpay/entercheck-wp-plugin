@@ -42,9 +42,8 @@
     }
 	
 	function enterpay_plugin_processing_section_text(){
-		echo '<p>'.__('Simple processing mode forwards business ID and country to Entercheck backend and registers company to the backend system.<br>', 'enterpay-company-search');
-		echo __('Smart processing mode forwards additionally data specified in the form mapping page, and allows defining processing workflows in the backend.<br>', 'enterpay-company-search');
-		echo __('Smart processing mode requires defining a workflow. Please enter here the smart form ID. If not specified, default workflow will be used.', 'enterpay-company-search').'</p>';
+		echo '<p>'.__('<strong>Simple</strong> processing registers new business to the Entercheck backend.<br>', 'enterpay-company-search');		
+		echo __('<strong>Smart</strong> processing mode forwards data specified on the form mapping page and executes the "Smart Form" workflow.', 'enterpay-company-search').'</p>';
 	}
 
     function enterpay_plugin_setting_username()

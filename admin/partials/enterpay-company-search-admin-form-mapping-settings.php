@@ -15,7 +15,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 		public function register_settings(){
 			register_setting( 'enterpay_plugin_options_form_mapping', 'enterpay_plugin_options_form_mapping', [$this, 'sanitize'] );
 			
-			add_settings_section('enterpay-company-search-form_mapping', '', array($this, 'settings_section_callback'), 'enterpay_plugin_options_form_mapping' );
+			add_settings_section('enterpay-company-search-form_mapping', '', array($this, 'mapping_section_callback'), 'enterpay_plugin_options_form_mapping' );
 			//add_settings_field( 'smartFormId', 'smartFormId', array($this, 'smartFormId_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
 			//add_settings_field( 'businessId', 'businessId*', array($this, 'businessId_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );
 			//add_settings_field( 'country', 'country*', array($this, 'country_callback'), 'enterpay_plugin_options_form_mapping', 'enterpay-company-search-form_mapping' );			
@@ -54,6 +54,10 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			}
 			*/
 			return $input;
+		}
+		
+		public function mapping_section_callback(){
+			echo '<p>The form mapping determines what data is routed to the Entercheck backend process. Set the HTML field names for input according to the defined "Smart Form" workflow.</p>';
 		}
 		
 		public function smartFormId_callback(){
