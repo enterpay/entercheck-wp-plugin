@@ -89,7 +89,7 @@
 */
        ?>			
 						
-			<!--<input type="checkbox" <?php if ($options['display_form_mapping'] == 1) echo 'checked'; ?> id="display_form_mapping" name="enterpay_plugin_options[display_form_mapping]" value="1" />-->
+			<!--<input type="checkbox" <?php /*if ($options['display_form_mapping'] == 1) echo 'checked';*/ ?> id="display_form_mapping" name="enterpay_plugin_options[display_form_mapping]" value="1" />-->
 			<!--<label class="chb" for="display_invoice_address"><?php _e('Allow form mapping', 'enterpay-company-search'); ?></label>-->
 			
 		<?php
