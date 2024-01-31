@@ -89,7 +89,8 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				}
 				
 				if ($field == 'search_country_list'){
-					if( isset( $input['search_country_list'] ))	$input['search_country_list'] = implode(',', $input['search_country_list']);
+					if( isset( $input['search_country_list'] ) && is_array($input['search_country_list']))	$input['search_country_list'] = implode(',', $input['search_country_list']);
+					else $input['search_country_list'] = '';
 				}
 				
 			}
@@ -489,7 +490,7 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 			
 			if (!isset($options['search_country_list'])) {
-				$options['search_country_list'] = 'FI';
+				$options['search_country_list'] = '';
 			}
 			$search_country_list = array_filter(explode(',', $options['search_country_list']));
 			$country_list = EnterpayCountry::getInstance()->get_country_list();
