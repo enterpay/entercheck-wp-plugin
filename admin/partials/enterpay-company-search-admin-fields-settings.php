@@ -34,6 +34,7 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			
 			add_settings_section('enterpay-company-search-business_id_search', '' /*__('Company search', 'enterpay-company-search')*/, array($this, 'business_id_name_section_callback'), 'enterpay_plugin_options_fields' );
 			add_settings_field( 'business_id', __('Business Id', 'enterpay-company-search'), array($this, 'business_id_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-business_id_search' );
+			add_settings_field( 'use_advanced_search', __('Use Advanced Search', 'enterpay-company-search'), array($this, 'use_advanced_search_callback'), 'enterpay_plugin_options_fields', 'enterpay-company-search-business_id_search' );
 			
 			
 
@@ -86,6 +87,10 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 				
 				if ($field == 'allow_search_country'){
 					if( isset( $input['allow_search_country'] ) && $input['allow_search_country'] == 1 ) $input['allow_search_country'] = 1; else $input['allow_search_country'] = 0;
+				}
+				
+				if ($field == 'use_advanced_search'){
+					if( isset( $input['use_advanced_search'] ) && $input['use_advanced_search'] == 1 ) $input['use_advanced_search'] = 1; else $input['use_advanced_search'] = 0;
 				}
 				
 				if ($field == 'search_country_list'){
@@ -220,6 +225,19 @@ if ( !class_exists( 'EnterpayCompanySearchFields' ) ) {
 			<div class="box_row">					
 				<input type="checkbox" <?php if ($options['business_id']['auto'] == 1) echo 'checked'; ?> id="business_id-auto" name="enterpay_plugin_options_fields[business_id][auto]" value="1" />
 				<label class="chb" for="business_id-auto"><?php _e('Add automatically', 'enterpay-company-search'); ?></label>
+			</div>				
+			<?php
+		}
+		
+		public function use_advanced_search_callback(){
+			$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
+						
+			if (!isset($options['use_advanced_search'])) {
+				$options['use_advanced_search'] = '0';
+			}
+			?>			
+			<div class="box_row">					
+				<input type="checkbox" <?php if ($options['use_advanced_search'] == 1) echo 'checked'; ?> id="use_advanced_search" name="enterpay_plugin_options_fields[use_advanced_search]" value="1" />
 			</div>				
 			<?php
 		}

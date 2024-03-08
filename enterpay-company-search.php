@@ -16,7 +16,7 @@
  * Plugin Name:       Entercheck
  * Plugin URI:        https://entercheck.eu/en
  * Description:       enterpay company search 
- * Version:           1.0.3
+ * Version:           1.0.4
  * Author:            Enterpay <technical@enterpay.fi>
  * Author URI:        https://demoshop.entercheck.eu/
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'ENTERPAY_COMPANY_SEARCH_VERSION', '1.0.3' );
+define( 'ENTERPAY_COMPANY_SEARCH_VERSION', '1.0.4' );
 
 /**
  * The code that runs during plugin activation.

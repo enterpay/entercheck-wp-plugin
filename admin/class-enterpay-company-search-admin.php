@@ -167,6 +167,7 @@ class Enterpay_Company_Search_Admin
 	public function enterpay_user_profile_fields($user)
 	{
 		$user_id = $user->ID;
+		
 		$company_base = get_user_meta($user_id, 'company_base', true);
 		$invoice_address = get_user_meta($user_id, 'invoice_address', true);
 		if (!empty($company_base)) {
@@ -179,12 +180,21 @@ class Enterpay_Company_Search_Admin
 		}
 		if (!empty($company_info)) {
 			//$uuid = $company_base['uuid'];
-			$companyId = $company_base['companyId'];			
+			if (!empty($company_base) && isset($company_base['companyId']))
+				$companyId = $company_base['companyId'];
+			else
+				$companyId = $company_info['id'];
 
 			// get Bsuiness ID and VAT ID from company_info
-			$business_id = $company_info['ids'][0]['idValue'];
-			$vat_id = $company_info['ids'][1]['idValue'];
-			$status = $company_info['status'];
+			if (isset($company_info['ids'])){
+				$business_id = $company_info['ids'][0]['idValue'];
+				$vat_id = $company_info['ids'][1]['idValue'];
+				$status = $company_info['status'];
+			} else {
+				$business_id = $company_info['primaryBusinessId'];				
+				$vat_id = count($company_info['additionalCompanyIds']) > 0 && !empty($company_info['additionalCompanyIds'][1]['idValue']) ? $company_info['additionalCompanyIds'][1]['idValue'] : '';
+				$status = $company_info['status'];
+			}
 			
 			$invoiceAddresses = [];			
 			/*
