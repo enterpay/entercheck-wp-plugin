@@ -37,13 +37,13 @@
     function enterpay_plugin_section_text()
     {
         // translate text 
-        echo '<p>'.__('Here you can set all the options for using the API', 'enterpay-company-search').'</p>';
-		echo '<p>'.__('Read more at', 'enterpay-company-search').' <a href="https://docs.entercheck.eu/">https://docs.entercheck.eu/</a></p>';
+        echo '<p>'.__('Here you can set all the options for using the API', 'entercheck-company-search').'</p>';
+		echo '<p>'.__('Read more at', 'entercheck-company-search').' <a href="https://docs.entercheck.eu/">https://docs.entercheck.eu/</a></p>';
     }
 	
 	function enterpay_plugin_processing_section_text(){
-		echo '<p>'.__('<strong>Simple</strong> processing registers new business to the Entercheck backend.<br>', 'enterpay-company-search');		
-		echo __('<strong>Smart</strong> processing mode forwards data specified on the form mapping page and executes the "Smart Form" workflow.', 'enterpay-company-search').'</p>';
+		echo '<p>'.__('<strong>Simple</strong> processing registers new business to the Entercheck backend.<br>', 'entercheck-company-search');		
+		echo __('<strong>Smart</strong> processing mode forwards data specified on the form mapping page and executes the "Smart Form" workflow.', 'entercheck-company-search').'</p>';
 	}
 
     function enterpay_plugin_setting_username()
@@ -90,7 +90,7 @@
        ?>			
 						
 			<!--<input type="checkbox" <?php /*if ($options['display_form_mapping'] == 1) echo 'checked';*/ ?> id="display_form_mapping" name="enterpay_plugin_options[display_form_mapping]" value="1" />-->
-			<!--<label class="chb" for="display_invoice_address"><?php _e('Allow form mapping', 'enterpay-company-search'); ?></label>-->
+			<!--<label class="chb" for="display_invoice_address"><?php _e('Allow form mapping', 'entercheck-company-search'); ?></label>-->
 			
 		<?php
     }
@@ -102,7 +102,7 @@
             $options['smart_form_id'] = "";
         }
 
-		echo '<label for="company_name-id">'.__('Smart form ID - null uses default value', 'enterpay-company-search').'</label><br>';
+		echo '<label for="company_name-id">'.__('Smart form ID - null uses default value', 'entercheck-company-search').'</label><br>';
 		echo "<input id='enterpay_plugin_setting_smart_form_id' name='enterpay_plugin_options[smart_form_id]' type='text' value='" . esc_attr($options['smart_form_id']) . "' />";
 	}
 	
@@ -139,8 +139,6 @@
 </form>
 
 <?php
-
-$curl = curl_init();
 $options = get_option('enterpay_plugin_options');
 
 $api_domain = "api.entercheck.eu"; 
@@ -156,26 +154,25 @@ $data = array(
     "username" => $options['username'],
     "password" => $options['password']
 );
-$data = json_encode($data);
-$options = array(
-    CURLOPT_RETURNTRANSFER => 1,
-    CURLOPT_URL => 'https://'.$api_domain.'/v1/auth',
-    CURLOPT_POST => true,
-    CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
-    CURLOPT_POSTFIELDS => $data
+$data = wp_json_encode($data);
+
+$request_url = 'https://'.$api_domain.'/v1/auth';
+
+$send_data = array(
+	'method' => 'POST',		
+	'headers'  => array(
+		'Content-Type' => 'application/json',
+		'Content-Length' => strlen($data),
+		'Cache-control' => 'no-cache',
+	),
+	'body' => $data
 );
 
-curl_setopt_array($curl, $options);
-curl_setopt(
-    $curl,
-    CURLOPT_HTTPHEADER,
-    array(
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($data)
-    )
-);
+$my_request = wp_remote_post($request_url, $send_data);
+if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
+	$resp = wp_remote_retrieve_body( $my_request );
+}
 
-$resp = curl_exec($curl);
 
 if (!empty($resp)) :
     $res =   json_decode($resp);
@@ -185,12 +182,12 @@ if (!empty($resp)) :
             update_option('enterpay_token', $token);
 ?>
 			<h2>Test API call</h2>
-			<?php _e('<p>You can verify that your credentials are valid for the given environment by sending a test request.</p>', 'enterpay-company-search'); ?>
-            <p style="border:1px solid gray;padding:10px;margin-top:30px;width:100%;overflow: scroll;max-width: 90%;"><b><?php _e('Token') ?>: </b><?= $token ?></p>
+			<?php _e('<p>You can verify that your credentials are valid for the given environment by sending a test request.</p>', 'entercheck-company-search'); ?>
+            <p style="border:1px solid gray;padding:10px;margin-top:30px;width:100%;overflow: scroll;max-width: 90%;"><b><?php _e('Token') ?>: </b><?php echo $token ?></p>
             <br>
-            <button id="test-call-btn" onclick="search_company()"><?php _e('Make a test API call', 'enterpay-company-search') ?></button>
+            <button id="test-call-btn" onclick="search_company()"><?php _e('Make a test API call', 'entercheck-company-search') ?></button>
             <script type="text/javascript">
-                nonce = "<?= wp_create_nonce("my_user_vote_nonce") ?>"
+                nonce = "<?php echo wp_create_nonce("my_user_vote_nonce") ?>"
             </script>
             <div id="search_company_result"></div>
 <?php
@@ -199,7 +196,3 @@ if (!empty($resp)) :
         endif;
     endif;
 endif;
-
-
-curl_close($curl);
-

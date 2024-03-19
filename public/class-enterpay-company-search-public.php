@@ -197,84 +197,74 @@ class Enterpay_Company_Search_Public
 
 	public function auth()
 	{
-		$curl = curl_init();
 		$options = get_option('enterpay_plugin_options');
+
 
 		$data = array(
 			"username" => $options['username'],
 			"password" => $options['password']
 		);
-		$data = json_encode($data);
-		$options = array(
-			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_URL => 'https://'.$this->api_domain.'/v1/auth',
-			CURLOPT_POST => true,
-			CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
-			CURLOPT_POSTFIELDS => $data
+		$data = wp_json_encode($data);
+
+		$request_url = 'https://'.$this->api_domain.'/v1/auth';
+
+		$send_data = array(
+			'method' => 'POST',		
+			'headers'  => array(
+				'Content-Type' => 'application/json',
+				'Content-Length' => strlen($data),
+				'Cache-control' => 'no-cache',
+			),
+			'body' => $data
 		);
 
-		curl_setopt_array($curl, $options);
-		curl_setopt(
-			$curl,
-			CURLOPT_HTTPHEADER,
-			array(
-				'Content-Type: application/json',
-				'Content-Length: ' . strlen($data)
-			)
-		);
-
-		$resp = curl_exec($curl);
-
-		if ($resp) {
+		$my_request = wp_remote_post($request_url, $send_data);
+		if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
+			$resp = wp_remote_retrieve_body( $my_request );
+		}
+		
+		if (!empty($resp)) {
 			$token = json_decode($resp)->token;
 			if ($token) {
 				update_option('enterpay_token', $token);
 			}
 		}
 	}
-
+	
 	public function send_API_request($endpoint_url, $method, $fileds = [])
 	{
 		$token_str = get_option('enterpay_token');
-
-		$ch = curl_init($endpoint_url);
-
-		// Returns the data/output as a string instead of raw data
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-
-		//Set your auth headers
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-			'Content-Type: application/json',
-			'Authorization: Bearer ' . $token_str
-		));
-
+		
+		$send_data = array(
+			'method' => $method,		
+			'headers'  => array(
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer ' . $token_str.'',
+				'Cache-control' => 'no-cache',
+			)
+		);
+		
 		if ($method == "POST"){
-			$fileds = json_encode($fileds);
+			$fileds = wp_json_encode($fileds);
 			
-			curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $fileds);
+			$send_data['body'] = $fileds;
+			
+			$my_request = wp_remote_post($endpoint_url, $send_data);
+		} else {
+			$my_request = wp_remote_get($endpoint_url, $send_data);
 		}
 		
-		// get stringified data/output. See CURLOPT_RETURNTRANSFER
-		$data = curl_exec($ch);
-		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		// close curl resource to free up system resources
-		curl_close($ch);
-
-		//check the token 
-
-		if ($http_code == 401 || $http_code == '401') {
-			//auth again
-			$this->auth();
-			return $this->send_API_request($endpoint_url, $method);
+		if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
+			$resp = wp_remote_retrieve_body( $my_request );
 		}
-
-		return $data;
+		
+		if (!empty($resp)) {
+			return $resp;
+		}
+		
+		return null;
 	}
-
+	
 	public function search_company()
 	{
 		$name = urlencode($_REQUEST["name"]);
@@ -283,6 +273,10 @@ class Enterpay_Company_Search_Public
 		$country_code = !empty($_REQUEST["country"]) ? $_REQUEST["country"] : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
 
 		$endpoint_url = "https://".$this->api_domain."/company/search?country=" . $country_code . "&name=" . $name;
+		
+		if (isset($options["use_advanced_search"]) && $options["use_advanced_search"] == '1')
+			$endpoint_url .= "&advancedSearch=true";
+		
 		$data = $this->send_API_request($endpoint_url, "GET");
 		
 		print_r($data);
@@ -558,6 +552,22 @@ class Enterpay_Company_Search_Public
 					$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
 					$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
 					
+					$fields = [];
+					$fields["businessId"] = $business_id;
+					$fields["countryCode"] = $country;
+					$fields["companyKeyFigures"] = false;
+					$fields["companyRating"] = false;
+					$fields["companyRepresentatives"] = false;
+					$fields["companyPaymentRemarks"] = false;
+									
+					$endpoint_url = 'https://'.$this->api_domain.'/company/add';
+					$data =	$this->send_API_request($endpoint_url, "POST", $fields);
+					
+					if (!empty($data)) {
+						update_user_meta($user_id, 'company_info', sanitize_text_field($data));
+					}
+					
+					/*
 					$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
 					$data =	$this->send_API_request($endpoint_url, "GET");
 					update_user_meta($user_id, 'company_base', $data);
@@ -567,6 +577,7 @@ class Enterpay_Company_Search_Public
 					if (!empty($data)) {
 						update_user_meta($user_id, 'company_info', sanitize_text_field($data));
 					}
+					*/
 					
 					break;
 				}
@@ -581,30 +592,52 @@ class Enterpay_Company_Search_Public
 		
 		//return;
 	
-		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
-		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
-		
-		$country = $this->get_form_search_country();
-		
-		foreach ($field_names as $field_name){			
-			if (isset($_REQUEST[$field_name])) {
-				$business_id =  $_REQUEST[$field_name];
-				$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
-				$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
-				
-				$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
-				$data =	$this->send_API_request($endpoint_url, "GET");
-				$current_user = wp_get_current_user();
-				if ($current_user instanceof WP_User && $current_user->ID > 0){				
-					update_user_meta($current_user->ID, 'company_base', $data);					
-					$_REQUEST['bid'] = $business_id;				
-					$data = $this->get_company_detail(true);
+		$options  = get_option( 'enterpay_plugin_options', array() );						
+		if (!isset($options["request_mode"]) || $options["request_mode"] != "smart"){		
+			$options_fields  = get_option( 'enterpay_plugin_options_fields', array() ); 		
+			$field_names = isset($options_fields['business_id']['name']) ? explode(",", $options_fields['business_id']['name']) : ['inputBusinessId'];
+			
+			$country = $this->get_form_search_country();
+			
+			foreach ($field_names as $field_name){			
+				if (isset($_REQUEST[$field_name])) {
+					$business_id =  $_REQUEST[$field_name];
+					$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
+					$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
+					
+					$fields = [];
+					$fields["businessId"] = $business_id;
+					$fields["countryCode"] = $country;
+					$fields["companyKeyFigures"] = false;
+					$fields["companyRating"] = false;
+					$fields["companyRepresentatives"] = false;
+					$fields["companyPaymentRemarks"] = false;
+									
+					$endpoint_url = 'https://'.$this->api_domain.'/company/add';
+					$data =	$this->send_API_request($endpoint_url, "POST", $fields);
+					
 					if (!empty($data)) {
-						update_user_meta($current_user->ID, 'company_info', sanitize_text_field($data));
+						$current_user = wp_get_current_user();
+						if ($current_user instanceof WP_User && $current_user->ID > 0){	
+							update_user_meta($current_user->ID, 'company_info', sanitize_text_field($data));
+						}
 					}
+						
+					/*
+					$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
+					$data =	$this->send_API_request($endpoint_url, "GET");
+					$current_user = wp_get_current_user();
+					if ($current_user instanceof WP_User && $current_user->ID > 0){				
+						update_user_meta($current_user->ID, 'company_base', $data);					
+						$_REQUEST['bid'] = $business_id;				
+						$data = $this->get_company_detail(true);
+						if (!empty($data)) {
+							update_user_meta($current_user->ID, 'company_info', sanitize_text_field($data));
+						}
+					}
+					*/
+					break;
 				}
-				
-				break;
 			}
 		}
 	}	
