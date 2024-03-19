@@ -21,7 +21,7 @@
  * Author URI:        https://demoshop.entercheck.eu/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       enterpay-company-search
+ * Text Domain:       entercheck-company-search
  * Domain Path:       /languages
  */
 

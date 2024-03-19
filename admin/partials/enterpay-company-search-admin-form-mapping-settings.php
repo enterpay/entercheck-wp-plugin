@@ -64,14 +64,14 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['smartFormId']['field'])) {
-				$options['smartFormId']['field'] = 'inputsmartFormId';
+				$options['smartFormId']['field'] = '';
 			}
 			if (!isset($options['smartFormId']['value'])) {
 				$options['smartFormId']['value'] = '';
 			}
 			?>
 			<div class="box_row_mapping">
-				<label for="company_name-id"><?php _e('Smart form ID - null uses default value', 'enterpay-company-search'); ?></label>
+				<label for="company_name-id"><?php _e('Smart form ID - null uses default value', 'entercheck-company-search'); ?></label>
 			</div>
 			<div class="box_row">
 				<input type="text" id="smartFormId-field" name="enterpay_plugin_options_form_mapping[smartFormId][field]" value="<?php echo $options['smartFormId']['field']; ?>" />
@@ -84,14 +84,14 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['businessId']['field'])) {
-				$options['businessId']['field'] = 'inputBusinessId';
+				$options['businessId']['field'] = '';
 			}
 			if (!isset($options['businessId']['default'])) {
 				$options['businessId']['default'] = '2538754-7';
 			}
 			?>
 			<div class="box_row_mapping">
-				<label for="company_name-id"><?php _e('HTML Form Element name', 'enterpay-company-search'); ?></label>
+				<label for="company_name-id"><?php _e('HTML Form Element name', 'entercheck-company-search'); ?></label>
 			</div>
 			<div class="box_row">
 				<input type="text" id="businessId-field" name="enterpay_plugin_options_form_mapping[businessId][field]" value="<?php echo $options['businessId']['field']; ?>" />
@@ -104,7 +104,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['country']['field'])) {
-				$options['country']['field'] = 'inputCountry';
+				$options['country']['field'] = '';
 			}
 			if (!isset($options['country']['default'])) {
 				$options['country']['default'] = 'FI';
@@ -121,7 +121,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['firstName']['field'])) {
-				$options['firstName']['field'] = 'inputFirstName';
+				$options['firstName']['field'] = '';
 			}
 			if (!isset($options['firstName']['default'])) {
 				$options['firstName']['default'] = '';
@@ -138,7 +138,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['lastName']['field'])) {
-				$options['lastName']['field'] = 'inputLastName';
+				$options['lastName']['field'] = '';
 			}
 			if (!isset($options['lastName']['default'])) {
 				$options['lastName']['default'] = '';
@@ -155,7 +155,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['email']['field'])) {
-				$options['email']['field'] = 'inputEmail';
+				$options['email']['field'] = '';
 			}
 			if (!isset($options['email']['default'])) {
 				$options['email']['default'] = 'john.doe@example.com';
@@ -172,7 +172,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['phoneNumber']['field'])) {
-				$options['phoneNumber']['field'] = 'inputPhoneNumber';
+				$options['phoneNumber']['field'] = '';
 			}
 			if (!isset($options['phoneNumber']['default'])) {
 				$options['phoneNumber']['default'] = '+1234567890';
@@ -189,7 +189,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['businessName']['field'])) {
-				$options['businessName']['field'] = 'inputBusinessName';
+				$options['businessName']['field'] = '';
 			}
 			if (!isset($options['businessName']['default'])) {
 				$options['businessName']['default'] = 'ABC Company';
@@ -206,7 +206,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['jobTitle']['field'])) {
-				$options['jobTitle']['field'] = 'inputJobTitle';
+				$options['jobTitle']['field'] = '';
 			}
 			if (!isset($options['jobTitle']['default'])) {
 				$options['jobTitle']['default'] = 'Manager';
@@ -223,7 +223,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['dateOfBirth']['field'])) {
-				$options['dateOfBirth']['field'] = 'inputDateOfBirth';
+				$options['dateOfBirth']['field'] = '';
 			}
 			if (!isset($options['dateOfBirth']['default'])) {
 				$options['dateOfBirth']['default'] = '1990-01-01';
@@ -240,7 +240,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['preferredContactMethod']['field'])) {
-				$options['preferredContactMethod']['field'] = 'inputPreferredContactMethod';
+				$options['preferredContactMethod']['field'] = '';
 			}
 			if (!isset($options['preferredContactMethod']['default'])) {
 				$options['preferredContactMethod']['default'] = 'Email';
@@ -257,7 +257,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['allowMarketing']['field'])) {
-				$options['allowMarketing']['field'] = 'inputAllowMarketing';
+				$options['allowMarketing']['field'] = '';
 			}
 			if (!isset($options['allowMarketing']['default'])) {
 				$options['allowMarketing']['default'] = 'true';
@@ -274,7 +274,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['subscribeToNewsLetter']['field'])) {
-				$options['subscribeToNewsLetter']['field'] = 'inputSubscribeToNewsLetter';
+				$options['subscribeToNewsLetter']['field'] = '';
 			}
 			if (!isset($options['subscribeToNewsLetter']['default'])) {
 				$options['subscribeToNewsLetter']['default'] = 'false';
@@ -291,7 +291,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['acceptedTos']['field'])) {
-				$options['acceptedTos']['field'] = 'inputAcceptedTos';
+				$options['acceptedTos']['field'] = '';
 			}
 			if (!isset($options['acceptedTos']['default'])) {
 				$options['acceptedTos']['default'] = 'true';
@@ -308,7 +308,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['acceptedPrivacyPolicy']['field'])) {
-				$options['acceptedPrivacyPolicy']['field'] = 'inputAcceptedPrivacyPolicy';
+				$options['acceptedPrivacyPolicy']['field'] = '';
 			}
 			if (!isset($options['acceptedPrivacyPolicy']['default'])) {
 				$options['acceptedPrivacyPolicy']['default'] = 'true';
@@ -325,7 +325,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['orderTotal']['field'])) {
-				$options['orderTotal']['field'] = 'inputOrderTotal';
+				$options['orderTotal']['field'] = '';
 			}
 			if (!isset($options['orderTotal']['default'])) {
 				$options['orderTotal']['default'] = '100';
@@ -342,7 +342,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['orderCurrency']['field'])) {
-				$options['orderCurrency']['field'] = 'inputOrderCurrency';
+				$options['orderCurrency']['field'] = '';
 			}
 			if (!isset($options['orderCurrency']['default'])) {
 				$options['orderCurrency']['default'] = 'USD';
@@ -359,7 +359,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['targetCompletionDate']['field'])) {
-				$options['targetCompletionDate']['field'] = 'inputTargetCompletionDate';
+				$options['targetCompletionDate']['field'] = '';
 			}
 			if (!isset($options['targetCompletionDate']['default'])) {
 				$options['targetCompletionDate']['default'] = '1990-01-01';
@@ -376,7 +376,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['referralSource']['field'])) {
-				$options['referralSource']['field'] = 'inputReferralSource';
+				$options['referralSource']['field'] = '';
 			}
 			if (!isset($options['referralSource']['default'])) {
 				$options['referralSource']['default'] = 'Google';
@@ -393,7 +393,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['freeText1']['field'])) {
-				$options['freeText1']['field'] = 'inputFreeText1';
+				$options['freeText1']['field'] = '';
 			}
 			if (!isset($options['freeText1']['default'])) {
 				$options['freeText1']['default'] = 'Lorem ipsum dolor sit amet';
@@ -410,7 +410,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['freeText2']['field'])) {
-				$options['freeText2']['field'] = 'inputFreeText2';
+				$options['freeText2']['field'] = '';
 			}
 			if (!isset($options['freeText2']['default'])) {
 				$options['freeText2']['default'] = 'Lorem ipsum dolor sit amet';
@@ -427,7 +427,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['additionalData1']['field'])) {
-				$options['additionalData1']['field'] = 'inputAdditionalData1';
+				$options['additionalData1']['field'] = '';
 			}
 			if (!isset($options['additionalData1']['default'])) {
 				$options['additionalData1']['default'] = '';
@@ -444,7 +444,7 @@ if ( !class_exists( 'EnterpayCompanySearchFormMapping' ) ) {
 			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['additionalData2']['field'])) {
-				$options['additionalData2']['field'] = 'inputAdditionalData2';
+				$options['additionalData2']['field'] = '';
 			}
 			if (!isset($options['additionalData2']['default'])) {
 				$options['additionalData2']['default'] = '';

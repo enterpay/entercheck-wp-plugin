@@ -236,28 +236,28 @@ class Enterpay_Company_Search_Admin
 			}	
 
 ?>
-			<h3><?php _e("Customer Organization", 'enterpay-company-search'); ?></h3>
+			<h3><?php _e("Customer Organization", 'entercheck-company-search'); ?></h3>
 			<table class="form-table">
 				<tr>
-					<th><label for="enterpay_vat_id"><?php _e("Link to Entercheck", 'enterpay-company-search'); ?></label></th>
+					<th><label for="enterpay_vat_id"><?php _e("Link to Entercheck", 'entercheck-company-search'); ?></label></th>
 					<td>
 						<a target="_blank" href="https://<?php echo $api_domain; ?>/companies/<?php echo $companyId; ?>">Link to Entercheck</a>
 					</td>
 				</tr>
 				<tr>
-					<th><label for="enterpay_bsuiness_id"><?php _e("Bsuiness ID", 'enterpay-company-search'); ?></label></th>
+					<th><label for="enterpay_bsuiness_id"><?php _e("Bsuiness ID", 'entercheck-company-search'); ?></label></th>
 					<td>
 						<input type="text" name="enterpay_bsuiness_id" id="enterpay_bsuiness_id" readonly value="<?php echo esc_attr($business_id); ?>" class="regular-text" /><br />
 					</td>
 				</tr>
 				<tr>
-					<th><label for="enterpay_vat_id"><?php _e("VAT ID", 'enterpay-company-search'); ?></label></th>
+					<th><label for="enterpay_vat_id"><?php _e("VAT ID", 'entercheck-company-search'); ?></label></th>
 					<td>
 						<input type="text" name="enterpay_vat_id" id="enterpay_vat_id" readonly value="<?php echo esc_attr($vat_id); ?>" class="regular-text" /><br />
 					</td>
 				</tr>
 				<tr>
-					<th><label for="enterpay_vat_id"><?php _e("Status", 'enterpay-company-search'); ?></label></th>
+					<th><label for="enterpay_vat_id"><?php _e("Status", 'entercheck-company-search'); ?></label></th>
 					<td>
 						<input type="text" name="enterpay_vat_id" id="enterpay_vat_id" readonly value="<?php echo esc_attr($status); ?>" class="regular-text" /><br />
 					</td>
@@ -267,34 +267,34 @@ class Enterpay_Company_Search_Admin
 			<?php 
 			$ind = 1;
 			foreach ($invoiceAddresses as $invoiceAddress) { ?>			
-				<h3><?php _e("Invoice Address", 'enterpay-company-search'); ?> <?php if (count($invoiceAddresses) > 1) echo $ind; ?></h3>
+				<h3><?php _e("Invoice Address", 'entercheck-company-search'); ?> <?php if (count($invoiceAddresses) > 1) echo $ind; ?></h3>
 				<table class="form-table">
 					<tr>
-						<th><label for="enterpay_bsuiness_id"><?php _e("Company name", 'enterpay-company-search'); ?></label></th>
+						<th><label for="enterpay_bsuiness_id"><?php _e("Company name", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text" readonly value="<?php echo esc_attr($invoiceAddress['company_name']); ?>" class="regular-text" /><br />
 						</td>
 					</tr>
 					<tr>
-						<th><label for="enterpay_bsuiness_id"><?php _e("Address", 'enterpay-company-search'); ?></label></th>
+						<th><label for="enterpay_bsuiness_id"><?php _e("Address", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['address']); ?>" class="regular-text" /><br />
 						</td>
 					</tr>
 					<tr>
-						<th><label for="enterpay_vat_id"><?php _e("Operator code", 'enterpay-company-search'); ?></label></th>
+						<th><label for="enterpay_vat_id"><?php _e("Operator code", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['operatorCode']); ?>" class="regular-text" /><br />
 						</td>
 					</tr>
 					<tr>
-						<th><label for="enterpay_vat_id"><?php _e("Operator", 'enterpay-company-search'); ?></label></th>
+						<th><label for="enterpay_vat_id"><?php _e("Operator", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['operator']); ?>" class="regular-text" /><br />
 						</td>
 					</tr>	
 					<tr>
-					<th><label for="enterpay_vat_id"><?php _e("OVT", 'enterpay-company-search'); ?></label></th>
+					<th><label for="enterpay_vat_id"><?php _e("OVT", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['ovt']); ?>" class="regular-text" /><br />
 						</td>				

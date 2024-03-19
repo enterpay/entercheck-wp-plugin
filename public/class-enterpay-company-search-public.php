@@ -197,84 +197,74 @@ class Enterpay_Company_Search_Public
 
 	public function auth()
 	{
-		$curl = curl_init();
 		$options = get_option('enterpay_plugin_options');
+
 
 		$data = array(
 			"username" => $options['username'],
 			"password" => $options['password']
 		);
-		$data = json_encode($data);
-		$options = array(
-			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_URL => 'https://'.$this->api_domain.'/v1/auth',
-			CURLOPT_POST => true,
-			CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)",
-			CURLOPT_POSTFIELDS => $data
+		$data = wp_json_encode($data);
+
+		$request_url = 'https://'.$this->api_domain.'/v1/auth';
+
+		$send_data = array(
+			'method' => 'POST',		
+			'headers'  => array(
+				'Content-Type' => 'application/json',
+				'Content-Length' => strlen($data),
+				'Cache-control' => 'no-cache',
+			),
+			'body' => $data
 		);
 
-		curl_setopt_array($curl, $options);
-		curl_setopt(
-			$curl,
-			CURLOPT_HTTPHEADER,
-			array(
-				'Content-Type: application/json',
-				'Content-Length: ' . strlen($data)
-			)
-		);
-
-		$resp = curl_exec($curl);
-
-		if ($resp) {
+		$my_request = wp_remote_post($request_url, $send_data);
+		if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
+			$resp = wp_remote_retrieve_body( $my_request );
+		}
+		
+		if (!empty($resp)) {
 			$token = json_decode($resp)->token;
 			if ($token) {
 				update_option('enterpay_token', $token);
 			}
 		}
 	}
-
+	
 	public function send_API_request($endpoint_url, $method, $fileds = [])
 	{
 		$token_str = get_option('enterpay_token');
-
-		$ch = curl_init($endpoint_url);
-
-		// Returns the data/output as a string instead of raw data
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-
-		//Set your auth headers
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-			'Content-Type: application/json',
-			'Authorization: Bearer ' . $token_str
-		));
-
+		
+		$send_data = array(
+			'method' => $method,		
+			'headers'  => array(
+				'Content-Type' => 'application/json',
+				'Authorization' => 'Bearer ' . $token_str.'',
+				'Cache-control' => 'no-cache',
+			)
+		);
+		
 		if ($method == "POST"){
-			$fileds = json_encode($fileds);
+			$fileds = wp_json_encode($fileds);
 			
-			curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $fileds);
+			$send_data['body'] = $fileds;
+			
+			$my_request = wp_remote_post($endpoint_url, $send_data);
+		} else {
+			$my_request = wp_remote_get($endpoint_url, $send_data);
 		}
 		
-		// get stringified data/output. See CURLOPT_RETURNTRANSFER
-		$data = curl_exec($ch);
-		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		// close curl resource to free up system resources
-		curl_close($ch);
-
-		//check the token 
-
-		if ($http_code == 401 || $http_code == '401') {
-			//auth again
-			$this->auth();
-			return $this->send_API_request($endpoint_url, $method);
+		if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
+			$resp = wp_remote_retrieve_body( $my_request );
 		}
-
-		return $data;
+		
+		if (!empty($resp)) {
+			return $resp;
+		}
+		
+		return null;
 	}
-
+	
 	public function search_company()
 	{
 		$name = urlencode($_REQUEST["name"]);

@@ -35,7 +35,7 @@ class Enterpay_Company_Search_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'enterpay-company-search',
+			'entercheck-company-search',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);
