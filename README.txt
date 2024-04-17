@@ -4,21 +4,41 @@ Donate link: https://demoshop.entercheck.eu/
 Tags: company, search, registration, form
 Requires at least: 6.1.4
 Tested up to: 6.5.2
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Fetch company names and details from company registry API to integrate with your site's forms.
 
 == Description ==
+Entercheck's Company Search plugin seamlessly integrates with company registry APIs to enhance WordPress registration forms. This plugin automates the fetching and populating of company names, details, and statuses from user submissions during the registration process. This enriched data is then available on the WordPress user page and the Entercheck backend portal.
 
-Entercheck's Company Search plugin allows behind-the-scenes integration with company registry APIs to populate and augment WordPress registration form fields. The plugin offers features to fetch company names and details, fetch company status and other processed details when a form is submitted, and add this information to a WordPress user during registration. The information is available at the WordPress user page and in the Entercheck backend portal. Using the Plugin requires registering at portal.entercheck.eu/register
+Additionally, the plugin features a smart processing mode that enables the forwarding of data to external systems, such as CRM systems. This facilitates a more connected and efficient data management workflow, making it ideal for users seeking to integrate their website's data with other business tools.
+
+== Important Disclosure  ==
+This plugin relies on external services provided by Entercheck for its functionality. Data transmitted includes company search and query details required to authenticate and retrieve company information directly from our servers. 
+
+== External Services Used ==
+- Authentication (`https://api.entercheck.eu/v1/auth`)
+- Company search (`https://api.entercheck.eu/company/search`)
+- Company details retrieval (`https://api.entercheck.eu/company/details`)
+- Form submission endpoint (`https://api.entercheck.eu/forms/submit`)
+- Company registration and modification (`https://api.entercheck.eu/companies`)
+
+For full details on the data we process and how we manage it, please review our Privacy Policy and Terms of Service:
+- [Entercheck Privacy Policy](https://entercheck.eu/privacy)
+- [Entercheck Terms of Service](https://entercheck.eu/terms)
+
+== Usage of Plugin ==
+Prior use requires registration at [Entercheck Registration Portal](https://portal.entercheck.eu/register).
+
+== Availability ==
+The plugin is currently only available in the Finnish and Norwegian markets.
 
 == Installation ==
 
-1. Upload `entercheck-company-search.php` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Use the provided hooks or shortcodes in your forms to integrate the company search functionality.
+1. Activate the plugin through the 'Plugins' menu in WordPress
+2. Use the provided hooks or shortcodes in your forms to integrate the company search functionality.
 
 == Frequently Asked Questions ==
 
@@ -49,6 +69,21 @@ Use these shortcodes appropriately within your form to provide the desired funct
 
 = 1.0 =
 * Initial release with key features: Authenticate with Enterhcek backend, Fetch company names and details, fetch company status, and add this information to a WordPress user.
+
+= 1.0.1 =
+* Add support for multiple countries
+
+= 1.0.2 = 
+* Country search settings
+
+= 1.0.3 = 
+* Enable Smart processing mode
+
+= 1.0.4 =
+* Advanced search mode in Finland
+
+= 1.0.5 =
+* Compatability with WorpPress plugin directory
 
 == Upgrade Notice ==
 
