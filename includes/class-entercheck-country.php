@@ -1,7 +1,9 @@
 <?php
 
-if ( !class_exists( 'EnterpayCountry' ) ) {
-	class EnterpayCountry {
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+if ( !class_exists( 'EntercheckCountry' ) ) {
+	class EntercheckCountry {
 		private static $instance = null;
 		
 		public static function getInstance()

@@ -1,9 +1,9 @@
 === Entercheck Company Search ===
-Contributors: Entercheck 
+Contributors: Entercheck
 Donate link: https://demoshop.entercheck.eu/
 Tags: company, search, registration, form
-Requires at least: WordPress 6.1.4
-Tested up to: WordPress 6.4.3
+Requires at least: 6.1.4
+Tested up to: 6.5.2
 Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,32 +18,27 @@ Entercheck's Company Search plugin allows behind-the-scenes integration with com
 
 1. Upload `entercheck-company-search.php` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Sign up for the Entercheck service if you haven't already done so. Visit [Entercheck website](https://portal.entercheck.eu) to create an account.
-4. Identify the HTML field IDs in the forms where you want to enable the functionality of the Enterpay Company Search plugin. Enter the HTML field IDs in the appropriate field or box provided.
+3. Use the provided hooks or shortcodes in your forms to integrate the company search functionality.
 
 == Frequently Asked Questions ==
 
 = How do I integrate the company search functionality with my form? =
 
-To integrate the company search functionality with your form, enter the HTML field IDs in the appropriate field in the settings.
+To integrate the company search functionality with your form, use the following shortcodes:
 
-= How do I submit the company data to Entercheck? =
+**[company_name_dropdown]**
 
-You must include the "business id" field in the form. You can add a hidden business id field by selecting "Add automatically" from the settings.
+This shortcode displays a dropdown list of company names fetched from the company registry API.
 
-= How do I submit the company data to during WooCommerce checkout? =
+**[company_details company_id='123']**
 
-You must include the "business id" field in the form. You can add a hidden business id field by selecting "Add automatically" from the settings.
+This shortcode fetches and displays details for a specific selected company based on its ID.
 
-= How do I add e-invoice details? =
+**[company_status company_id='123']**
 
-To create a dropdown you can add select type form element
-<select id="invoice_address" name="invoice_address"></select><br><br>
+This shortcode retrieves and displays the status of a company based on its ID.
 
-if you want to allow user to edit and write, you can use input type
-<label for="invoice_address">e-invoice address: </label>
-<input type="text" id="invoice_address" name="invoice_address"><br><br>
-
+Use these shortcodes appropriately within your form to provide the desired functionality.
 
 == Screenshots ==
 

@@ -77,8 +77,8 @@ function search_company() {
 	jQuery.ajax({
 		type: "post",
 		dataType: "json",
-		url: ajaxurl+"?name=a",
-		data: { action: "search_company", nonce: nonce }
+		url: entercheckjs.ajaxurl+"?name=a",
+		data: { action: "search_company", admin_nonce: entercheckjs.nonce }
 	}).done(function (e) {
 		jQuery("#search_company_result").html("<pre>" + JSON.stringify(e) + "</pre>");
 	});
