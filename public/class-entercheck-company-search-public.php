@@ -1,13 +1,15 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 /**
  * The public-facing functionality of the plugin.
  *
  * @link       https://demoshop.entercheck.eu/
  * @since      1.0.0
  *
- * @package    Enterpay_Company_Search
- * @subpackage Enterpay_Company_Search/public
+ * @package    Entercheck_Company_Search
+ * @subpackage Entercheck_Company_Search/public
  */
 
 /**
@@ -16,11 +18,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Enterpay_Company_Search
- * @subpackage Enterpay_Company_Search/public
+ * @package    Entercheck_Company_Search
+ * @subpackage Entercheck_Company_Search/public
  * @author     Ha Nguyen <nd.dungha@gmail.com>
  */
-class Enterpay_Company_Search_Public
+class Entercheck_Company_Search_Public
 {
 
 	/**
@@ -94,17 +96,17 @@ class Enterpay_Company_Search_Public
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Enterpay_Company_Search_Loader as all of the hooks are defined
+		 * defined in Entercheck_Company_Search_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Enterpay_Company_Search_Loader will then create the relationship
+		 * The Entercheck_Company_Search_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
 
-		//wp_register_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all' );
-		wp_enqueue_style($this->plugin_name . "-CSS", plugin_dir_url(__FILE__) . 'css/enterpay-company-search-public.css', array(), $this->version, 'all');
+		//wp_register_style($this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/entercheck-company-search-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style($this->plugin_name . "-CSS", plugin_dir_url(__FILE__) . 'css/entercheck-company-search-public.css', array(), $this->version, 'all');
 
 
 		wp_enqueue_style($this->plugin_name . "-ISO-BOOTSTRAP", plugin_dir_url(__FILE__) . 'css/iso_bootstrap4.0.0min.css', array(), $this->version, 'all');
@@ -122,10 +124,10 @@ class Enterpay_Company_Search_Public
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Enterpay_Company_Search_Loader as all of the hooks are defined
+		 * defined in Entercheck_Company_Search_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Enterpay_Company_Search_Loader will then create the relationship
+		 * The Entercheck_Company_Search_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
@@ -135,7 +137,7 @@ class Enterpay_Company_Search_Public
 		wp_enqueue_script("typeahead", plugin_dir_url(__FILE__) . 'js/typeahead/typeahead.bundle.js', array('jquery'), $this->version, false);
 
 
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/enterpay-company-search-public.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/entercheck-company-search-public.js', array('jquery'), $this->version, false);
 
 		$options = get_option('enterpay_plugin_options_fields');
 
@@ -179,20 +181,22 @@ class Enterpay_Company_Search_Public
 			'search_country_id' => isset($options['search_country']['id']) ? str_ireplace(',', ', #', $options['search_country']['id']) : 'search_country',
 			'search_country_list' => [],
 			
+			'entercheck_nonce_field' => wp_nonce_field( 'entercheck_nonce_action', 'entercheck_nonce', false, false ),
+			
 		);
 		
 		if (isset($options['allow_search_country']) && is_numeric($options['allow_search_country']) && $options['allow_search_country'] == 1){
 			$search_country_list = array_filter(explode(',', $options['search_country_list']));
 			
 			$variables['search_country_list'] = array_filter(
-														EnterpayCountry::getInstance()->get_country_list(),
+														EntercheckCountry::getInstance()->get_country_list(),
 														function ($key) use ($search_country_list) {return in_array($key, $search_country_list);} ,
 														ARRAY_FILTER_USE_KEY
 													);
 		}
 		
 		
-		wp_localize_script($this->plugin_name, "enterpayjs", $variables);
+		wp_localize_script($this->plugin_name, "entercheckjs", $variables);
 	}
 
 	public function auth()
@@ -226,14 +230,14 @@ class Enterpay_Company_Search_Public
 		if (!empty($resp)) {
 			$token = json_decode($resp)->token;
 			if ($token) {
-				update_option('enterpay_token', $token);
+				update_option('entercheck_token', $token);
 			}
 		}
 	}
 	
 	public function send_API_request($endpoint_url, $method, $fileds = [])
 	{
-		$token_str = get_option('enterpay_token');
+		$token_str = get_option('entercheck_token');
 		
 		$send_data = array(
 			'method' => $method,		
@@ -267,10 +271,25 @@ class Enterpay_Company_Search_Public
 	
 	public function search_company()
 	{
+		if (isset($_REQUEST['admin_nonce'])){
+			if (!wp_verify_nonce( $_REQUEST['admin_nonce'], 'entercheck_admin_nonce' )){
+				echo '';
+				die();
+			}
+		} else if (isset($_REQUEST['nonce'])){
+			if (!wp_verify_nonce( $_REQUEST['nonce'], 'entercheck_nonce_action' )) {
+				echo '';
+				die();
+			}
+		} else {
+			echo '';
+			die();
+		}
+		
 		$name = urlencode($_REQUEST["name"]);
 		
 		$options = get_option('enterpay_plugin_options_fields');
-		$country_code = !empty($_REQUEST["country"]) ? $_REQUEST["country"] : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
+		$country_code = !empty($_REQUEST["country"]) ? sanitize_text_field($_REQUEST["country"]) : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
 
 		$endpoint_url = "https://".$this->api_domain."/company/search?country=" . $country_code . "&name=" . $name;
 		
@@ -285,10 +304,15 @@ class Enterpay_Company_Search_Public
 
 	public function get_company_detail($is_return = false)
 	{				
-		$bid = $_REQUEST["bid"];
+		if (!isset($_REQUEST['nonce']) || !wp_verify_nonce( $_REQUEST['nonce'], 'name_of_my_action' )){
+			echo '';
+			die();
+		}
+	
+		$bid = sanitize_text_field($_REQUEST["bid"]);
 		
 		$options = get_option('enterpay_plugin_options_fields');
-		$country_code = !empty($_REQUEST["country"]) ? $_REQUEST["country"] : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
+		$country_code = !empty($_REQUEST["country"]) ? sanitize_text_field($_REQUEST["country"]) : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
 		
 		$endpoint_url = "https://".$this->api_domain."/company/details?country=" . $country_code . "&id=" . $bid;
 		$data = $this->send_API_request($endpoint_url, "GET");
@@ -300,54 +324,45 @@ class Enterpay_Company_Search_Public
 		die();
 	}
 
-	public function company_search_form_render()
-	{
-		// ob_start();
-		// include(plugin_dir_path(__FILE__) . 'partials/form-shortcode.php');
-		// return ob_get_clean();		
-	}
-
 	function woocommerce_register_post_customer($username, $email, $errors)
 	{
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 
 		if (isset($_POST['billing_first_name']) && empty($_POST['billing_first_name'])) {
-			$errors->add('billing_first_name_error', __('First name is required!'));
+			$errors->add('billing_first_name_error', esc_attr__('First name is required!'));
 		}
 		if (isset($_POST['billing_last_name']) && empty($_POST['billing_last_name'])) {
-			$errors->add('billing_last_name_error', __('Last name is required!'));
+			$errors->add('billing_last_name_error', esc_attr__('Last name is required!'));
 		}
-		//if (!empty($_POST['billing_company'] && $_POST['billing_company'] != 'consumer')) {
 			
-			$field_names = isset($options['company_name']['name']) ? explode(",", $options['company_name']['name']) : ['billing_company'];		
-			foreach ($field_names as $field_name){		
-				if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-					$errors->add('billing_last_name_error', __('Company name is required!'));
-					break;
-				}
+		$field_names = isset($options['company_name']['name']) ? explode(",", $options['company_name']['name']) : ['billing_company'];		
+		foreach ($field_names as $field_name){		
+			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
+				$errors->add('billing_last_name_error', esc_attr__('Company name is required!'));
+				break;
 			}
-			
-			$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];		
-			foreach ($field_names as $field_name){		
-				if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-					$errors->add('billing_last_name_error', __('Business ID is required!'));
-					break;
-				}
+		}
+		
+		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];		
+		foreach ($field_names as $field_name){		
+			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
+				$errors->add('billing_last_name_error', esc_attr__('Business ID is required!'));
+				break;
 			}
-			
-			$field_names = isset($options['vat_number']['name']) ? explode(",", $options['vat_number']['name']) : ['inputVATNumber'];		
-			foreach ($field_names as $field_name){		
-				if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-					$errors->add('billing_last_name_error', __('VAT NUMBER is required!'));
-					break;
-				}
+		}
+		
+		$field_names = isset($options['vat_number']['name']) ? explode(",", $options['vat_number']['name']) : ['inputVATNumber'];		
+		foreach ($field_names as $field_name){		
+			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
+				$errors->add('billing_last_name_error', esc_attr__('VAT NUMBER is required!'));
+				break;
 			}
-		//}
+		}
 		
 		$field_names = isset($options['street']['name']) ? explode(",", $options['street']['name']) : ['billing_address_1'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', __('Company address is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('Company address is required!'));
 				break;
 			}
 		}
@@ -355,7 +370,7 @@ class Enterpay_Company_Search_Public
 		$field_names = isset($options['postal_code']['name']) ? explode(",", $options['postal_code']['name']) : ['billing_postcode'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', __('Postcode is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('Postcode is required!'));
 				break;
 			}
 		}
@@ -363,18 +378,16 @@ class Enterpay_Company_Search_Public
 		$field_names = isset($options['city']['name']) ? explode(",", $options['city']['name']) : ['billing_city'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', __('City is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('City is required!'));
 				break;
 			}
-		}
-		
-		
+		}	
 		
 		if (isset($_POST['email']) && empty($_POST['email'])) {
-			$errors->add('billing_last_name_error', __('Email address is required!'));
+			$errors->add('billing_last_name_error', esc_attr__('Email address is required!'));
 		}
 		if (isset($_POST['password']) && empty($_POST['password'])) {
-			$errors->add('billing_last_name_error', __('Password is required!'));
+			$errors->add('billing_last_name_error', esc_attr__('Password is required!'));
 		}
 		return $errors;
 	}
@@ -468,63 +481,54 @@ class Enterpay_Company_Search_Public
 	function send_post_request(){		
 		if (isset($GLOBALS["post_request_already_sent"]) && $GLOBALS["post_request_already_sent"] == 1)
 			return;
-		
-		//file_put_contents('al_json.txt', '1');
-		
+				
 		$options  = get_option( 'enterpay_plugin_options', array() );
 						
 		if (isset($options["request_mode"]) && $options["request_mode"] == "smart"){
 			$options_fields  = get_option( 'enterpay_plugin_options_fields', array() );			
 			$company_name_fields = isset($options_fields['company_name']['name']) ? explode(",", $options_fields['company_name']['name']) : ['billing_company'];
-			//file_put_contents('al_json.txt', print_r($_POST, 1));
 			/*if (isset($form_mapping_options["smartFormId"]) && $form_mapping_options["smartFormId"]['value'] != ""){*/
 			foreach ($company_name_fields as $company_name_field){	
 				if (isset($_REQUEST[$company_name_field])){
-					//file_put_contents('al_json.txt', '3');
 					$form_mapping_options  = get_option( 'enterpay_plugin_options_form_mapping', array() );	
-					//$field_name = isset($form_mapping_options['smartFormId']['field']) ? $form_mapping_options['smartFormId']['field'] : ['smartFormId'];
-					//if (isset($_REQUEST[$field_name]) && $_REQUEST[$field_name] == $form_mapping_options['smartFormId']['value']) {
-						$smartFormId = !empty($options["smart_form_id"]) ? $options["smart_form_id"] : '';
-						$businessId = "";
-						$country = $this->get_form_search_country();
-							
-						$field_names = isset($options_fields['business_id']['name']) ? explode(",", $options_fields['business_id']['name']) : ['inputBusinessId'];
-						foreach ($field_names as $field_name){
-							if (isset($_REQUEST[$field_name])) {
-								$businessId = $_REQUEST[$field_name];
+					$smartFormId = !empty($options["smart_form_id"]) ? $options["smart_form_id"] : '';
+					$businessId = "";
+					$country = $this->get_form_search_country();
+						
+					$field_names = isset($options_fields['business_id']['name']) ? explode(",", $options_fields['business_id']['name']) : ['inputBusinessId'];
+					foreach ($field_names as $field_name){
+						if (isset($_REQUEST[$field_name])) {
+							$businessId = sanitize_text_field($_REQUEST[$field_name]);
+						}
+					}
+					
+					$fields = ["businessId" => $businessId, "country" => $country, "smartFormId" => $smartFormId];
+					$additional_data = ["field1" => "", "field2" => ""];
+					
+					foreach($form_mapping_options as $post_field_name => $form_mapping_field){
+						if (isset($form_mapping_field["field"])) {
+							if (($post_field_name == 'additionalData1')){
+								$additional_data["field1"] = isset($_REQUEST[$form_mapping_field["field"]]) ? sanitize_text_field($_REQUEST[$form_mapping_field["field"]]) : "";
+							} else if (($post_field_name == 'additionalData2')){
+								$additional_data["field2"] = isset($_REQUEST[$form_mapping_field["field"]]) ? sanitize_text_field($_REQUEST[$form_mapping_field["field"]]) : "";
+							} else if (($post_field_name == 'country')){
+								$additional_data["field2"] = isset($_REQUEST[$form_mapping_field["field"]]) ? sanitize_text_field($_REQUEST[$form_mapping_field["field"]]) : "FI";							
+							} else if (($post_field_name == 'phoneNumber')){
+								if (!empty($_REQUEST[$form_mapping_field["field"]]))
+									$additional_data["field2"] = sanitize_text_field($_REQUEST[$form_mapping_field["field"]]);
+							} else {
+								$fields[$post_field_name] = isset($_REQUEST[$form_mapping_field["field"]]) ? sanitize_text_field($_REQUEST[$form_mapping_field["field"]]) : "";
 							}
 						}
-						
-						$fields = ["businessId" => $businessId, "country" => $country, "smartFormId" => $smartFormId];
-						$additional_data = ["field1" => "", "field2" => ""];
-						
-						foreach($form_mapping_options as $post_field_name => $form_mapping_field){
-							if (isset($form_mapping_field["field"])) {
-								if (($post_field_name == 'additionalData1')){
-									$additional_data["field1"] = isset($_REQUEST[$form_mapping_field["field"]]) ? $_REQUEST[$form_mapping_field["field"]] : "";
-								} else if (($post_field_name == 'additionalData2')){
-									$additional_data["field2"] = isset($_REQUEST[$form_mapping_field["field"]]) ? $_REQUEST[$form_mapping_field["field"]] : "";
-								} else if (($post_field_name == 'country')){
-									$additional_data["field2"] = isset($_REQUEST[$form_mapping_field["field"]]) ? $_REQUEST[$form_mapping_field["field"]] : "FI";							
-								} else if (($post_field_name == 'phoneNumber')){
-									if (!empty($_REQUEST[$form_mapping_field["field"]]))
-										$additional_data["field2"] = $_REQUEST[$form_mapping_field["field"]];
-								} else {
-									$fields[$post_field_name] = isset($_REQUEST[$form_mapping_field["field"]]) ? $_REQUEST[$form_mapping_field["field"]] : "";
-								}
-							}
-						}
+					}
 
-						$fields["additionalData"] = $additional_data;
-						
-						//file_put_contents('al_json.txt', print_r($fields, 1));
-						//return;
-										
-						$endpoint_url = 'https://'.$this->api_domain.'/forms/submit';
-						$data =	$this->send_API_request($endpoint_url, "POST", $fields);
-						
-						$GLOBALS["post_request_already_sent"] = 1;
-					//}
+					$fields["additionalData"] = $additional_data;
+					
+					$endpoint_url = 'https://'.$this->api_domain.'/forms/submit';
+					$data =	$this->send_API_request($endpoint_url, "POST", $fields);
+					
+					$GLOBALS["post_request_already_sent"] = 1;
+				
 					
 					break;
 				}
@@ -534,6 +538,11 @@ class Enterpay_Company_Search_Public
 
 	function request_after_registration_submission($user_id)
 	{
+		if (isset($_REQUEST['entercheck_nonce'])){
+			if (!wp_verify_nonce( $_REQUEST['entercheck_nonce'], 'entercheck_nonce_action' )) 
+				return;
+		}
+		
 		$this->save_custom_data();
 		$this->send_post_request();
 		
@@ -548,7 +557,7 @@ class Enterpay_Company_Search_Public
 			
 			foreach ($field_names as $field_name){
 				if (isset($_REQUEST[$field_name])) {
-					$business_id =  $_REQUEST[$field_name];
+					$business_id =  sanitize_text_field($_REQUEST[$field_name]);
 					$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
 					$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
 					
@@ -560,7 +569,7 @@ class Enterpay_Company_Search_Public
 					$fields["companyRepresentatives"] = false;
 					$fields["companyPaymentRemarks"] = false;
 									
-					$endpoint_url = 'https://'.$this->api_domain.'/company/add';
+					$endpoint_url = 'https://'.$this->api_domain.'/companies'; //company/add
 					$data =	$this->send_API_request($endpoint_url, "POST", $fields);
 					
 					if (!empty($data)) {
@@ -586,7 +595,12 @@ class Enterpay_Company_Search_Public
 	}
 	
 	function request_after_submission_form()
-	{		
+	{
+		if (isset($_REQUEST['entercheck_nonce'])){
+			if (!wp_verify_nonce( $_REQUEST['entercheck_nonce'], 'entercheck_nonce_action' )) 
+				return;
+		}
+		
 		$this->save_custom_data();
 		$this->send_post_request();
 		
@@ -601,7 +615,7 @@ class Enterpay_Company_Search_Public
 			
 			foreach ($field_names as $field_name){			
 				if (isset($_REQUEST[$field_name])) {
-					$business_id =  $_REQUEST[$field_name];
+					$business_id =  sanitize_text_field($_REQUEST[$field_name]);
 					$_REQUEST["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
 					$GLOBALS["entercheck_portal_link"] = 'https://'.$this->portal_api_domain.'/companies/buid/'.$business_id;
 					
@@ -613,7 +627,7 @@ class Enterpay_Company_Search_Public
 					$fields["companyRepresentatives"] = false;
 					$fields["companyPaymentRemarks"] = false;
 									
-					$endpoint_url = 'https://'.$this->api_domain.'/company/add';
+					$endpoint_url = 'https://'.$this->api_domain.'/companies'; // company/add
 					$data =	$this->send_API_request($endpoint_url, "POST", $fields);
 					
 					if (!empty($data)) {
@@ -653,13 +667,13 @@ class Enterpay_Company_Search_Public
 		
 		foreach ($field_invoice_address as $field_name){
 			if (isset($_REQUEST[$field_name])) {
-				$invoice_address = $_REQUEST[$field_name];
+				$invoice_address = sanitize_text_field($_REQUEST[$field_name]);
 			}
 		}
 		
 		foreach ($field_invoice_operator_code as $field_name){
 			if (isset($_REQUEST[$field_name])) {
-				$invoice_operator_code = $_REQUEST[$field_name];
+				$invoice_operator_code = sanitize_text_field($_REQUEST[$field_name]);
 			}
 		}
 		
@@ -668,7 +682,7 @@ class Enterpay_Company_Search_Public
 		} else {
 			foreach ($field_invoice_selector as $field_name){
 				if (isset($_REQUEST[$field_name])) {
-					$invoice_address = $_REQUEST[$field_name];
+					$invoice_address = sanitize_text_field($_REQUEST[$field_name]);
 				}
 			}
 		}
@@ -686,7 +700,7 @@ class Enterpay_Company_Search_Public
 	}
 
 	// save options to database
-	function enterpay_plugin_options_validate($input)
+	function entercheck_plugin_options_validate($input)
 	{
 		$options = get_option('enterpay_plugin_options');
 		$options['username'] = trim($input['username']);
@@ -698,7 +712,7 @@ class Enterpay_Company_Search_Public
 		return $options;
 	}
 
-	function enterpay_save_custom_checkout_fields($order)
+	function entercheck_save_custom_checkout_fields($order)
 	{
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 		
@@ -724,7 +738,7 @@ class Enterpay_Company_Search_Public
 			}
 		}
 	}
-	function enterpay_save_custom_fields_to_user_meta($order_id)
+	function entercheck_save_custom_fields_to_user_meta($order_id)
 	{
 		$order = wc_get_order($order_id);
 		$user_id = $order->get_user_id();

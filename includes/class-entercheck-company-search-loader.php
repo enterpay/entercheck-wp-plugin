@@ -1,14 +1,17 @@
 <?php
 
+
 /**
  * Register all actions and filters for the plugin
  *
  * @link       https://demoshop.entercheck.eu/
  * @since      1.0.0
  *
- * @package    Enterpay_Company_Search
- * @subpackage Enterpay_Company_Search/includes
+ * @package    Entercheck_Company_Search
+ * @subpackage Entercheck_Company_Search/includes
  */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Register all actions and filters for the plugin.
@@ -17,11 +20,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Enterpay_Company_Search
- * @subpackage Enterpay_Company_Search/includes
+ * @package    Entercheck_Company_Search
+ * @subpackage Entercheck_Company_Search/includes
  * @author     Ha Nguyen <nd.dungha@gmail.com>
  */
-class Enterpay_Company_Search_Loader {
+class Entercheck_Company_Search_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

@@ -9,9 +9,11 @@
  * @link       https://demoshop.entercheck.eu/
  * @since      1.0.0
  *
- * @package    Enterpay_Company_Search
- * @subpackage Enterpay_Company_Search/includes
+ * @package    Entercheck_Company_Search
+ * @subpackage Entercheck_Company_Search/includes
  */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * The core plugin class.
@@ -23,11 +25,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Enterpay_Company_Search
- * @subpackage Enterpay_Company_Search/includes
+ * @package    Entercheck_Company_Search
+ * @subpackage Entercheck_Company_Search/includes
  * @author     Ha Nguyen <nd.dungha@gmail.com>
  */
-class Enterpay_Company_Search {
+class Entercheck_Company_Search {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +37,7 @@ class Enterpay_Company_Search {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Enterpay_Company_Search_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Entercheck_Company_Search_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -67,12 +69,12 @@ class Enterpay_Company_Search {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'ENTERPAY_COMPANY_SEARCH_VERSION' ) ) {
-			$this->version = ENTERPAY_COMPANY_SEARCH_VERSION;
+		if ( defined( 'ENTERCHECK_COMPANY_SEARCH_VERSION' ) ) {
+			$this->version = ENTERCHECK_COMPANY_SEARCH_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'enterpay-company-search';
+		$this->plugin_name = 'entercheck-company-search';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -86,10 +88,10 @@ class Enterpay_Company_Search {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Enterpay_Company_Search_Loader. Orchestrates the hooks of the plugin.
-	 * - Enterpay_Company_Search_i18n. Defines internationalization functionality.
-	 * - Enterpay_Company_Search_Admin. Defines all hooks for the admin area.
-	 * - Enterpay_Company_Search_Public. Defines all hooks for the public side of the site.
+	 * - Entercheck_Company_Search_Loader. Orchestrates the hooks of the plugin.
+	 * - Entercheck_Company_Search_i18n. Defines internationalization functionality.
+	 * - Entercheck_Company_Search_Admin. Defines all hooks for the admin area.
+	 * - Entercheck_Company_Search_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -103,33 +105,33 @@ class Enterpay_Company_Search {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-enterpay-company-search-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-entercheck-company-search-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-enterpay-company-search-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-entercheck-company-search-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-enterpay-company-search-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-entercheck-company-search-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-enterpay-company-search-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-entercheck-company-search-public.php';
 
-		$this->loader = new Enterpay_Company_Search_Loader();
+		$this->loader = new Entercheck_Company_Search_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Enterpay_Company_Search_i18n class in order to set the domain and to register the hook
+	 * Uses the Entercheck_Company_Search_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -137,7 +139,7 @@ class Enterpay_Company_Search {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Enterpay_Company_Search_i18n();
+		$plugin_i18n = new Entercheck_Company_Search_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -152,7 +154,7 @@ class Enterpay_Company_Search {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Enterpay_Company_Search_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Entercheck_Company_Search_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -171,7 +173,7 @@ class Enterpay_Company_Search {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Enterpay_Company_Search_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Entercheck_Company_Search_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -193,10 +195,10 @@ class Enterpay_Company_Search {
 		
 		////$this->loader->add_action( 'woocommerce_before_checkout_billing_form', $plugin_public, 'custom_checkout_field_select' );
 		
-		$this->loader->add_action( 'woocommerce_checkout_create_order', $plugin_public, 'enterpay_save_custom_checkout_fields' );
-		$this->loader->add_action( 'woocommerce_new_order', $plugin_public, 'enterpay_save_custom_fields_to_user_meta' );
+		$this->loader->add_action( 'woocommerce_checkout_create_order', $plugin_public, 'entercheck_save_custom_checkout_fields' );
+		$this->loader->add_action( 'woocommerce_new_order', $plugin_public, 'entercheck_save_custom_fields_to_user_meta' );
 
-		$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
+		//$this->loader->add_shortcode( 'company_search_form', $plugin_public, 'company_search_form_render' );
 		
 		////$this->loader->add_filter( 'woocommerce_save_account_details_required_fields', $plugin_public, 'woocommerce_save_account_details_required_fields_custom' );
 		////$this->loader->add_filter( 'woocommerce_billing_fields', $plugin_public, 'custom_woocommerce_billing_fields' );
@@ -233,7 +235,7 @@ class Enterpay_Company_Search {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Enterpay_Company_Search_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Entercheck_Company_Search_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;

@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 /**
  * Provide a public-facing view for the plugin
  *
@@ -8,8 +10,8 @@
  * @link       https://demoshop.entercheck.eu/
  * @since      1.0.0
  *
- * @package    Enterpay_Company_Search
- * @subpackage Enterpay_Company_Search/public/partials
+ * @package    Entercheck_Company_Search
+ * @subpackage Entercheck_Company_Search/public/partials
  */
 ?>
 
