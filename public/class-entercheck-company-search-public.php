@@ -260,6 +260,10 @@ class Entercheck_Company_Search_Public
 		
 		if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
 			$resp = wp_remote_retrieve_body( $my_request );
+		} else {
+			//auth again
+			$this->auth();
+			return $this->send_API_request($endpoint_url, $method, $fileds);
 		}
 		
 		if (!empty($resp)) {

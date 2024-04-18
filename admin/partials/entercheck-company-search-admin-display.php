@@ -45,8 +45,8 @@
     }
 	
 	function entercheck_plugin_processing_section_text(){
-		echo '<p>'.esc_attr__('<strong>Simple</strong> processing registers new business to the Entercheck backend.<br>', 'entercheck-company-search');		
-		echo esc_attr__('<strong>Smart</strong> processing mode forwards data specified on the form mapping page and executes the "Smart Form" workflow.', 'entercheck-company-search').'</p>';
+		echo '<p>'.__('<strong>Simple</strong> processing registers new business to the Entercheck backend.<br>', 'entercheck-company-search');		
+		echo __('<strong>Smart</strong> processing mode forwards data specified on the form mapping page and executes the "Smart Form" workflow.', 'entercheck-company-search').'</p>';
 	}
 
     function entercheck_plugin_setting_username()
