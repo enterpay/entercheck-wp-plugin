@@ -18,29 +18,29 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			register_setting( 'enterpay_plugin_options_form_mapping', 'enterpay_plugin_options_form_mapping', [$this, 'sanitize'] );
 			
 			add_settings_section('entercheck-company-search-form_mapping', '', array($this, 'mapping_section_callback'), 'entercheck_plugin_options_form_mapping' );
-			//add_settings_field( 'smartFormId', 'smartFormId', array($this, 'smartFormId_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			//add_settings_field( 'businessId', 'businessId*', array($this, 'businessId_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			//add_settings_field( 'country', 'country*', array($this, 'country_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );			
-			add_settings_field( 'firstName', 'First Name', array($this, 'firstName_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'lastName', 'Last Name', array($this, 'lastName_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'email', 'Email', array($this, 'email_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'phoneNumber', 'Phone Number', array($this, 'phoneNumber_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'businessName', 'Business Name', array($this, 'businessName_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'jobTitle', 'Job Title', array($this, 'jobTitle_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'dateOfBirth', 'Date of Birth', array($this, 'dateOfBirth_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'preferredContactMethod', 'Preferred Contact Method', array($this, 'preferredContactMethod_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'allowMarketing', 'Allow Marketing', array($this, 'allowMarketing_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'subscribeToNewsLetter', 'Subscribe to NewsLetter', array($this, 'subscribeToNewsLetter_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'acceptedTos', 'Accepted TOS', array($this, 'acceptedTos_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'acceptedPrivacyPolicy', 'Accepted Privacy Policy', array($this, 'acceptedPrivacyPolicy_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'orderTotal', 'Order Total', array($this, 'orderTotal_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'orderCurrency', 'Order Currency', array($this, 'orderCurrency_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'targetCompletionDate', 'Target Completion Date', array($this, 'targetCompletionDate_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'referralSource', 'Referral Source', array($this, 'referralSource_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'freeText1', 'Free Text 1', array($this, 'freeText1_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'freeText2', 'Free Text 2', array($this, 'freeText2_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'additionalData1', 'Additional Data 1', array($this, 'additionalData1_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
-			add_settings_field( 'additionalData2', 'Additional Data 2', array($this, 'additionalData2_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			//add_settings_field( 'entercheck_smartFormId', 'smartFormId', array($this, 'smartFormId_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			//add_settings_field( 'entercheck_businessId', 'businessId*', array($this, 'businessId_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			//add_settings_field( 'entercheck_country', 'country*', array($this, 'country_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );			
+			add_settings_field( 'entercheck_firstName', 'First Name', array($this, 'firstName_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_lastName', 'Last Name', array($this, 'lastName_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_email', 'Email', array($this, 'email_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_phoneNumber', 'Phone Number', array($this, 'phoneNumber_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_businessName', 'Business Name', array($this, 'businessName_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_jobTitle', 'Job Title', array($this, 'jobTitle_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_dateOfBirth', 'Date of Birth', array($this, 'dateOfBirth_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_preferredContactMethod', 'Preferred Contact Method', array($this, 'preferredContactMethod_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_allowMarketing', 'Allow Marketing', array($this, 'allowMarketing_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_subscribeToNewsLetter', 'Subscribe to NewsLetter', array($this, 'subscribeToNewsLetter_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_acceptedTos', 'Accepted TOS', array($this, 'acceptedTos_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_acceptedPrivacyPolicy', 'Accepted Privacy Policy', array($this, 'acceptedPrivacyPolicy_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_orderTotal', 'Order Total', array($this, 'orderTotal_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_orderCurrency', 'Order Currency', array($this, 'orderCurrency_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_targetCompletionDate', 'Target Completion Date', array($this, 'targetCompletionDate_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_referralSource', 'Referral Source', array($this, 'referralSource_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_freeText1', 'Free Text 1', array($this, 'freeText1_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_freeText2', 'Free Text 2', array($this, 'freeText2_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_additionalData1', 'Additional Data 1', array($this, 'additionalData1_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
+			add_settings_field( 'entercheck_additionalData2', 'Additional Data 2', array($this, 'additionalData2_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
 		}
 		
 		public function sanitize( $input )
@@ -82,7 +82,7 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row_mapping">
-				<label for="company_name-id"><?php _e('HTML Form Element name', 'entercheck-company-search'); ?></label>
+				<label for="company_name-id"><?php esc_html_e('HTML Form Element name', 'entercheck-company-search'); ?></label>
 			</div>
 			<div class="box_row">
 				<input type="text" id="businessId-field" name="enterpay_plugin_options_form_mapping[businessId][field]" value="<?php echo esc_attr($options['businessId']['field']); ?>" />

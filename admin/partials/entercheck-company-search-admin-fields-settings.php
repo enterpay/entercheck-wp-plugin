@@ -32,20 +32,20 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			add_settings_section('entercheck-company-search-company_search', esc_attr__('Company search', 'entercheck-company-search'), array($this, 'company_name_section_callback'), 'entercheck_plugin_options_fields', [
 				'after_section' => '<p class="after_field">Company id can be prefilled for the customer and backend processing by defining the field name and id.</p>'
 			] );
-			add_settings_field( 'company_name', esc_attr__('Company name', 'entercheck-company-search'), array($this, 'company_name_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-company_search' );
+			add_settings_field( 'entercheck_company_name', esc_attr__('Company name', 'entercheck-company-search'), array($this, 'company_name_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-company_search' );
 			
 			add_settings_section('entercheck-company-search-business_id_search', '' /*esc_attr__('Company search', 'entercheck-company-search')*/, array($this, 'business_id_name_section_callback'), 'entercheck_plugin_options_fields' );
-			add_settings_field( 'business_id', esc_attr__('Business Id', 'entercheck-company-search'), array($this, 'business_id_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-business_id_search' );
-			add_settings_field( 'use_advanced_search', esc_attr__('Use Advanced Search', 'entercheck-company-search'), array($this, 'use_advanced_search_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-business_id_search' );
+			add_settings_field( 'entercheck_business_id', esc_attr__('Business Id', 'entercheck-company-search'), array($this, 'business_id_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-business_id_search' );
+			add_settings_field( 'entercheck_use_advanced_search', esc_attr__('Use Advanced Search', 'entercheck-company-search'), array($this, 'use_advanced_search_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-business_id_search' );
 			
 			
 
 			
 			add_settings_section('entercheck-search-country_fields_settings', esc_attr__('Regional Settings', 'entercheck-company-search'), array($this, 'settings_section_callback'), 'entercheck_plugin_options_fields' );
-			add_settings_field( 'search_country', esc_attr__('Country Selection', 'entercheck-company-search'), array($this, 'search_country_callback'), 'entercheck_plugin_options_fields', 'entercheck-search-country_fields_settings' );
-			add_settings_field( 'default_country', esc_attr__('Default country', 'entercheck-company-search'), array($this, 'default_country_callback'), 'entercheck_plugin_options_fields', 'entercheck-search-country_fields_settings');
-			add_settings_field( 'allow_search_country', esc_attr__('Enable Searching Multiple Regions', 'entercheck-company-search'), array($this, 'allow_search_country_callback'), 'entercheck_plugin_options_fields', 'entercheck-search-country_fields_settings' );
-			add_settings_field( 'search_country_list', esc_attr__('Allowed Countries', 'entercheck-company-search'), array($this, 'search_country_list_callback'), 'entercheck_plugin_options_fields', 'entercheck-search-country_fields_settings' );
+			add_settings_field( 'entercheck_search_country', esc_attr__('Country Selection', 'entercheck-company-search'), array($this, 'search_country_callback'), 'entercheck_plugin_options_fields', 'entercheck-search-country_fields_settings' );
+			add_settings_field( 'entercheck_default_country', esc_attr__('Default country', 'entercheck-company-search'), array($this, 'default_country_callback'), 'entercheck_plugin_options_fields', 'entercheck-search-country_fields_settings');
+			add_settings_field( 'entercheck_allow_search_country', esc_attr__('Enable Searching Multiple Regions', 'entercheck-company-search'), array($this, 'allow_search_country_callback'), 'entercheck_plugin_options_fields', 'entercheck-search-country_fields_settings' );
+			add_settings_field( 'entercheck_search_country_list', esc_attr__('Allowed Countries', 'entercheck-company-search'), array($this, 'search_country_list_callback'), 'entercheck_plugin_options_fields', 'entercheck-search-country_fields_settings' );
 
 
 
@@ -53,23 +53,23 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 						
 			add_settings_section('entercheck-company-search-prefill_settings', esc_attr__('Prefill Settings', 'entercheck-company-search'), array($this, 'prefill_settings_section_callback'), 'entercheck_plugin_options_fields' );
 			//echo '<h3>Relevant company fields</h3>';
-			add_settings_field( 'business_line', esc_attr__('Business Line', 'entercheck-company-search'), array($this, 'business_line_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-prefill_settings' );
-			add_settings_field( 'vat_number', esc_attr__('VAT Number', 'entercheck-company-search'), array($this, 'vat_number_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-prefill_settings' );
+			add_settings_field( 'entercheck_business_line', esc_attr__('Business Line', 'entercheck-company-search'), array($this, 'business_line_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-prefill_settings' );
+			add_settings_field( 'entercheck_vat_number', esc_attr__('VAT Number', 'entercheck-company-search'), array($this, 'vat_number_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-prefill_settings' );
 			
 			//echo '<h3>Billing address</h3>';
 			add_settings_section('entercheck-company-search-relevant-company-fields_settings', '' /*esc_attr__('Relevant company fields', 'entercheck-company-search')*/, array($this, 'billing_section_callback'), 'entercheck_plugin_options_fields' );
-			add_settings_field( 'country', esc_attr__('Country', 'entercheck-company-search'), array($this, 'country_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-relevant-company-fields_settings' );
-			add_settings_field( 'city', esc_attr__('City', 'entercheck-company-search'), array($this, 'city_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-relevant-company-fields_settings' );
-			add_settings_field( 'street', esc_attr__('Street', 'entercheck-company-search'), array($this, 'street_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-relevant-company-fields_settings' );
-			add_settings_field( 'street_second', esc_attr__('Street second row', 'entercheck-company-search'), array($this, 'street_second_callback'), 'entercheck-company-search-relevant-company-fields_settings' );
-			add_settings_field( 'postal_code', esc_attr__('Postal code', 'entercheck-company-search'), array($this, 'postal_code_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-relevant-company-fields_settings' );
+			add_settings_field( 'entercheck_country', esc_attr__('Country', 'entercheck-company-search'), array($this, 'country_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-relevant-company-fields_settings' );
+			add_settings_field( 'entercheck_city', esc_attr__('City', 'entercheck-company-search'), array($this, 'city_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-relevant-company-fields_settings' );
+			add_settings_field( 'entercheck_street', esc_attr__('Street', 'entercheck-company-search'), array($this, 'street_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-relevant-company-fields_settings' );
+			add_settings_field( 'entercheck_street_second', esc_attr__('Street second row', 'entercheck-company-search'), array($this, 'street_second_callback'), 'entercheck-company-search-relevant-company-fields_settings' );
+			add_settings_field( 'entercheck_postal_code', esc_attr__('Postal code', 'entercheck-company-search'), array($this, 'postal_code_callback'), 'entercheck_plugin_options_fields', 'entercheck-company-search-relevant-company-fields_settings' );
 			
 			//echo '<h3>Invoice address</h3>';
 			add_settings_section('entercheck-invoice-company-fields_settings', '' /*esc_attr__('Invoice address', 'enterpay-company-search')*/, array($this, 'invoice_section_callback'), 'enterpay_plugin_options_fields' );
-			//add_settings_field( 'display_invoice_address', esc_attr__('Display invoice address', 'enterpay-company-search'), array($this, 'display_invoice_address_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
-			add_settings_field( 'invoice_selector', esc_attr__('Invoice selector', 'entercheck-company-search'), array($this, 'invoice_selector_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
-			add_settings_field( 'invoice_address', esc_attr__('Invoice address', 'entercheck-company-search'), array($this, 'invoice_address_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
-			add_settings_field( 'invoice_operator_code', esc_attr__('Invoice operator code', 'entercheck-company-search'), array($this, 'invoice_operator_code_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
+			//add_settings_field( 'entercheck_display_invoice_address', esc_attr__('Display invoice address', 'enterpay-company-search'), array($this, 'display_invoice_address_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
+			add_settings_field( 'entercheck_invoice_selector', esc_attr__('Invoice selector', 'entercheck-company-search'), array($this, 'invoice_selector_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
+			add_settings_field( 'entercheck_invoice_address', esc_attr__('Invoice address', 'entercheck-company-search'), array($this, 'invoice_address_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
+			add_settings_field( 'entercheck_invoice_operator_code', esc_attr__('Invoice operator code', 'entercheck-company-search'), array($this, 'invoice_operator_code_callback'), 'enterpay_plugin_options_fields', 'enterpay-invoice-company-fields_settings' );
 
 		}
 		
@@ -168,16 +168,16 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			// class="regular-text" 
 			?>
 			<div class="box_row">
-				<label for="company_name-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="company_name-name" name="enterpay_plugin_options_fields[company_name][name]" value="<?php echo $options['company_name']['name']; ?>" />
+				<label for="company_name-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="company_name-name" name="enterpay_plugin_options_fields[company_name][name]" value="<?php echo esc_html($options['company_name']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="company_name-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="company_name-id" name="enterpay_plugin_options_fields[company_name][id]" value="<?php echo $options['company_name']['id']; ?>" />
+				<label for="company_name-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="company_name-id" name="enterpay_plugin_options_fields[company_name][id]" value="<?php echo esc_html($options['company_name']['id']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="company_name-tooltip"><?php _e('ToolTip', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="company_name-tooltip" name="enterpay_plugin_options_fields[company_name][tooltip]" value="<?php echo $options['company_name']['tooltip']; ?>" />
+				<label for="company_name-tooltip"><?php esc_html_e('ToolTip', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="company_name-tooltip" name="enterpay_plugin_options_fields[company_name][tooltip]" value="<?php echo esc_html($options['company_name']['tooltip']); ?>" />
 			</div>				
 			<?php
 		}	
@@ -193,12 +193,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="vat_number-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="vat_number-name" name="enterpay_plugin_options_fields[vat_number][name]" value="<?php echo $options['vat_number']['name']; ?>" />
+				<label for="vat_number-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="vat_number-name" name="enterpay_plugin_options_fields[vat_number][name]" value="<?php echo esc_html($options['vat_number']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="vat_number-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="vat_number-id" name="enterpay_plugin_options_fields[vat_number][id]" value="<?php echo $options['vat_number']['id']; ?>" />
+				<label for="vat_number-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="vat_number-id" name="enterpay_plugin_options_fields[vat_number][id]" value="<?php echo esc_html($options['vat_number']['id']); ?>" />
 			</div>			
 			<?php
 		}	
@@ -217,16 +217,16 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="business_id-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="business_id-name" name="enterpay_plugin_options_fields[business_id][name]" value="<?php echo $options['business_id']['name']; ?>" />
+				<label for="business_id-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="business_id-name" name="enterpay_plugin_options_fields[business_id][name]" value="<?php echo esc_html($options['business_id']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="business_id-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="business_id-id" name="enterpay_plugin_options_fields[business_id][id]" value="<?php echo $options['business_id']['id']; ?>" />
+				<label for="business_id-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="business_id-id" name="enterpay_plugin_options_fields[business_id][id]" value="<?php echo esc_html($options['business_id']['id']); ?>" />
 			</div>
 			<div class="box_row">					
 				<input type="checkbox" <?php if ($options['business_id']['auto'] == 1) echo 'checked'; ?> id="business_id-auto" name="enterpay_plugin_options_fields[business_id][auto]" value="1" />
-				<label class="chb" for="business_id-auto"><?php _e('Add automatically', 'entercheck-company-search'); ?></label>
+				<label class="chb" for="business_id-auto"><?php esc_html_e('Add automatically', 'entercheck-company-search'); ?></label>
 			</div>				
 			<?php
 		}
@@ -255,12 +255,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="business_line-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="business_line-name" name="enterpay_plugin_options_fields[business_line][name]" value="<?php echo $options['business_line']['name']; ?>" />
+				<label for="business_line-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="business_line-name" name="enterpay_plugin_options_fields[business_line][name]" value="<?php echo esc_html($options['business_line']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="business_line-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="business_line-id" name="enterpay_plugin_options_fields[business_line][id]" value="<?php echo $options['business_line']['id']; ?>" />
+				<label for="business_line-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="business_line-id" name="enterpay_plugin_options_fields[business_line][id]" value="<?php echo esc_html($options['business_line']['id']); ?>" />
 			</div>			
 			<?php
 		}
@@ -279,12 +279,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			?>
 			
 			<div class="box_row">
-				<label for="country-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="country-name" name="enterpay_plugin_options_fields[country][name]" value="<?php echo $options['country']['name']; ?>" />
+				<label for="country-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="country-name" name="enterpay_plugin_options_fields[country][name]" value="<?php echo esc_html($options['country']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="country-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="country-id" name="enterpay_plugin_options_fields[country][id]" value="<?php echo $options['country']['id']; ?>" />
+				<label for="country-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="country-id" name="enterpay_plugin_options_fields[country][id]" value="<?php echo esc_html($options['country']['id']); ?>" />
 			</div>			
 			<?php
 		}
@@ -300,12 +300,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="city-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="city-name" name="enterpay_plugin_options_fields[city][name]" value="<?php echo $options['city']['name']; ?>" />
+				<label for="city-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="city-name" name="enterpay_plugin_options_fields[city][name]" value="<?php echo esc_html($options['city']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="city-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="city-id" name="enterpay_plugin_options_fields[city][id]" value="<?php echo $options['city']['id']; ?>" />
+				<label for="city-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="city-id" name="enterpay_plugin_options_fields[city][id]" value="<?php echo esc_html($options['city']['id']); ?>" />
 			</div>			
 			<?php
 		}
@@ -321,12 +321,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="street-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="street-name" name="enterpay_plugin_options_fields[street][name]" value="<?php echo $options['street']['name']; ?>" />
+				<label for="street-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="street-name" name="enterpay_plugin_options_fields[street][name]" value="<?php echo esc_html($options['street']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="street-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="street-id" name="enterpay_plugin_options_fields[street][id]" value="<?php echo $options['street']['id']; ?>" />
+				<label for="street-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="street-id" name="enterpay_plugin_options_fields[street][id]" value="<?php echo esc_html($options['street']['id']); ?>" />
 			</div>			
 			<?php
 		}
@@ -342,12 +342,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="street_second-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="street_second-name" name="enterpay_plugin_options_fields[street_second][name]" value="<?php echo $options['street_second']['name']; ?>" />
+				<label for="street_second-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="street_second-name" name="enterpay_plugin_options_fields[street_second][name]" value="<?php echo esc_html($options['street_second']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="street_second-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="street_second-id" name="enterpay_plugin_options_fields[street_second][id]" value="<?php echo $options['street_second']['id']; ?>" />
+				<label for="street_second-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="street_second-id" name="enterpay_plugin_options_fields[street_second][id]" value="<?php echo esc_html($options['street_second']['id']); ?>" />
 			</div>	
 			<?php
 		}		
@@ -363,12 +363,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="postal_code-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="postal_code-name" name="enterpay_plugin_options_fields[postal_code][name]" value="<?php echo $options['postal_code']['name']; ?>" />
+				<label for="postal_code-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="postal_code-name" name="enterpay_plugin_options_fields[postal_code][name]" value="<?php echo esc_html($options['postal_code']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="postal_code-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="postal_code-id" name="enterpay_plugin_options_fields[postal_code][id]" value="<?php echo $options['postal_code']['id']; ?>" />
+				<label for="postal_code-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="postal_code-id" name="enterpay_plugin_options_fields[postal_code][id]" value="<?php echo esc_html($options['postal_code']['id']); ?>" />
 			</div>			
 			<?php
 		}
@@ -382,7 +382,7 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			?>			
 			<div class="box_row">					
 				<input type="checkbox" <?php if ($options['display_invoice_address'] == 1) echo 'checked'; ?> id="display_invoice_address" name="enterpay_plugin_options_fields[display_invoice_address]" value="1" />
-				<!--<label class="chb" for="display_invoice_address"><?php _e('Display invoice address', 'entercheck-company-search'); ?></label>-->
+				<!--<label class="chb" for="display_invoice_address"><?php esc_html_e('Display invoice address', 'entercheck-company-search'); ?></label>-->
 			</div>				
 			<?php
 		}
@@ -398,12 +398,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="invoice_selector-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="invoice_selector-name" name="enterpay_plugin_options_fields[invoice_selector][name]" value="<?php echo $options['invoice_selector']['name']; ?>" />
+				<label for="invoice_selector-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="invoice_selector-name" name="enterpay_plugin_options_fields[invoice_selector][name]" value="<?php echo esc_html($options['invoice_selector']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="invoice_selector-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="invoice_selector-id" name="enterpay_plugin_options_fields[invoice_selector][id]" value="<?php echo $options['invoice_selector']['id']; ?>" />
+				<label for="invoice_selector-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="invoice_selector-id" name="enterpay_plugin_options_fields[invoice_selector][id]" value="<?php echo esc_html($options['invoice_selector']['id']); ?>" />
 			</div>
 			<?php
 		}
@@ -419,12 +419,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="invoice_address-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="invoice_address-name" name="enterpay_plugin_options_fields[invoice_address][name]" value="<?php echo $options['invoice_address']['name']; ?>" />
+				<label for="invoice_address-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="invoice_address-name" name="enterpay_plugin_options_fields[invoice_address][name]" value="<?php echo esc_html($options['invoice_address']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="invoice_address-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="invoice_address-id" name="enterpay_plugin_options_fields[invoice_address][id]" value="<?php echo $options['invoice_address']['id']; ?>" />
+				<label for="invoice_address-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="invoice_address-id" name="enterpay_plugin_options_fields[invoice_address][id]" value="<?php echo esc_html($options['invoice_address']['id']); ?>" />
 			</div>
 			<?php
 		}
@@ -440,12 +440,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<label for="invoice_operator_code-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-				<input type="text" id="invoice_operator_code-name" name="enterpay_plugin_options_fields[invoice_operator_code][name]" value="<?php echo $options['invoice_operator_code']['name']; ?>" />
+				<label for="invoice_operator_code-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="invoice_operator_code-name" name="enterpay_plugin_options_fields[invoice_operator_code][name]" value="<?php echo esc_html($options['invoice_operator_code']['name']); ?>" />
 			</div>
 			<div class="box_row">
-				<label for="invoice_operator_code-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-				<input type="text" id="invoice_operator_code-id" name="enterpay_plugin_options_fields[invoice_operator_code][id]" value="<?php echo $options['invoice_operator_code']['id']; ?>" />
+				<label for="invoice_operator_code-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="invoice_operator_code-id" name="enterpay_plugin_options_fields[invoice_operator_code][id]" value="<?php echo esc_html($options['invoice_operator_code']['id']); ?>" />
 			</div>
 			<?php
 		}
@@ -478,7 +478,7 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			?>			
 			<div class="box_row">					
 				<input type="checkbox" <?php if ($options['allow_search_country'] == 1) echo 'checked'; ?> id="allow_search_country" name="enterpay_plugin_options_fields[allow_search_country]" value="1" />
-				<!--<label class="chb" for="display_invoice_address"><?php _e('Display invoice address', 'entercheck-company-search'); ?></label>-->
+				<!--<label class="chb" for="display_invoice_address"><?php esc_html_e('Display invoice address', 'entercheck-company-search'); ?></label>-->
 			</div>				
 			<?php
 		}
@@ -495,12 +495,12 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			?>
 			<div class="display_search_country_box">
 				<div class="box_row">
-					<label for="search_country-name"><?php _e('Field name', 'entercheck-company-search'); ?>:</label>
-					<input type="text" id="search_country-name" name="enterpay_plugin_options_fields[search_country][name]" value="<?php echo $options['search_country']['name']; ?>" />
+					<label for="search_country-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+					<input type="text" id="search_country-name" name="enterpay_plugin_options_fields[search_country][name]" value="<?php echo esc_html($options['search_country']['name']); ?>" />
 				</div>
 				<div class="box_row">
-					<label for="search_country-id"><?php _e('Field ID', 'entercheck-company-search'); ?>:</label>			
-					<input type="text" id="search_country-id" name="enterpay_plugin_options_fields[search_country][id]" value="<?php echo $options['search_country']['id']; ?>" />
+					<label for="search_country-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+					<input type="text" id="search_country-id" name="enterpay_plugin_options_fields[search_country][id]" value="<?php echo esc_html($options['search_country']['id']); ?>" />
 				</div>
 			</div>
 			<?php
@@ -545,7 +545,7 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<h4>Please enter the unique identifier of the element you want to modify in both the field_id and field_name cells. To enable functionality in multiple forms, you can add multiple values separated by a comma.</h4>
 			<h4>Company search funcntionality is mandatory</h4>
-			<!--<div id="preset_wc_fields"><?php _e('Click here to add fields to WooCommerce checkout', 'entercheck-company-search'); ?></div>-->
+			<!--<div id="preset_wc_fields"><?php esc_html_e('Click here to add fields to WooCommerce checkout', 'entercheck-company-search'); ?></div>-->
 			
 			<div id="field_settings_block">
 				<form action='options.php' method='post'> <?php
