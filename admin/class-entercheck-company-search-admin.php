@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @package    Entercheck_Company_Search
  * @subpackage Entercheck_Company_Search/admin
- * @author     Ha Nguyen <nd.dungha@gmail.com>
+ * @author     Entercheck <support@entercheck.eu>
  */
 class Entercheck_Company_Search_Admin
 {
@@ -244,28 +244,28 @@ class Entercheck_Company_Search_Admin
 			}	
 
 ?>
-			<h3><?php _e("Customer Organization", 'entercheck-company-search'); ?></h3>
+			<h3><?php esc_html_e("Customer Organization", 'entercheck-company-search'); ?></h3>
 			<table class="form-table">
 				<tr>
-					<th><label for="entercheck_vat_id"><?php _e("Link to Entercheck", 'entercheck-company-search'); ?></label></th>
+					<th><label for="entercheck_vat_id"><?php esc_html_e("Link to Entercheck", 'entercheck-company-search'); ?></label></th>
 					<td>
 						<a target="_blank" href="https://<?php echo esc_attr($api_domain); ?>/companies/<?php echo esc_attr($companyId); ?>">Link to Entercheck</a>
 					</td>
 				</tr>
 				<tr>
-					<th><label for="entercheck_bsuiness_id"><?php _e("Bsuiness ID", 'entercheck-company-search'); ?></label></th>
+					<th><label for="entercheck_bsuiness_id"><?php esc_html_e("Bsuiness ID", 'entercheck-company-search'); ?></label></th>
 					<td>
 						<input type="text" name="entercheck_bsuiness_id" id="entercheck_bsuiness_id" readonly value="<?php echo esc_attr($business_id); ?>" class="regular-text" /><br />
 					</td>
 				</tr>
 				<tr>
-					<th><label for="entercheck_vat_id"><?php _e("VAT ID", 'entercheck-company-search'); ?></label></th>
+					<th><label for="entercheck_vat_id"><?php esc_html_e("VAT ID", 'entercheck-company-search'); ?></label></th>
 					<td>
 						<input type="text" name="entercheck_vat_id" id="entercheck_vat_id" readonly value="<?php echo esc_attr($vat_id); ?>" class="regular-text" /><br />
 					</td>
 				</tr>
 				<tr>
-					<th><label for="entercheck_vat_id"><?php _e("Status", 'entercheck-company-search'); ?></label></th>
+					<th><label for="entercheck_vat_id"><?php esc_html_e("Status", 'entercheck-company-search'); ?></label></th>
 					<td>
 						<input type="text" name="entercheck_vat_id" id="entercheck_vat_id" readonly value="<?php echo esc_attr($status); ?>" class="regular-text" /><br />
 					</td>
@@ -275,34 +275,34 @@ class Entercheck_Company_Search_Admin
 			<?php 
 			$ind = 1;
 			foreach ($invoiceAddresses as $invoiceAddress) { ?>			
-				<h3><?php _e("Invoice Address", 'entercheck-company-search'); ?> <?php if (count($invoiceAddresses) > 1) echo $ind; ?></h3>
+				<h3><?php esc_html_e("Invoice Address", 'entercheck-company-search'); ?> <?php if (count($invoiceAddresses) > 1) echo $ind; ?></h3>
 				<table class="form-table">
 					<tr>
-						<th><label for="entercheck_bsuiness_id"><?php _e("Company name", 'entercheck-company-search'); ?></label></th>
+						<th><label for="entercheck_bsuiness_id"><?php esc_html_e("Company name", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text" readonly value="<?php echo esc_attr($invoiceAddress['company_name']); ?>" class="regular-text" /><br />
 						</td>
 					</tr>
 					<tr>
-						<th><label for="entercheck_bsuiness_id"><?php _e("Address", 'entercheck-company-search'); ?></label></th>
+						<th><label for="entercheck_bsuiness_id"><?php esc_html_e("Address", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['address']); ?>" class="regular-text" /><br />
 						</td>
 					</tr>
 					<tr>
-						<th><label for="entercheck_vat_id"><?php _e("Operator code", 'entercheck-company-search'); ?></label></th>
+						<th><label for="entercheck_vat_id"><?php esc_html_e("Operator code", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['operatorCode']); ?>" class="regular-text" /><br />
 						</td>
 					</tr>
 					<tr>
-						<th><label for="entercheck_vat_id"><?php _e("Operator", 'entercheck-company-search'); ?></label></th>
+						<th><label for="entercheck_vat_id"><?php esc_html_e("Operator", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['operator']); ?>" class="regular-text" /><br />
 						</td>
 					</tr>	
 					<tr>
-					<th><label for="entercheck_vat_id"><?php _e("OVT", 'entercheck-company-search'); ?></label></th>
+					<th><label for="entercheck_vat_id"><?php esc_html_e("OVT", 'entercheck-company-search'); ?></label></th>
 						<td>
 							<input type="text"  readonly value="<?php echo esc_attr($invoiceAddress['ovt']); ?>" class="regular-text" /><br />
 						</td>				

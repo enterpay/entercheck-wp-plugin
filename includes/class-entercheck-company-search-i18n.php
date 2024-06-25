@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @since      1.0.0
  * @package    Entercheck_Company_Search
  * @subpackage Entercheck_Company_Search/includes
- * @author     Ha Nguyen <nd.dungha@gmail.com>
+ * @author     Entercheck <support@entercheck.eu>
  */
 class Entercheck_Company_Search_i18n {
 

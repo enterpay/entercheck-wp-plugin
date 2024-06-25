@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @package    Entercheck_Company_Search
  * @subpackage Entercheck_Company_Search/public
- * @author     Ha Nguyen <nd.dungha@gmail.com>
+ * @author     Entercheck <support@entercheck.eu>
  */
 class Entercheck_Company_Search_Public
 {
@@ -276,12 +276,12 @@ class Entercheck_Company_Search_Public
 	public function search_company()
 	{
 		if (isset($_REQUEST['admin_nonce'])){
-			if (!wp_verify_nonce( $_REQUEST['admin_nonce'], 'entercheck_admin_nonce' )){
+			if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['admin_nonce'])), 'entercheck_admin_nonce' )){
 				echo '';
 				die();
 			}
 		} else if (isset($_REQUEST['nonce'])){
-			if (!wp_verify_nonce( $_REQUEST['nonce'], 'entercheck_nonce_action' )) {
+			if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['nonce'])), 'entercheck_nonce_action' )) {
 				echo '';
 				die();
 			}
@@ -290,7 +290,7 @@ class Entercheck_Company_Search_Public
 			die();
 		}
 		
-		$name = urlencode($_REQUEST["name"]);
+		$name = urlencode(sanitize_text_field( wp_unslash ($_REQUEST["name"])));
 		
 		$options = get_option('enterpay_plugin_options_fields');
 		$country_code = !empty($_REQUEST["country"]) ? sanitize_text_field($_REQUEST["country"]) : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
@@ -308,7 +308,7 @@ class Entercheck_Company_Search_Public
 
 	public function get_company_detail($is_return = false)
 	{				
-		if (!isset($_REQUEST['nonce']) || !wp_verify_nonce( $_REQUEST['nonce'], 'name_of_my_action' )){
+		if (!isset($_REQUEST['nonce']) || !wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['nonce'])), 'name_of_my_action' )){
 			echo '';
 			die();
 		}
@@ -330,19 +330,22 @@ class Entercheck_Company_Search_Public
 
 	function woocommerce_register_post_customer($username, $email, $errors)
 	{
+		if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['entercheck_nonce'])), 'entercheck_nonce_action' )) 
+			return;
+		
 		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
 
 		if (isset($_POST['billing_first_name']) && empty($_POST['billing_first_name'])) {
-			$errors->add('billing_first_name_error', esc_attr__('First name is required!'));
+			$errors->add('billing_first_name_error', esc_attr__('First name is required!', 'entercheck-company-search'));
 		}
 		if (isset($_POST['billing_last_name']) && empty($_POST['billing_last_name'])) {
-			$errors->add('billing_last_name_error', esc_attr__('Last name is required!'));
+			$errors->add('billing_last_name_error', esc_attr__('Last name is required!', 'entercheck-company-search'));
 		}
 			
 		$field_names = isset($options['company_name']['name']) ? explode(",", $options['company_name']['name']) : ['billing_company'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', esc_attr__('Company name is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('Company name is required!', 'entercheck-company-search'));
 				break;
 			}
 		}
@@ -350,7 +353,7 @@ class Entercheck_Company_Search_Public
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', esc_attr__('Business ID is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('Business ID is required!', 'entercheck-company-search'));
 				break;
 			}
 		}
@@ -358,7 +361,7 @@ class Entercheck_Company_Search_Public
 		$field_names = isset($options['vat_number']['name']) ? explode(",", $options['vat_number']['name']) : ['inputVATNumber'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', esc_attr__('VAT NUMBER is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('VAT NUMBER is required!', 'entercheck-company-search'));
 				break;
 			}
 		}
@@ -366,7 +369,7 @@ class Entercheck_Company_Search_Public
 		$field_names = isset($options['street']['name']) ? explode(",", $options['street']['name']) : ['billing_address_1'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', esc_attr__('Company address is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('Company address is required!', 'entercheck-company-search'));
 				break;
 			}
 		}
@@ -374,7 +377,7 @@ class Entercheck_Company_Search_Public
 		$field_names = isset($options['postal_code']['name']) ? explode(",", $options['postal_code']['name']) : ['billing_postcode'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', esc_attr__('Postcode is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('Postcode is required!', 'entercheck-company-search'));
 				break;
 			}
 		}
@@ -382,16 +385,16 @@ class Entercheck_Company_Search_Public
 		$field_names = isset($options['city']['name']) ? explode(",", $options['city']['name']) : ['billing_city'];		
 		foreach ($field_names as $field_name){		
 			if (isset($_POST[$field_name]) && empty($_POST[$field_name])) {
-				$errors->add('billing_last_name_error', esc_attr__('City is required!'));
+				$errors->add('billing_last_name_error', esc_attr__('City is required!', 'entercheck-company-search'));
 				break;
 			}
 		}	
 		
 		if (isset($_POST['email']) && empty($_POST['email'])) {
-			$errors->add('billing_last_name_error', esc_attr__('Email address is required!'));
+			$errors->add('billing_last_name_error', esc_attr__('Email address is required!', 'entercheck-company-search'));
 		}
 		if (isset($_POST['password']) && empty($_POST['password'])) {
-			$errors->add('billing_last_name_error', esc_attr__('Password is required!'));
+			$errors->add('billing_last_name_error', esc_attr__('Password is required!', 'entercheck-company-search'));
 		}
 		return $errors;
 	}
@@ -483,7 +486,7 @@ class Entercheck_Company_Search_Public
 	}
 	
 	function send_post_request(){		
-		if (isset($GLOBALS["post_request_already_sent"]) && $GLOBALS["post_request_already_sent"] == 1)
+		if (isset($GLOBALS["entercheck_post_request_already_sent"]) && $GLOBALS["entercheck_post_request_already_sent"] == 1)
 			return;
 				
 		$options  = get_option( 'enterpay_plugin_options', array() );
@@ -531,7 +534,7 @@ class Entercheck_Company_Search_Public
 					$endpoint_url = 'https://'.$this->api_domain.'/forms/submit';
 					$data =	$this->send_API_request($endpoint_url, "POST", $fields);
 					
-					$GLOBALS["post_request_already_sent"] = 1;
+					$GLOBALS["entercheck_post_request_already_sent"] = 1;
 				
 					
 					break;
@@ -543,7 +546,7 @@ class Entercheck_Company_Search_Public
 	function request_after_registration_submission($user_id)
 	{
 		if (isset($_REQUEST['entercheck_nonce'])){
-			if (!wp_verify_nonce( $_REQUEST['entercheck_nonce'], 'entercheck_nonce_action' )) 
+			if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['entercheck_nonce'])), 'entercheck_nonce_action' )) 
 				return;
 		}
 		
@@ -601,7 +604,7 @@ class Entercheck_Company_Search_Public
 	function request_after_submission_form()
 	{
 		if (isset($_REQUEST['entercheck_nonce'])){
-			if (!wp_verify_nonce( $_REQUEST['entercheck_nonce'], 'entercheck_nonce_action' )) 
+			if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['entercheck_nonce'])), 'entercheck_nonce_action' )) 
 				return;
 		}
 		
