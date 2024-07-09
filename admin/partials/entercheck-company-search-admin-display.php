@@ -18,24 +18,13 @@
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
-
+<div id="credentials_settings_block">
 <form action="options.php" method="post">
     <?php
-    settings_fields('enterpay_plugin_options');
+    settings_fields('entercheck_plugin_options');
     do_settings_sections('dbi_example_plugin'); ?>
-    <p><input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Save'); ?>" /></p>
+    <p><input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Save', 'entercheck-company-search'); ?>" /></p>
 	
-	<style>
-		.form-table th {
-			vertical-align: bottom !important;
-			padding: 5px 10px 5px 0 !important;
-		}
-		
-		.form-table td {
-			padding: 5px 10px 5px 10px !important;
-		}
-	</style>
-
     <?php
     function entercheck_plugin_section_text()
     {
@@ -51,71 +40,58 @@
 
     function entercheck_plugin_setting_username()
     {
-        $options = get_option('enterpay_plugin_options');
+        $options = get_option('entercheck_plugin_options', array());
 
         if (!isset($options['username'])) {
             $options['username'] = "";
         }
 
-        echo "<input id='enterpay_plugin_setting_username' name='enterpay_plugin_options[username]' type='text' value='" . esc_attr($options['username']) . "' />";
+        echo "<input id='entercheck_plugin_setting_username' name='entercheck_plugin_options[username]' type='text' value='" . esc_attr($options['username']) . "' />";
     }
 
     function entercheck_plugin_setting_password()
     {
-        $options = get_option('enterpay_plugin_options');
+        $options = get_option('entercheck_plugin_options', array());
 
         if (!isset($options['password'])) {
             $options['password'] = "";
         }
 
-        echo "<input id='enterpay_plugin_setting_password' name='enterpay_plugin_options[password]' type='password' value='" . esc_attr($options['password']) . "' />";
-		echo "<img id='display_password' src='".plugin_dir_url( dirname( __FILE__ ) )."images/hidden_eye_icon.png' width='24' heigth='24'>";
+        echo "<input id='entercheck_plugin_setting_password' name='entercheck_plugin_options[password]' type='password' value='" . esc_attr($options['password']) . "' />";
+		echo "<img id='display_password' src='".esc_attr(plugin_dir_url( dirname( __FILE__ ) ))."images/hidden_eye_icon.png' width='24' heigth='24'>";
     }
 	
     function entercheck_plugin_setting_request_mode()
     {
-		$options = get_option('enterpay_plugin_options');
+		$options = get_option('entercheck_plugin_options', array());
 		
 		if (!isset($options['request_mode'])) { $options['request_mode'] = "simple"; }
 ?>
-		<select name="enterpay_plugin_options[request_mode]">
+		<select name="entercheck_plugin_options[request_mode]">
 			<option value="simple" <?php if ($options['request_mode'] == 'simple') echo 'selected="selected"'; ?>>Simple</option>
 			<option value="smart" <?php if ($options['request_mode'] == 'smart') echo 'selected="selected"'; ?>>Smart</option>
 		</select>
 <?php 	
-/*
-        $options = get_option('enterpay_plugin_options');
-
-        if (!isset($options['display_form_mapping'])) {
-			$options['display_form_mapping'] = '0';
-		}
-*/
-       ?>			
-						
-			<!--<input type="checkbox" <?php /*if ($options['display_form_mapping'] == 1) echo 'checked';*/ ?> id="display_form_mapping" name="enterpay_plugin_options[display_form_mapping]" value="1" />-->
-			<!--<label class="chb" for="display_invoice_address"><?php esc_attr_e('Allow form mapping', 'entercheck-company-search'); ?></label>-->
-			
-		<?php
     }
 	
 	function entercheck_plugin_setting_smart_form_id(){
-		$options = get_option('enterpay_plugin_options');
+		$options = get_option('entercheck_plugin_options', array());
 
         if (!isset($options['smart_form_id'])) {
             $options['smart_form_id'] = "";
         }
 
 		echo '<label for="company_name-id">'.esc_attr__('Smart form ID - null uses default value', 'entercheck-company-search').'</label><br>';
-		echo "<input id='enterpay_plugin_setting_smart_form_id' name='enterpay_plugin_options[smart_form_id]' type='text' value='" . esc_attr($options['smart_form_id']) . "' />";
+		echo "<input id='entercheck_plugin_setting_smart_form_id' name='entercheck_plugin_options[smart_form_id]' type='text' value='" . esc_attr($options['smart_form_id']) . "' />";
 	}
 	
 	
 	function entercheck_plugin_setting_environment(){
-		$options = get_option('enterpay_plugin_options');
+		$options = get_option('entercheck_plugin_options', array());
 		
 		if (!isset($options['environment'])) { $options['environment'] = "test"; }
 ?>
-		<select name="enterpay_plugin_options[environment]">
+		<select name="entercheck_plugin_options[environment]">
 			<option value="test" <?php if ($options['environment'] == 'test') echo 'selected="selected"'; ?>>Test</option>
 			<option value="production" <?php if ($options['environment'] == 'production') echo 'selected="selected"'; ?>>Production</option>
 		</select>
@@ -125,13 +101,13 @@
 	
     function entercheck_plugin_setting_start_date()
     {
-        $options = get_option('enterpay_plugin_options');
+        $options = get_option('entercheck_plugin_options', array());
 
         if (!isset($options['start_date'])) {
             $options['start_date'] = "";
         }
 
-        echo "<input id='enterpay_plugin_setting_start_date' name='enterpay_plugin_options[start_date]' type='text' value='" . esc_attr($options['start_date']) . "' />";
+        echo "<input id='entercheck_plugin_setting_start_date' name='entercheck_plugin_options[start_date]' type='text' value='" . esc_attr($options['start_date']) . "' />";
     }
 
     function entercheck_plugin_setting_enterchecktoken()
@@ -140,9 +116,10 @@
     ?>
 
 </form>
+</div>
 
 <?php
-$options = get_option('enterpay_plugin_options');
+$options = get_option('entercheck_plugin_options', array());
 
 $api_domain = "api.entercheck.eu"; 
 if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
@@ -186,7 +163,7 @@ if (!empty($resp)) :
 ?>
 			<h2>Test API call</h2>
 			<p><?php esc_attr_e('You can verify that your credentials are valid for the given environment by sending a test request.', 'entercheck-company-search'); ?></p>
-            <p style="border:1px solid gray;padding:10px;margin-top:30px;width:100%;overflow: scroll;max-width: 90%;"><b><?php esc_attr_e('Token') ?>: </b><?php echo $token; ?></p>
+            <p style="border:1px solid gray;padding:10px;margin-top:30px;width:100%;overflow: scroll;max-width: 90%;"><b><?php esc_attr_e('Token', 'entercheck-company-search'); ?>: </b><?php echo esc_attr($token); ?></p>
             <br>
             <button id="test-call-btn" onclick="search_company()"><?php esc_attr_e('Make a test API call', 'entercheck-company-search'); ?></button>
             <div id="search_company_result"></div>

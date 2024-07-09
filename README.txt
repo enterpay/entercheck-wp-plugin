@@ -4,7 +4,7 @@ Donate link: https://demoshop.entercheck.eu/
 Tags: company, search, registration, form
 Requires at least: 6.1.4
 Tested up to: 6.5.4
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

@@ -100,4 +100,21 @@ div#field_settings_block p.before_field {
 }
 
 
+div#credentials_settings_block .form-table th {
+	vertical-align: bottom !important;
+	padding: 5px 10px 5px 0 !important;
+}
 
+div#credentials_settings_block .form-table td {
+	padding: 5px 10px 5px 10px !important;
+}
+
+
+div#mapping_form_block .form-table th {
+	vertical-align: inherit !important;
+	padding: 10px 10px 10px 0;
+}
+
+div#mapping_form_block .form-table td {
+	padding: 10px 10px 10px 10px !important;
+}

@@ -48,7 +48,7 @@
 	 });
 	 
 	 $( document ).on('click', '#display_password', function(){
-		 $('#enterpay_plugin_setting_password').attr('type', 'text');
+		 $('#entercheck_plugin_setting_password').attr('type', 'text');
 	 });
 	 
 	 $( document ).ready(function(){

@@ -80,7 +80,7 @@ class Entercheck_Company_Search {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
+		$this->define_options();
 	}
 
 	/**
@@ -209,6 +209,20 @@ class Entercheck_Company_Search {
 		////$this->loader->add_filter("woocommerce_get_price_html", $plugin_public, "bbloomer_hide_price_addcart_not_logged_in",10,2);
 		
 		
+	}
+	
+	private function define_options(){
+		$options_fields = get_option('entercheck_plugin_options_fields');		
+		if ($options_fields === false || !is_array($options_fields)){
+			$options_fields = [];
+			update_option('entercheck_plugin_options_fields', $options_fields, false);
+		}
+		
+		$options = get_option('entercheck_plugin_options');		
+		if ($options === false || !is_array($options)){
+			$options = [];
+			update_option('entercheck_plugin_options', $options, false);
+		}
 	}
 
 	/**
