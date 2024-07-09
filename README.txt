@@ -40,17 +40,17 @@ This shortcode retrieves and displays the status of a company based on its ID.
 
 Use these shortcodes appropriately within your form to provide the desired functionality.
 
-== Screenshots ==
+== External Services ==
+The plugin depends on Entercheck, a service used to integrate with various 3rd party information providers.
 
-1. Screenshot of the dropdown list populated with company names from the API.
-2. Details fetched for a selected company from the dropdown list.
+- More information about the service can be found here: [https://docs.entercheck.eu/](https://docs.entercheck.eu/)
+- Production API: [api.entercheck.eu](https://api.entercheck.eu)
+- Test API: [api.test.entercheck.eu](https://api.test.entercheck.eu)
+- Developer Docs: [https://developer.entercheck.eu/](https://developer.entercheck.eu/)
+- Terms of Service: [https://www.entercheck.eu/terms-of-service/](https://www.entercheck.eu/terms-of-service/)
+- Privacy Policy: [https://www.entercheck.eu/privacy-policy/](https://www.entercheck.eu/privacy-policy/)
 
 == Changelog ==
 
 = 1.0 =
 * Initial release with key features: Authenticate with Enterhcek backend, Fetch company names and details, fetch company status, and add this information to a WordPress user.
-
-== Upgrade Notice ==
-
-= 1.0 =
-Upgrade to get access to the company search and integration features for your forms.
