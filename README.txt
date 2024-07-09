@@ -44,8 +44,8 @@ Use these shortcodes appropriately within your form to provide the desired funct
 The plugin depends on Entercheck, a service used to integrate with various 3rd party information providers.
 
 - More information about the service can be found here: [https://docs.entercheck.eu/](https://docs.entercheck.eu/)
-- Production API: [api.entercheck.eu](https://api.entercheck.eu)
-- Test API: [api.test.entercheck.eu](https://api.test.entercheck.eu)
+- Production API: [https://api.entercheck.eu]
+- Test API: [https://api.test.entercheck.eu]
 - Developer Docs: [https://developer.entercheck.eu/](https://developer.entercheck.eu/)
 - Terms of Service: [https://www.entercheck.eu/terms-of-service/](https://www.entercheck.eu/terms-of-service/)
 - Privacy Policy: [https://www.entercheck.eu/privacy-policy/](https://www.entercheck.eu/privacy-policy/)
