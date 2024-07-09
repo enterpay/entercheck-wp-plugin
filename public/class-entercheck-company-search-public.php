@@ -74,7 +74,7 @@ class Entercheck_Company_Search_Public
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		
-		$options = get_option('enterpay_plugin_options');
+		$options = get_option('entercheck_plugin_options');
 		if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
 			$this->api_domain = "api.test.entercheck.eu"; 
 			$this->portal_api_domain = "portal.test.entercheck.eu";
@@ -139,7 +139,7 @@ class Entercheck_Company_Search_Public
 
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/entercheck-company-search-public.js', array('jquery'), $this->version, false);
 
-		$options = get_option('enterpay_plugin_options_fields');
+		$options = get_option('entercheck_plugin_options_fields');
 
 		$variables = array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
@@ -201,7 +201,7 @@ class Entercheck_Company_Search_Public
 
 	public function auth()
 	{
-		$options = get_option('enterpay_plugin_options');
+		$options = get_option('entercheck_plugin_options');
 
 
 		$data = array(
@@ -292,7 +292,7 @@ class Entercheck_Company_Search_Public
 		
 		$name = urlencode(sanitize_text_field( wp_unslash ($_REQUEST["name"])));
 		
-		$options = get_option('enterpay_plugin_options_fields');
+		$options = get_option('entercheck_plugin_options_fields');
 		$country_code = !empty($_REQUEST["country"]) ? sanitize_text_field($_REQUEST["country"]) : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
 
 		$endpoint_url = "https://".$this->api_domain."/company/search?country=" . $country_code . "&name=" . $name;
@@ -315,7 +315,7 @@ class Entercheck_Company_Search_Public
 	
 		$bid = sanitize_text_field($_REQUEST["bid"]);
 		
-		$options = get_option('enterpay_plugin_options_fields');
+		$options = get_option('entercheck_plugin_options_fields');
 		$country_code = !empty($_REQUEST["country"]) ? sanitize_text_field($_REQUEST["country"]) : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
 		
 		$endpoint_url = "https://".$this->api_domain."/company/details?country=" . $country_code . "&id=" . $bid;
@@ -333,7 +333,7 @@ class Entercheck_Company_Search_Public
 		if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['entercheck_nonce'])), 'entercheck_nonce_action' )) 
 			return;
 		
-		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
+		$options  = get_option( 'entercheck_plugin_options_fields', array() ); 
 
 		if (isset($_POST['billing_first_name']) && empty($_POST['billing_first_name'])) {
 			$errors->add('billing_first_name_error', esc_attr__('First name is required!', 'entercheck-company-search'));
@@ -401,7 +401,10 @@ class Entercheck_Company_Search_Public
 
 	function woocommerce_created_customer_data($customer_id)
 	{
-		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
+		if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['entercheck_nonce'])), 'entercheck_nonce_action' )) 
+			return;
+		
+		$options  = get_option( 'entercheck_plugin_options_fields', array() ); 
 		
 		// save to database
 		if (isset($_POST['billing_first_name'])) {
@@ -467,7 +470,7 @@ class Entercheck_Company_Search_Public
 	}
 
 	function get_form_search_country(){
-		$options  = get_option( 'enterpay_plugin_options_fields', array() );	
+		$options  = get_option( 'entercheck_plugin_options_fields', array() );	
 		
 		$field_country = isset($options['search_country']['name']) ? explode(",", $options['search_country']['name']) : ['search_country'];
 		$field_allow_search_country = isset($options['allow_search_country']) && is_numeric($options['allow_search_country']) && $options['allow_search_country'] == 1;
@@ -489,15 +492,15 @@ class Entercheck_Company_Search_Public
 		if (isset($GLOBALS["entercheck_post_request_already_sent"]) && $GLOBALS["entercheck_post_request_already_sent"] == 1)
 			return;
 				
-		$options  = get_option( 'enterpay_plugin_options', array() );
+		$options  = get_option( 'entercheck_plugin_options', array() );
 						
 		if (isset($options["request_mode"]) && $options["request_mode"] == "smart"){
-			$options_fields  = get_option( 'enterpay_plugin_options_fields', array() );			
+			$options_fields  = get_option( 'entercheck_plugin_options_fields', array() );			
 			$company_name_fields = isset($options_fields['company_name']['name']) ? explode(",", $options_fields['company_name']['name']) : ['billing_company'];
 			/*if (isset($form_mapping_options["smartFormId"]) && $form_mapping_options["smartFormId"]['value'] != ""){*/
 			foreach ($company_name_fields as $company_name_field){	
 				if (isset($_REQUEST[$company_name_field])){
-					$form_mapping_options  = get_option( 'enterpay_plugin_options_form_mapping', array() );	
+					$form_mapping_options  = get_option( 'entercheck_plugin_options_form_mapping', array() );	
 					$smartFormId = !empty($options["smart_form_id"]) ? $options["smart_form_id"] : '';
 					$businessId = "";
 					$country = $this->get_form_search_country();
@@ -555,9 +558,9 @@ class Entercheck_Company_Search_Public
 		
 		//return;
 		
-		$options  = get_option( 'enterpay_plugin_options', array() );						
+		$options  = get_option( 'entercheck_plugin_options', array() );						
 		if (!isset($options["request_mode"]) || $options["request_mode"] != "smart"){		
-			$options_fields  = get_option( 'enterpay_plugin_options_fields', array() );		
+			$options_fields  = get_option( 'entercheck_plugin_options_fields', array() );		
 			$field_names = isset($options_fields['business_id']['name']) ? explode(",", $options_fields['business_id']['name']) : ['inputBusinessId'];
 			
 			$country = $this->get_form_search_country();
@@ -613,9 +616,9 @@ class Entercheck_Company_Search_Public
 		
 		//return;
 	
-		$options  = get_option( 'enterpay_plugin_options', array() );						
+		$options  = get_option( 'entercheck_plugin_options', array() );						
 		if (!isset($options["request_mode"]) || $options["request_mode"] != "smart"){		
-			$options_fields  = get_option( 'enterpay_plugin_options_fields', array() ); 		
+			$options_fields  = get_option( 'entercheck_plugin_options_fields', array() ); 		
 			$field_names = isset($options_fields['business_id']['name']) ? explode(",", $options_fields['business_id']['name']) : ['inputBusinessId'];
 			
 			$country = $this->get_form_search_country();
@@ -664,7 +667,7 @@ class Entercheck_Company_Search_Public
 	}	
 
 	function save_custom_data($user_id = -1){
-		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 		
+		$options  = get_option( 'entercheck_plugin_options_fields', array() ); 		
 		$field_invoice_selector = isset($options['invoice_selector']['name']) ? explode(",", $options['invoice_selector']['name']) : ['invoice_selector'];
 		$field_invoice_address = isset($options['invoice_address']['name']) ? explode(",", $options['invoice_address']['name']) : ['invoice_address'];
 		$field_invoice_operator_code = isset($options['invoice_operator_code']['name']) ? explode(",", $options['invoice_operator_code']['name']) : ['invoice_operator_code'];
@@ -709,7 +712,7 @@ class Entercheck_Company_Search_Public
 	// save options to database
 	function entercheck_plugin_options_validate($input)
 	{
-		$options = get_option('enterpay_plugin_options');
+		$options = get_option('entercheck_plugin_options');
 		$options['username'] = trim($input['username']);
 		$options['password'] = trim($input['password']);
 		$options['environment'] = trim($input['environment']);
@@ -721,7 +724,10 @@ class Entercheck_Company_Search_Public
 
 	function entercheck_save_custom_checkout_fields($order)
 	{
-		$options  = get_option( 'enterpay_plugin_options_fields', array() ); 
+		if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['entercheck_nonce'])), 'entercheck_nonce_action' )) 
+			return;
+		
+		$options  = get_option( 'entercheck_plugin_options_fields', array() ); 
 		
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
@@ -747,16 +753,19 @@ class Entercheck_Company_Search_Public
 	}
 	function entercheck_save_custom_fields_to_user_meta($order_id)
 	{
+		if (!wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['entercheck_nonce'])), 'entercheck_nonce_action' )) 
+			return;
+		
 		$order = wc_get_order($order_id);
 		$user_id = $order->get_user_id();
 		
-		$options  = get_option( 'enterpay_plugin_options_fields', array() );		
+		$options  = get_option( 'entercheck_plugin_options_fields', array() );		
 		$field_names = isset($options['business_id']['name']) ? explode(",", $options['business_id']['name']) : ['inputBusinessId'];
 		
 		foreach ($field_names as $field_name){
 			if (isset($_POST[$field_name])) {		
 				$bizid = sanitize_text_field($_POST[$field_name]);
-				update_user_meta($user_id, 'enterpay_bsuiness_id', $bizid);
+				update_user_meta($user_id, 'entercheck_bsuiness_id', $bizid);
 				
 				break;
 			}
@@ -767,7 +776,7 @@ class Entercheck_Company_Search_Public
 		foreach ($field_names as $field_name){
 			if (isset($_POST[$field_name])) {	
 				$vat = sanitize_text_field($_POST[$field_name]);
-				update_user_meta($user_id, 'enterpay_vat_id', $vat);
+				update_user_meta($user_id, 'entercheck_vat_id', $vat);
 				
 				break;
 			}

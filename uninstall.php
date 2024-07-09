@@ -22,7 +22,7 @@
  * @link       https://demoshop.entercheck.eu/
  * @since      1.0.0
  *
- * @package    Enterpay_Company_Search
+ * @package    Entercheck_Company_Search
  */
 
 // If uninstall not called from WordPress, then exit.

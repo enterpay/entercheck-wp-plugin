@@ -58,7 +58,7 @@ class Entercheck_Company_Search_Admin
 		
 		include(plugin_dir_path(__FILE__) . 'partials/entercheck-company-search-admin-fields-settings.php');
 		
-		$options = get_option('enterpay_plugin_options');
+		$options = get_option('entercheck_plugin_options');
 		
 		if (isset($options['request_mode']) && $options['request_mode'] == 'smart')
 			include(plugin_dir_path(__FILE__) . 'partials/entercheck-company-search-admin-form-mapping-settings.php');
@@ -69,7 +69,7 @@ class Entercheck_Company_Search_Admin
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles()
+	public function enqueue_styles($hook)
 	{
 
 		/**
@@ -84,7 +84,10 @@ class Entercheck_Company_Search_Admin
 		 * class.
 		 */
 
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/entercheck-company-search-admin.css', array(), $this->version, 'all');
+		$screen = get_current_screen();
+
+		if ($screen && $screen instanceof WP_Screen && in_array($screen->id, ['entercheck_page_entercheck-company-search-entercheck-fields', 'entercheck-company-search-admin-display', 'entercheck-company-search-admin-form-mapping-settings']))
+			wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/entercheck-company-search-admin.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -147,7 +150,7 @@ class Entercheck_Company_Search_Admin
 	public function admin_register_settings()
 	{
 
-		register_setting('enterpay_plugin_options', 'enterpay_plugin_options', 'entercheck_plugin_options_validate');
+		register_setting('entercheck_plugin_options', 'entercheck_plugin_options', 'entercheck_plugin_options_validate');
 
 		add_settings_section('api_settings', 'API Credentials', 'entercheck_plugin_section_text', 'dbi_example_plugin');
 
@@ -237,7 +240,7 @@ class Entercheck_Company_Search_Admin
 			
 			$status = $company_info['status'];
 			
-			$options = get_option('enterpay_plugin_options');
+			$options = get_option('entercheck_plugin_options');
 			$api_domain = "portal.entercheck.eu"; 
 			if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
 				$api_domain = "portal.test.entercheck.eu"; 
@@ -275,7 +278,7 @@ class Entercheck_Company_Search_Admin
 			<?php 
 			$ind = 1;
 			foreach ($invoiceAddresses as $invoiceAddress) { ?>			
-				<h3><?php esc_html_e("Invoice Address", 'entercheck-company-search'); ?> <?php if (count($invoiceAddresses) > 1) echo $ind; ?></h3>
+				<h3><?php esc_html_e("Invoice Address", 'entercheck-company-search'); ?> <?php if (count($invoiceAddresses) > 1) echo esc_html($ind); ?></h3>
 				<table class="form-table">
 					<tr>
 						<th><label for="entercheck_bsuiness_id"><?php esc_html_e("Company name", 'entercheck-company-search'); ?></label></th>

@@ -15,7 +15,7 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 		}
 		
 		public function register_settings(){
-			register_setting( 'enterpay_plugin_options_form_mapping', 'enterpay_plugin_options_form_mapping', [$this, 'sanitize'] );
+			register_setting( 'entercheck_plugin_options_form_mapping', 'entercheck_plugin_options_form_mapping', [$this, 'sanitize'] );
 			
 			add_settings_section('entercheck-company-search-form_mapping', '', array($this, 'mapping_section_callback'), 'entercheck_plugin_options_form_mapping' );
 			//add_settings_field( 'entercheck_smartFormId', 'smartFormId', array($this, 'smartFormId_callback'), 'entercheck_plugin_options_form_mapping', 'entercheck-company-search-form_mapping' );
@@ -53,7 +53,7 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 		}
 		
 		public function smartFormId_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['smartFormId']['field'])) {
 				$options['smartFormId']['field'] = '';
@@ -66,13 +66,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 				<label for="company_name-id"><?php esc_attr_e('Smart form ID - null uses default value', 'entercheck-company-search'); ?></label>
 			</div>
 			<div class="box_row">
-				<input type="text" id="smartFormId-field" name="enterpay_plugin_options_form_mapping[smartFormId][field]" value="<?php echo esc_attr($options['smartFormId']['field']); ?>" />
+				<input type="text" id="smartFormId-field" name="entercheck_plugin_options_form_mapping[smartFormId][field]" value="<?php echo esc_attr($options['smartFormId']['field']); ?>" />
 			</div>
 			<?php
 		}	
 		
 		public function businessId_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['businessId']['field'])) {
 				$options['businessId']['field'] = '';
@@ -85,13 +85,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 				<label for="company_name-id"><?php esc_html_e('HTML Form Element name', 'entercheck-company-search'); ?></label>
 			</div>
 			<div class="box_row">
-				<input type="text" id="businessId-field" name="enterpay_plugin_options_form_mapping[businessId][field]" value="<?php echo esc_attr($options['businessId']['field']); ?>" />
+				<input type="text" id="businessId-field" name="entercheck_plugin_options_form_mapping[businessId][field]" value="<?php echo esc_attr($options['businessId']['field']); ?>" />
 			</div>
 			<?php
 		}			
 		
 		public function country_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['country']['field'])) {
 				$options['country']['field'] = '';
@@ -101,13 +101,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="country-field" name="enterpay_plugin_options_form_mapping[country][field]" value="<?php echo esc_attr($options['country']['field']); ?>" />
+				<input type="text" id="country-field" name="entercheck_plugin_options_form_mapping[country][field]" value="<?php echo esc_attr($options['country']['field']); ?>" />
 			</div>
 			<?php
 		}			
 				
 		public function firstName_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['firstName']['field'])) {
 				$options['firstName']['field'] = '';
@@ -117,13 +117,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="firstName-field" name="enterpay_plugin_options_form_mapping[firstName][field]" value="<?php echo esc_attr($options['firstName']['field']); ?>" />
+				<input type="text" id="firstName-field" name="entercheck_plugin_options_form_mapping[firstName][field]" value="<?php echo esc_attr($options['firstName']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function lastName_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['lastName']['field'])) {
 				$options['lastName']['field'] = '';
@@ -133,13 +133,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="lastName-field" name="enterpay_plugin_options_form_mapping[lastName][field]" value="<?php echo esc_attr($options['lastName']['field']); ?>" />
+				<input type="text" id="lastName-field" name="entercheck_plugin_options_form_mapping[lastName][field]" value="<?php echo esc_attr($options['lastName']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function email_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['email']['field'])) {
 				$options['email']['field'] = '';
@@ -149,13 +149,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="email-field" name="enterpay_plugin_options_form_mapping[email][field]" value="<?php echo esc_attr($options['email']['field']); ?>" />
+				<input type="text" id="email-field" name="entercheck_plugin_options_form_mapping[email][field]" value="<?php echo esc_attr($options['email']['field']); ?>" />
 			</div>
 			<?php
 		}			
 		
 		public function phoneNumber_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['phoneNumber']['field'])) {
 				$options['phoneNumber']['field'] = '';
@@ -165,13 +165,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="phoneNumber-field" name="enterpay_plugin_options_form_mapping[phoneNumber][field]" value="<?php echo esc_attr($options['phoneNumber']['field']); ?>" />
+				<input type="text" id="phoneNumber-field" name="entercheck_plugin_options_form_mapping[phoneNumber][field]" value="<?php echo esc_attr($options['phoneNumber']['field']); ?>" />
 			</div>
 			<?php
 		}			
 		
 		public function businessName_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['businessName']['field'])) {
 				$options['businessName']['field'] = '';
@@ -181,13 +181,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="businessName-field" name="enterpay_plugin_options_form_mapping[businessName][field]" value="<?php echo esc_attr($options['businessName']['field']); ?>" />
+				<input type="text" id="businessName-field" name="entercheck_plugin_options_form_mapping[businessName][field]" value="<?php echo esc_attr($options['businessName']['field']); ?>" />
 			</div>
 			<?php
 		}			
 		
 		public function jobTitle_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['jobTitle']['field'])) {
 				$options['jobTitle']['field'] = '';
@@ -197,13 +197,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="jobTitle-field" name="enterpay_plugin_options_form_mapping[jobTitle][field]" value="<?php echo esc_attr($options['jobTitle']['field']); ?>" />
+				<input type="text" id="jobTitle-field" name="entercheck_plugin_options_form_mapping[jobTitle][field]" value="<?php echo esc_attr($options['jobTitle']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function dateOfBirth_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['dateOfBirth']['field'])) {
 				$options['dateOfBirth']['field'] = '';
@@ -213,13 +213,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="dateOfBirth-field" name="enterpay_plugin_options_form_mapping[dateOfBirth][field]" value="<?php echo esc_attr($options['dateOfBirth']['field']); ?>" />
+				<input type="text" id="dateOfBirth-field" name="entercheck_plugin_options_form_mapping[dateOfBirth][field]" value="<?php echo esc_attr($options['dateOfBirth']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function preferredContactMethod_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['preferredContactMethod']['field'])) {
 				$options['preferredContactMethod']['field'] = '';
@@ -229,13 +229,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="preferredContactMethod-field" name="enterpay_plugin_options_form_mapping[preferredContactMethod][field]" value="<?php echo esc_attr($options['preferredContactMethod']['field']); ?>" />
+				<input type="text" id="preferredContactMethod-field" name="entercheck_plugin_options_form_mapping[preferredContactMethod][field]" value="<?php echo esc_attr($options['preferredContactMethod']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function allowMarketing_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['allowMarketing']['field'])) {
 				$options['allowMarketing']['field'] = '';
@@ -245,13 +245,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="allowMarketing-field" name="enterpay_plugin_options_form_mapping[allowMarketing][field]" value="<?php echo esc_attr($options['allowMarketing']['field']); ?>" />
+				<input type="text" id="allowMarketing-field" name="entercheck_plugin_options_form_mapping[allowMarketing][field]" value="<?php echo esc_attr($options['allowMarketing']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function subscribeToNewsLetter_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['subscribeToNewsLetter']['field'])) {
 				$options['subscribeToNewsLetter']['field'] = '';
@@ -261,13 +261,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="subscribeToNewsLetter-field" name="enterpay_plugin_options_form_mapping[subscribeToNewsLetter][field]" value="<?php echo esc_attr($options['subscribeToNewsLetter']['field']); ?>" />
+				<input type="text" id="subscribeToNewsLetter-field" name="entercheck_plugin_options_form_mapping[subscribeToNewsLetter][field]" value="<?php echo esc_attr($options['subscribeToNewsLetter']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function acceptedTos_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['acceptedTos']['field'])) {
 				$options['acceptedTos']['field'] = '';
@@ -277,13 +277,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="acceptedTos-field" name="enterpay_plugin_options_form_mapping[acceptedTos][field]" value="<?php echo esc_attr($options['acceptedTos']['field']); ?>" />
+				<input type="text" id="acceptedTos-field" name="entercheck_plugin_options_form_mapping[acceptedTos][field]" value="<?php echo esc_attr($options['acceptedTos']['field']); ?>" />
 		</div>
 			<?php
 		}
 		
 		public function acceptedPrivacyPolicy_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['acceptedPrivacyPolicy']['field'])) {
 				$options['acceptedPrivacyPolicy']['field'] = '';
@@ -293,13 +293,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="acceptedPrivacyPolicy-field" name="enterpay_plugin_options_form_mapping[acceptedPrivacyPolicy][field]" value="<?php echo esc_attr($options['acceptedPrivacyPolicy']['field']); ?>" />
+				<input type="text" id="acceptedPrivacyPolicy-field" name="entercheck_plugin_options_form_mapping[acceptedPrivacyPolicy][field]" value="<?php echo esc_attr($options['acceptedPrivacyPolicy']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function orderTotal_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['orderTotal']['field'])) {
 				$options['orderTotal']['field'] = '';
@@ -309,13 +309,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="orderTotal-field" name="enterpay_plugin_options_form_mapping[orderTotal][field]" value="<?php echo esc_attr($options['orderTotal']['field']); ?>" />
+				<input type="text" id="orderTotal-field" name="entercheck_plugin_options_form_mapping[orderTotal][field]" value="<?php echo esc_attr($options['orderTotal']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function orderCurrency_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['orderCurrency']['field'])) {
 				$options['orderCurrency']['field'] = '';
@@ -325,13 +325,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="orderCurrency-field" name="enterpay_plugin_options_form_mapping[orderCurrency][field]" value="<?php echo esc_attr($options['orderCurrency']['field']); ?>" />
+				<input type="text" id="orderCurrency-field" name="entercheck_plugin_options_form_mapping[orderCurrency][field]" value="<?php echo esc_attr($options['orderCurrency']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function targetCompletionDate_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['targetCompletionDate']['field'])) {
 				$options['targetCompletionDate']['field'] = '';
@@ -341,13 +341,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="targetCompletionDate-field" name="enterpay_plugin_options_form_mapping[targetCompletionDate][field]" value="<?php echo esc_attr($options['targetCompletionDate']['field']); ?>" />
+				<input type="text" id="targetCompletionDate-field" name="entercheck_plugin_options_form_mapping[targetCompletionDate][field]" value="<?php echo esc_attr($options['targetCompletionDate']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function referralSource_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['referralSource']['field'])) {
 				$options['referralSource']['field'] = '';
@@ -357,13 +357,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="referralSource-field" name="enterpay_plugin_options_form_mapping[referralSource][field]" value="<?php echo esc_attr($options['referralSource']['field']); ?>" />
+				<input type="text" id="referralSource-field" name="entercheck_plugin_options_form_mapping[referralSource][field]" value="<?php echo esc_attr($options['referralSource']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function freeText1_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['freeText1']['field'])) {
 				$options['freeText1']['field'] = '';
@@ -373,13 +373,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="freeText1-field" name="enterpay_plugin_options_form_mapping[freeText1][field]" value="<?php echo esc_attr($options['freeText1']['field']); ?>" />
+				<input type="text" id="freeText1-field" name="entercheck_plugin_options_form_mapping[freeText1][field]" value="<?php echo esc_attr($options['freeText1']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function freeText2_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['freeText2']['field'])) {
 				$options['freeText2']['field'] = '';
@@ -389,13 +389,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="freeText2-field" name="enterpay_plugin_options_form_mapping[freeText2][field]" value="<?php echo esc_attr($options['freeText2']['field']); ?>" />
+				<input type="text" id="freeText2-field" name="entercheck_plugin_options_form_mapping[freeText2][field]" value="<?php echo esc_attr($options['freeText2']['field']); ?>" />
 			</div>
 			<?php
 		}
 				
 		public function additionalData1_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['additionalData1']['field'])) {
 				$options['additionalData1']['field'] = '';
@@ -405,13 +405,13 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="additionalData1-field" name="enterpay_plugin_options_form_mapping[additionalData1][field]" value="<?php echo esc_attr($options['additionalData1']['field']); ?>" />
+				<input type="text" id="additionalData1-field" name="entercheck_plugin_options_form_mapping[additionalData1][field]" value="<?php echo esc_attr($options['additionalData1']['field']); ?>" />
 			</div>
 			<?php
 		}
 		
 		public function additionalData2_callback(){
-			$options  = get_option( 'enterpay_plugin_options_form_mapping', array() ); 
+			$options  = get_option( 'entercheck_plugin_options_form_mapping', array() ); 
 			
 			if (!isset($options['additionalData2']['field'])) {
 				$options['additionalData2']['field'] = '';
@@ -421,7 +421,7 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row">
-				<input type="text" id="additionalData2-field" name="enterpay_plugin_options_form_mapping[additionalData2][field]" value="<?php echo esc_attr($options['additionalData2']['field']); ?>" />
+				<input type="text" id="additionalData2-field" name="entercheck_plugin_options_form_mapping[additionalData2][field]" value="<?php echo esc_attr($options['additionalData2']['field']); ?>" />
 			</div>
 			<?php
 		}
@@ -433,26 +433,12 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 						
 			<div id="mapping_form_block">
 				<form action='options.php' method='post'> <?php
-					//settings_fields( 'enterpay-company-search-fields' );
-					settings_fields( 'enterpay_plugin_options_form_mapping' );
+					settings_fields( 'entercheck_plugin_options_form_mapping' );
 					
 					do_settings_sections( 'entercheck_plugin_options_form_mapping' );
-					//do_settings_sections( 'enterpay_plugin_options_company_fields' );
 					submit_button(); ?>
 				</form>
 			</div>
-
-
-			<style>
-				.form-table th {
-					vertical-align: inherit !important;
-					padding: 10px 10px 10px 0;
-				}
-				
-				.form-table td {
-					padding: 10px 10px 10px 10px !important;
-				}
-			</style>
 			<?php
 		}		
 	}
