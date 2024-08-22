@@ -182,6 +182,8 @@ class Entercheck_Company_Search_Public
 			'search_country_list' => [],
 			
 			'entercheck_nonce_field' => wp_nonce_field( 'entercheck_nonce_action', 'entercheck_nonce', false, false ),
+			'search_token' => $this->get_search_token(),
+			'search_url' => 'https://'.$this->api_domain.'/search/company/public',
 			
 		);
 		
@@ -197,6 +199,18 @@ class Entercheck_Company_Search_Public
 		
 		
 		wp_localize_script($this->plugin_name, "entercheckjs", $variables);
+	}
+
+	public function get_search_token(){
+		$request_url = 'https://'.$this->api_domain.'/auth/client/token/generate';
+		
+		$data = $this->send_API_request($request_url, "GET");
+		
+		if (!empty($data)) {
+			return json_decode($data)->token;			
+		}
+		
+		return '';
 	}
 
 	public function auth()
@@ -237,7 +251,7 @@ class Entercheck_Company_Search_Public
 	
 	public function send_API_request($endpoint_url, $method, $fileds = [])
 	{
-		$token_str = get_option('entercheck_token');
+		$token_str = get_option('entercheck_token', '');
 		
 		$send_data = array(
 			'method' => $method,		
@@ -257,6 +271,7 @@ class Entercheck_Company_Search_Public
 		} else {
 			$my_request = wp_remote_get($endpoint_url, $send_data);
 		}
+		
 		
 		if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
 			$resp = wp_remote_retrieve_body( $my_request );

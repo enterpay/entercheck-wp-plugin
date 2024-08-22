@@ -35,7 +35,7 @@
 	
 	function entercheck_plugin_processing_section_text(){
 		echo '<p><strong>'.esc_html__('Simple', 'entercheck-company-search').'</strong> '.esc_html__('processing registers new business to the Entercheck backend.', 'entercheck-company-search').'<br>';
-		echo '<strong>'.esc_html__('Smart', 'entercheck-company-search').'</strong> '.esc_html__('processing mode forwards data specified on the form mapping page and executes the "Smart Form" workflow.', 'entercheck-company-search').'</p>';
+		echo '<strong>'.esc_html__('Workflow', 'entercheck-company-search').'</strong> '.esc_html__('processing mode forwards data specified on the form mapping page and executes the workflow.', 'entercheck-company-search').'</p>';
 	}
 
     function entercheck_plugin_setting_username()
@@ -69,7 +69,7 @@
 ?>
 		<select name="entercheck_plugin_options[request_mode]">
 			<option value="simple" <?php if ($options['request_mode'] == 'simple') echo 'selected="selected"'; ?>>Simple</option>
-			<option value="smart" <?php if ($options['request_mode'] == 'smart') echo 'selected="selected"'; ?>>Smart</option>
+			<option value="smart" <?php if ($options['request_mode'] == 'smart') echo 'selected="selected"'; ?>>Workflow</option>
 		</select>
 <?php 	
     }
@@ -81,7 +81,7 @@
             $options['smart_form_id'] = "";
         }
 
-		echo '<label for="company_name-id">'.esc_attr__('Smart form ID - null uses default value', 'entercheck-company-search').'</label><br>';
+		echo '<label for="company_name-id">'.esc_attr__('Workflow ID - null uses default value', 'entercheck-company-search').'</label><br>';
 		echo "<input id='entercheck_plugin_setting_smart_form_id' name='entercheck_plugin_options[smart_form_id]' type='text' value='" . esc_attr($options['smart_form_id']) . "' />";
 	}
 	
