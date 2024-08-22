@@ -237,7 +237,7 @@ class Entercheck_Company_Search_Public
 	
 	public function send_API_request($endpoint_url, $method, $fileds = [])
 	{
-		$token_str = get_option('entercheck_token');
+		$token_str = get_option('entercheck_token', '');
 		
 		$send_data = array(
 			'method' => $method,		
