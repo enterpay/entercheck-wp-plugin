@@ -58,23 +58,6 @@
 		
 		$("#" + entercheckjs.company_name_id).attr('title', entercheckjs.company_name_tootltip);
 		$('<div id="company_loader"></div>').insertAfter($("#" + entercheckjs.company_name_id));	
-		$("#" + entercheckjs.company_name_id).typeahead({
-		  source: function (query, result) {
-			let nonce = $("input[name='entercheck_nonce']").val();
-			$.ajax({
-			  url: entercheckjs.ajaxurl,
-			  data: { action: "call_api", nonce: nonce },
-			  dataType: "json",
-			  type: "POST",
-			}).done(function (data) {
-			  result(
-				$.map(data, function (item) {
-				  return item;
-				})
-			  );
-			});
-		  },
-		});
 		
 		if (entercheckjs.allow_search_country == 1){
 			$("#" + entercheckjs.search_country_id).html('');
@@ -100,12 +83,26 @@
 		  datumTokenizer: Bloodhound.tokenizers.obj.whitespace("value"),
 		  queryTokenizer: Bloodhound.tokenizers.whitespace,
 		  remote: {
-			url: entercheckjs.ajaxurl + "?action=search_company", //&name=%QUERY&country=FI",
-			wildcard: "%QUERY",			
+			//url: entercheckjs.ajaxurl + "?action=search_company", //&name=%QUERY&country=FI",
+			url: entercheckjs.search_url,
+			wildcard: "%QUERY",
+			/*
 			replace: function (url, query) {
-				let nonce = $("input[name='entercheck_nonce']").val();
-				return url + "&name=" + encodeURI($("#" + entercheckjs.company_name_id).val()) + "&country=" + entercheckCountry() + "&nonce=" + nonce; //%QUERY
-			},			
+				//url = 'https://api.test.entercheck.eu/search/company?country=fi&name=Entercheck&limit=5';
+								
+				//let nonce = $("input[name='entercheck_nonce']").val();
+				//return url + "&name=" + encodeURI($("#" + entercheckjs.company_name_id).val()) + "&country=" + entercheckCountry() + "&nonce=" + nonce; //%QUERY
+				return url + "?name=" + encodeURI($("#" + entercheckjs.company_name_id).val()) + "&country=" + entercheckCountry(); //%QUERY
+			},
+			*/
+			prepare: function (query, settings) {
+				settings.url = settings.url + "?name=" + encodeURI($("#" + entercheckjs.company_name_id).val()) + "&country=" + entercheckCountry();
+				settings.headers = {
+				  'X-Entercheck-Authorization': entercheckjs.search_token
+				};
+
+				return settings;
+			},
 		  },
 		});
 

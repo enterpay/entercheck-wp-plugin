@@ -49,7 +49,7 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 		}
 		
 		public function mapping_section_callback(){
-			echo '<p>'.esc_attr('The form mapping determines what data is routed to the Entercheck backend process. Set the HTML field names for input according to the defined "Smart Form" workflow.').'</p>';
+			echo '<p>'.esc_attr('The form mapping determines what data is routed to the Entercheck backend process. Set the HTML field names for input according to the workflow.').'</p>';
 		}
 		
 		public function smartFormId_callback(){
@@ -63,7 +63,7 @@ if ( !class_exists( 'EntercheckCompanySearchFormMapping' ) ) {
 			}
 			?>
 			<div class="box_row_mapping">
-				<label for="company_name-id"><?php esc_attr_e('Smart form ID - null uses default value', 'entercheck-company-search'); ?></label>
+				<label for="company_name-id"><?php esc_attr_e('“Workflow ID - null uses default value', 'entercheck-company-search'); ?></label>
 			</div>
 			<div class="box_row">
 				<input type="text" id="smartFormId-field" name="entercheck_plugin_options_form_mapping[smartFormId][field]" value="<?php echo esc_attr($options['smartFormId']['field']); ?>" />

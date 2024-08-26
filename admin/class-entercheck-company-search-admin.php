@@ -161,7 +161,7 @@ class Entercheck_Company_Search_Admin
 		add_settings_section('processing_settings', 'Processing settings', 'entercheck_plugin_processing_section_text', 'dbi_example_plugin');
 		
 		add_settings_field('entercheck_plugin_setting_request_mode', 'Processing Mode', 'entercheck_plugin_setting_request_mode', 'dbi_example_plugin', 'processing_settings');
-		add_settings_field('entercheck_plugin_setting_smart_form_id', 'Smart Form Id', 'entercheck_plugin_setting_smart_form_id', 'dbi_example_plugin', 'processing_settings');
+		add_settings_field('entercheck_plugin_setting_smart_form_id', 'Workflow id', 'entercheck_plugin_setting_smart_form_id', 'dbi_example_plugin', 'processing_settings');
 		
 		//add_settings_section('api_call', 'Test API call', 'entercheck_plugin_api_call_section_text', 'dbi_example_plugin');
 		
