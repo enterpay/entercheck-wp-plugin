@@ -249,7 +249,7 @@ class Entercheck_Company_Search_Public
 		}
 	}
 	
-	public function send_API_request($endpoint_url, $method, $fileds = [])
+	public function send_API_request($endpoint_url, $method, $fileds = [], $retries = 0)
 	{
 		$token_str = get_option('entercheck_token', '');
 		
@@ -276,9 +276,15 @@ class Entercheck_Company_Search_Public
 		if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
 			$resp = wp_remote_retrieve_body( $my_request );
 		} else {
-			//auth again
-			$this->auth();
-			return $this->send_API_request($endpoint_url, $method, $fileds);
+			if ($retries < 5) {
+				$retries++;
+				sleep(2);
+				//auth again
+				$this->auth();
+				return $this->send_API_request($endpoint_url, $method, $fileds, $retries);
+			} else {
+				return null;
+			}
 		}
 		
 		if (!empty($resp)) {
