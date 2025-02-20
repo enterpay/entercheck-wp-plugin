@@ -93,6 +93,9 @@ Incorporate these shortcodes within your form as needed to provide the desired f
 = 1.0.9 =
 * The number of re-authentication attempts is limited.
 
+= 1.0.10 =
+* Fixed a requset to comany/details
+
 == Upgrade Notice ==
 
 = 1.0.8 =
