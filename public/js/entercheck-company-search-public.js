@@ -203,6 +203,13 @@
 			  $("#company_info").val(JSON.stringify(e));
 			  
 			  $('#company_loader').removeClass('spinner');
+			})
+			.fail(function(jqXHR, textStatus, errorThrown){
+				console.log(textStatus);				
+			})
+			.always(function( data, textStatus, jqXHR ) {
+				console.log(textStatus);
+				$('#company_loader').removeClass('spinner');
 			});
 		});
 		

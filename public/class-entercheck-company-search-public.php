@@ -329,7 +329,7 @@ class Entercheck_Company_Search_Public
 
 	public function get_company_detail($is_return = false)
 	{				
-		if (!isset($_REQUEST['nonce']) || !wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['nonce'])), 'name_of_my_action' )){
+		if (!isset($_REQUEST['nonce']) || !wp_verify_nonce( sanitize_text_field( wp_unslash ($_REQUEST['nonce'])), 'entercheck_nonce_action' )){
 			echo '';
 			die();
 		}
