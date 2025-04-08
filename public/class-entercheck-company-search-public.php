@@ -50,7 +50,7 @@ class Entercheck_Company_Search_Public
 	 * @access   private
 	 * @var      string    $version    The URL of API.
 	 */
-	private $api_domain;
+	public $api_domain;
 	
 	/**
 	 * The portal domain API.
@@ -59,7 +59,7 @@ class Entercheck_Company_Search_Public
 	 * @access   private
 	 * @var      string    $version    The URL of portal API.
 	 */
-	private $portal_api_domain;	
+	public $portal_api_domain;	
 
 	/**
 	 * Initialize the class and set its properties.
@@ -74,14 +74,8 @@ class Entercheck_Company_Search_Public
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		
-		$options = get_option('entercheck_plugin_options');
-		if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
-			$this->api_domain = "api.test.entercheck.eu"; 
-			$this->portal_api_domain = "portal.test.entercheck.eu";
-		} else {
-			$this->api_domain = "api.entercheck.eu";
-			$this->portal_api_domain = "portal.entercheck.eu";
-		}		
+		$this->api_domain = "entercheck-api.fly.dev";
+		$this->portal_api_domain = "entercheck-api.fly.dev";
 	}
 
 	/**
@@ -140,6 +134,7 @@ class Entercheck_Company_Search_Public
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/entercheck-company-search-public.js', array('jquery'), $this->version, false);
 
 		$options = get_option('entercheck_plugin_options_fields');
+		$plugin_options = get_option('entercheck_plugin_options');
 
 		$variables = array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
@@ -175,6 +170,16 @@ class Entercheck_Company_Search_Public
 			'invoice_operator_code_name' => isset($options['invoice_operator_code']['name']) ? $options['invoice_operator_code']['name'] : 'invoice_operator_code',
 			'invoice_operator_code_id' => isset($options['invoice_operator_code']['id']) ? str_ireplace(',', ', #', $options['invoice_operator_code']['id']) : 'invoice_operator_code',
 			
+			'revenue_class_name' => isset($options['revenue_class']['name']) ? $options['revenue_class']['name'] : 'revenue_class',
+			'revenue_class_id' => isset($options['revenue_class']['id']) ? str_ireplace(',', ', #', $options['revenue_class']['id']) : 'revenue_class',
+			'revenue_name' => isset($options['revenue']['name']) ? $options['revenue']['name'] : 'revenue',
+			'revenue_id' => isset($options['revenue']['id']) ? str_ireplace(',', ', #', $options['revenue']['id']) : 'revenue',
+			'result_name' => isset($options['result']['name']) ? $options['result']['name'] : 'result',
+			'result_id' => isset($options['result']['id']) ? str_ireplace(',', ', #', $options['result']['id']) : 'result',
+			'employees_name' => isset($options['employees']['name']) ? $options['employees']['name'] : 'employees',
+			'employees_id' => isset($options['employees']['id']) ? str_ireplace(',', ', #', $options['employees']['id']) : 'employees',
+
+			
 			'allow_search_country' => isset($options['allow_search_country']) && is_numeric($options['allow_search_country']) ? intval($options['allow_search_country']) : 0,
 			'default_country' => !empty($options['default_country']) ? $options['default_country'] : 'FI',
 			'search_country_name' => isset($options['search_country']['name']) ? $options['search_country']['name'] : 'search_country',
@@ -183,7 +188,7 @@ class Entercheck_Company_Search_Public
 			
 			'entercheck_nonce_field' => wp_nonce_field( 'entercheck_nonce_action', 'entercheck_nonce', false, false ),
 			'search_token' => $this->get_search_token(),
-			'search_url' => 'https://'.$this->api_domain.'/search/company/public',
+			'search_url' => 'https://'.$this->api_domain.'/search/company',
 			
 		);
 		
@@ -202,9 +207,10 @@ class Entercheck_Company_Search_Public
 	}
 
 	public function get_search_token(){
-		$request_url = 'https://'.$this->api_domain.'/auth/client/token/generate';
+		$options = get_option('entercheck_plugin_options');
 		
-		$data = $this->send_API_request($request_url, "GET");
+		$request_url = 'https://'.$this->api_domain.'/auth/anonymous';
+		$data = $this->send_API_request($request_url, "POST");
 		
 		if (!empty($data)) {
 			return json_decode($data)->token;			
@@ -212,53 +218,21 @@ class Entercheck_Company_Search_Public
 		
 		return '';
 	}
-
-	public function auth()
-	{
-		$options = get_option('entercheck_plugin_options');
-
-
-		$data = array(
-			"username" => $options['username'],
-			"password" => $options['password']
-		);
-		$data = wp_json_encode($data);
-
-		$request_url = 'https://'.$this->api_domain.'/v1/auth';
-
-		$send_data = array(
-			'method' => 'POST',		
-			'headers'  => array(
-				'Content-Type' => 'application/json',
-				'Content-Length' => strlen($data),
-				'Cache-control' => 'no-cache',
-			),
-			'body' => $data
-		);
-
-		$my_request = wp_remote_post($request_url, $send_data);
-		if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
-			$resp = wp_remote_retrieve_body( $my_request );
-		}
-		
-		if (!empty($resp)) {
-			$token = json_decode($resp)->token;
-			if ($token) {
-				update_option('entercheck_token', $token);
-			}
-		}
-	}
 	
 	public function send_API_request($endpoint_url, $method, $fileds = [], $retries = 0)
 	{
-		$token_str = get_option('entercheck_token', '');
+		$options = get_option('entercheck_plugin_options');
 		
+		$api_key = !empty($options["api_key"]) ? $options["api_key"] : '';
+				
 		$send_data = array(
 			'method' => $method,		
 			'headers'  => array(
 				'Content-Type' => 'application/json',
-				'Authorization' => 'Bearer ' . $token_str.'',
+				'Authorization' => 'Bearer ' . $api_key,
 				'Cache-control' => 'no-cache',
+				'Accept: */*',
+				'Connection: keep-alive'
 			)
 		);
 		
@@ -279,8 +253,7 @@ class Entercheck_Company_Search_Public
 			if ($retries < 5) {
 				$retries++;
 				sleep(2);
-				//auth again
-				$this->auth();
+					
 				return $this->send_API_request($endpoint_url, $method, $fileds, $retries);
 			} else {
 				return null;
@@ -316,7 +289,8 @@ class Entercheck_Company_Search_Public
 		$options = get_option('entercheck_plugin_options_fields');
 		$country_code = !empty($_REQUEST["country"]) ? sanitize_text_field($_REQUEST["country"]) : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
 
-		$endpoint_url = "https://".$this->api_domain."/company/search?country=" . $country_code . "&name=" . $name;
+		$endpoint = '/search/company';
+		$endpoint_url = "https://".$this->api_domain.$endpoint."?country=" . $country_code . "&name=" . $name;
 		
 		if (isset($options["use_advanced_search"]) && $options["use_advanced_search"] == '1')
 			$endpoint_url .= "&advancedSearch=true";
@@ -339,7 +313,9 @@ class Entercheck_Company_Search_Public
 		$options = get_option('entercheck_plugin_options_fields');
 		$country_code = !empty($_REQUEST["country"]) ? sanitize_text_field($_REQUEST["country"]) : (!empty($options['default_country']) ? $options['default_country'] : 'FI');
 		
-		$endpoint_url = "https://".$this->api_domain."/company/details?country=" . $country_code . "&id=" . $bid;
+		$endpoint = '/search/company/details';
+		$endpoint_url = "https://".$this->api_domain.$endpoint."?country=" . $country_code . "&id=" . $bid;
+		
 		$data = $this->send_API_request($endpoint_url, "GET");
 
 		if ($is_return)
@@ -533,7 +509,8 @@ class Entercheck_Company_Search_Public
 						}
 					}
 					
-					$fields = ["businessId" => $businessId, "country" => $country, "smartFormId" => $smartFormId];
+					$fields = ["businessId" => $businessId, "country" => $country, "workflowId" => $smartFormId];
+						
 					$additional_data = ["field1" => "", "field2" => ""];
 					
 					foreach($form_mapping_options as $post_field_name => $form_mapping_field){
@@ -555,7 +532,7 @@ class Entercheck_Company_Search_Public
 
 					$fields["additionalData"] = $additional_data;
 					
-					$endpoint_url = 'https://'.$this->api_domain.'/forms/submit';
+					$endpoint_url = 'https://'.$this->api_domain.'/workflow/start';
 					$data =	$this->send_API_request($endpoint_url, "POST", $fields);
 					
 					$GLOBALS["entercheck_post_request_already_sent"] = 1;
@@ -734,12 +711,10 @@ class Entercheck_Company_Search_Public
 	function entercheck_plugin_options_validate($input)
 	{
 		$options = get_option('entercheck_plugin_options');
-		$options['username'] = trim($input['username']);
-		$options['password'] = trim($input['password']);
-		$options['environment'] = trim($input['environment']);
 		$options['start_date'] = trim($input['start_date']);
 		$options['request_mode'] = trim($input['request_mode']);
 		$options['smart_form_id'] = trim($input['smart_form_id']);
+		$options['api_key'] = trim($input['api_key']);
 		return $options;
 	}
 

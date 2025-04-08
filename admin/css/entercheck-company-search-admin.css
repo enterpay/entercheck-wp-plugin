@@ -3,6 +3,8 @@
  * included in this file.
  */
 
+.field_hide {display:none;}
+
 .form-table .box_row {
 	float: left;
 	width: 100%;
@@ -102,8 +104,13 @@ div#field_settings_block p.before_field {
 
 div#credentials_settings_block .form-table th {
 	vertical-align: bottom !important;
-	padding: 5px 10px 5px 0 !important;
+	padding: 5px 10px 10px 5px !important
 }
+
+div#credentials_settings_block .form-table .auth_api_key th {
+	vertical-align: top !important;
+}
+
 
 div#credentials_settings_block .form-table td {
 	padding: 5px 10px 5px 10px !important;

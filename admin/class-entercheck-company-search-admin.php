@@ -85,8 +85,11 @@ class Entercheck_Company_Search_Admin
 		 */
 
 		$screen = get_current_screen();
-
-		if ($screen && $screen instanceof WP_Screen && in_array($screen->id, ['entercheck_page_entercheck-company-search-entercheck-fields', 'entercheck-company-search-admin-display', 'entercheck-company-search-admin-form-mapping-settings']))
+		
+		//var_dump($screen);
+		
+		//if (isset($_GET["page"]) && in_array($_GET["page"], ['entercheck-company-search-credentials', 'entercheck_page_entercheck-company-search-entercheck-fields', 'entercheck-company-search-admin-display', 'entercheck-company-search-admin-form-mapping-settings']))
+		if ($screen && $screen instanceof WP_Screen && in_array($screen->id, ['entercheck_page_entercheck-company-search-credentials', 'entercheck_page_entercheck-company-search-entercheck-fields', 'entercheck-company-search-admin-display', 'entercheck-company-search-admin-form-mapping-settings']))	
 			wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/entercheck-company-search-admin.css', array(), $this->version, 'all');
 	}
 
@@ -149,14 +152,17 @@ class Entercheck_Company_Search_Admin
 
 	public function admin_register_settings()
 	{
+		$options = get_option('entercheck_plugin_options');
+		$field_show_api = (!isset($options['auth_type']) || $options['auth_type'] == "api_key" ? true : false);
+		$auth_login_class = 'auth_login'.($field_show_api ? ' field_hide' : '');
+		$auth_api_class = 'auth_api_key'.(!$field_show_api ? ' field_hide' : '');
+		
 
 		register_setting('entercheck_plugin_options', 'entercheck_plugin_options', 'entercheck_plugin_options_validate');
 
 		add_settings_section('api_settings', 'API Credentials', 'entercheck_plugin_section_text', 'dbi_example_plugin');
 
-		add_settings_field('entercheck_plugin_setting_username', 'Username', 'entercheck_plugin_setting_username', 'dbi_example_plugin', 'api_settings');
-		add_settings_field('entercheck_plugin_setting_password', 'Password', 'entercheck_plugin_setting_password', 'dbi_example_plugin', 'api_settings');
-		add_settings_field('entercheck_plugin_setting_environment', 'Environment', 'entercheck_plugin_setting_environment', 'dbi_example_plugin', 'api_settings');
+		add_settings_field('entercheck_plugin_setting_api_key', 'API key', 'entercheck_plugin_setting_api_key', 'dbi_example_plugin', 'api_settings', ['class' => $auth_api_class]);
 		
 		add_settings_section('processing_settings', 'Processing settings', 'entercheck_plugin_processing_section_text', 'dbi_example_plugin');
 		

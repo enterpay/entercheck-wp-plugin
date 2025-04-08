@@ -3,8 +3,8 @@ Contributors: Entercheck
 Donate link: https://demoshop.entercheck.eu/
 Tags: company, search, registration, form
 Requires at least: 6.1.4
-Tested up to: 6.6.1
-Stable tag: 1.0.8
+Tested up to: 6.8
+Stable tag: 1.0.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,18 @@ Incorporate these shortcodes within your form as needed to provide the desired f
 = 1.0.8 =
 * Updated workflow descriptions.
 * Improved search speed by moving the search integration to the client side.
+
+= 1.0.9 =
+* The number of re-authentication attempts is limited.
+
+= 1.0.10 =
+* Fixed a requset to comany/details
+
+= 1.0.11 =
+* Fixed a requset to comany/details
+
+= 1.0.12 =
+* The authorization process has been changed to use the API key
 
 == Upgrade Notice ==
 
