@@ -37,29 +37,6 @@
 		echo '<p><strong>'.esc_html__('Simple', 'entercheck-company-search').'</strong> '.esc_html__('processing registers new business to the Entercheck backend.', 'entercheck-company-search').'<br>';
 		echo '<strong>'.esc_html__('Workflow', 'entercheck-company-search').'</strong> '.esc_html__('processing mode forwards data specified on the form mapping page and executes the workflow.', 'entercheck-company-search').'</p>';
 	}
-
-    function entercheck_plugin_setting_username()
-    {
-        $options = get_option('entercheck_plugin_options', array());
-
-        if (!isset($options['username'])) {
-            $options['username'] = "";
-        }
-
-        echo "<input id='entercheck_plugin_setting_username' name='entercheck_plugin_options[username]' type='text' value='" . esc_attr($options['username']) . "' />";
-    }
-
-    function entercheck_plugin_setting_password()
-    {
-        $options = get_option('entercheck_plugin_options', array());
-
-        if (!isset($options['password'])) {
-            $options['password'] = "";
-        }
-
-        echo "<input id='entercheck_plugin_setting_password' name='entercheck_plugin_options[password]' type='password' value='" . esc_attr($options['password']) . "' />";
-		echo "<img id='display_password' src='".esc_attr(plugin_dir_url( dirname( __FILE__ ) ))."images/hidden_eye_icon.png' width='24' heigth='24'>";
-    }
 	
     function entercheck_plugin_setting_request_mode()
     {
@@ -74,6 +51,8 @@
 <?php 	
     }
 	
+	
+	
 	function entercheck_plugin_setting_smart_form_id(){
 		$options = get_option('entercheck_plugin_options', array());
 
@@ -86,18 +65,17 @@
 	}
 	
 	
-	function entercheck_plugin_setting_environment(){
-		$options = get_option('entercheck_plugin_options', array());
-		
-		if (!isset($options['environment'])) { $options['environment'] = "test"; }
-?>
-		<select name="entercheck_plugin_options[environment]">
-			<option value="test" <?php if ($options['environment'] == 'test') echo 'selected="selected"'; ?>>Test</option>
-			<option value="production" <?php if ($options['environment'] == 'production') echo 'selected="selected"'; ?>>Production</option>
-		</select>
-<?php 		
-		
-	}
+	function entercheck_plugin_setting_api_key()
+    {
+        $options = get_option('entercheck_plugin_options', array());
+
+        if (!isset($options['api_key'])) {
+            $options['api_key'] = "";
+        }
+
+        echo "<textarea rows='3' cols='100' id='entercheck_plugin_setting_api_key' name='entercheck_plugin_options[api_key]'>" . esc_attr($options['api_key']) . "</textarea>";
+    }
+	
 	
     function entercheck_plugin_setting_start_date()
     {
@@ -118,58 +96,7 @@
 </form>
 </div>
 
-<?php
-$options = get_option('entercheck_plugin_options', array());
-
-$api_domain = "api.entercheck.eu"; 
-if (!isset($options['environment']) || empty($options['environment']) || $options['environment'] == 'test') { 
-	$api_domain = "api.test.entercheck.eu"; 
-}	
-
-if (!isset($options['username']) || !isset($options['password'])) {
-    echo "<p><b><i>API credentials are not set!</i></b></p>";
-    return;
-}
-$data = array(
-    "username" => $options['username'],
-    "password" => $options['password']
-);
-$data = wp_json_encode($data);
-
-$request_url = 'https://'.$api_domain.'/v1/auth';
-
-$send_data = array(
-	'method' => 'POST',		
-	'headers'  => array(
-		'Content-Type' => 'application/json',
-		'Content-Length' => strlen($data),
-		'Cache-control' => 'no-cache',
-	),
-	'body' => $data
-);
-
-$my_request = wp_remote_post($request_url, $send_data);
-if ( ! is_wp_error( $my_request ) && ( 200 == $my_request['response']['code'] || 201 == $my_request['response']['code'] ) ) {
-	$resp = wp_remote_retrieve_body( $my_request );
-}
-
-
-if (!empty($resp)) :
-    $res =   json_decode($resp);
-    if (!isset($res->error)) :
-        $token = $res->token;
-        if (!empty($token)) :
-            update_option('entercheck_token', $token);
-?>
-			<h2>Test API call</h2>
-			<p><?php esc_attr_e('You can verify that your credentials are valid for the given environment by sending a test request.', 'entercheck-company-search'); ?></p>
-            <p style="border:1px solid gray;padding:10px;margin-top:30px;width:100%;overflow: scroll;max-width: 90%;"><b><?php esc_attr_e('Token', 'entercheck-company-search'); ?>: </b><?php echo esc_attr($token); ?></p>
-            <br>
-            <button id="test-call-btn" onclick="search_company()"><?php esc_attr_e('Make a test API call', 'entercheck-company-search'); ?></button>
-            <div id="search_company_result"></div>
-<?php
-        else :
-            echo "<p><b><i>API credentials are incorrect!</i></b></p>";
-        endif;
-    endif;
-endif;
+<h2>Test API call</h2>
+<p><?php esc_attr_e('You can verify that your credentials are valid for the given environment by sending a test request.', 'entercheck-company-search'); ?></p>
+<button id="test-call-btn" onclick="search_company()"><?php esc_attr_e('Make a test API call', 'entercheck-company-search'); ?></button>
+<div id="search_company_result"></div>

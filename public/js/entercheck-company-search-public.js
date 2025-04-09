@@ -87,19 +87,10 @@
 			//url: entercheckjs.ajaxurl + "?action=search_company", //&name=%QUERY&country=FI",
 			url: entercheckjs.search_url,
 			wildcard: "%QUERY",
-			/*
-			replace: function (url, query) {
-				//url = 'https://api.test.entercheck.eu/search/company?country=fi&name=Entercheck&limit=5';
-								
-				//let nonce = $("input[name='entercheck_nonce']").val();
-				//return url + "&name=" + encodeURI($("#" + entercheckjs.company_name_id).val()) + "&country=" + entercheckCountry() + "&nonce=" + nonce; //%QUERY
-				return url + "?name=" + encodeURI($("#" + entercheckjs.company_name_id).val()) + "&country=" + entercheckCountry(); //%QUERY
-			},
-			*/
 			prepare: function (query, settings) {
 				settings.url = settings.url + "?name=" + encodeURI($("#" + entercheckjs.company_name_id).val()) + "&country=" + entercheckCountry();
 				settings.headers = {
-				  'X-Entercheck-Authorization': entercheckjs.search_token
+				  'Authorization': 'Bearer ' + entercheckjs.search_token
 				};
 
 				return settings;
@@ -199,6 +190,11 @@
 						$("#" + entercheckjs.invoice_operator_code_id).val(e.receivingFinvoiceAddress.length ? e.receivingFinvoiceAddress[0].operatorCode : '');
 					}
 			  }
+			  
+			  if ($("#" + entercheckjs.revenue_class_id).length) $("#" + entercheckjs.revenue_class_id).val(e.revenueClass);
+			  if ($("#" + entercheckjs.revenue_id).length) $("#" + entercheckjs.revenue_id).val(e.revenue);
+			  if ($("#" + entercheckjs.result_id).length) $("#" + entercheckjs.result_id).val(e.result);
+			  if ($("#" + entercheckjs.employees_id).length) $("#" + entercheckjs.employees_id).val(e.employees);
 			  
 			  $("#company_info").val(JSON.stringify(e));
 			  

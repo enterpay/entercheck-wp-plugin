@@ -70,6 +70,14 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			add_settings_field( 'entercheck_invoice_address', esc_attr__('Invoice address', 'entercheck-company-search'), array($this, 'invoice_address_callback'), 'entercheck_plugin_options_fields', 'entercheck-invoice-company-fields_settings' );
 			add_settings_field( 'entercheck_invoice_operator_code', esc_attr__('Invoice operator code', 'entercheck-company-search'), array($this, 'invoice_operator_code_callback'), 'entercheck_plugin_options_fields', 'entercheck-invoice-company-fields_settings' );
 
+			//echo '<h3>Financials</h3>';
+			add_settings_section('entercheck-financials-fields_settings', '', array($this, 'financials_section_callback'), 'entercheck_plugin_options_fields' );
+			add_settings_field( 'entercheck_revenue_class', esc_attr__('Revenue class', 'entercheck-company-search'), array($this, 'revenue_class_callback'), 'entercheck_plugin_options_fields', 'entercheck-financials-fields_settings' );
+			add_settings_field( 'entercheck_revenue', esc_attr__('Revenue', 'entercheck-company-search'), array($this, 'revenue_callback'), 'entercheck_plugin_options_fields', 'entercheck-financials-fields_settings' );
+			add_settings_field( 'entercheck_result', esc_attr__('Result', 'entercheck-company-search'), array($this, 'result_callback'), 'entercheck_plugin_options_fields', 'entercheck-financials-fields_settings' );
+			add_settings_field( 'entercheck_employees', esc_attr__('Employees', 'entercheck-company-search'), array($this, 'employees_callback'), 'entercheck_plugin_options_fields', 'entercheck-financials-fields_settings' );
+
+
 		}
 		
 		public function sanitize( $input )
@@ -145,6 +153,11 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 		public function billing_section_callback(){
 			//echo '<h3>Relevant company fields</h3>';
 			echo '<h3>Billing address</h3>';
+		}
+		
+		public function financials_section_callback(){
+			//echo '<h3>Relevant company fields</h3>';
+			echo '<h3>Financials</h3>';
 		}
 		
 		
@@ -447,6 +460,95 @@ if ( !class_exists( 'EntercheckCompanySearchFields' ) ) {
 			</div>
 			<?php
 		}
+		
+		
+		
+		
+		public function revenue_class_callback(){
+			$options  = get_option( 'entercheck_plugin_options_fields', array() ); 
+			
+			if (!isset($options['revenue_class']['name'])) {
+				$options['revenue_class']['name'] = 'revenue_class';
+			}
+			if (!isset($options['revenue_class']['id'])) {
+				$options['revenue_class']['id'] = 'revenue_class';
+			}
+			?>
+			<div class="box_row">
+				<label for="revenue_class-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="revenue_class-name" name="entercheck_plugin_options_fields[revenue_class][name]" value="<?php echo esc_html($options['revenue_class']['name']); ?>" />
+			</div>
+			<div class="box_row">
+				<label for="revenue_class-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="revenue_class-id" name="entercheck_plugin_options_fields[revenue_class][id]" value="<?php echo esc_html($options['revenue_class']['id']); ?>" />
+			</div>
+			<?php
+		}
+		
+		public function revenue_callback(){
+			$options  = get_option( 'entercheck_plugin_options_fields', array() ); 
+			
+			if (!isset($options['revenue']['name'])) {
+				$options['revenue']['name'] = 'revenue';
+			}
+			if (!isset($options['revenue']['id'])) {
+				$options['revenue']['id'] = 'revenue';
+			}
+			?>
+			<div class="box_row">
+				<label for="revenue-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="revenue-name" name="entercheck_plugin_options_fields[revenue][name]" value="<?php echo esc_html($options['revenue']['name']); ?>" />
+			</div>
+			<div class="box_row">
+				<label for="revenue-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="revenue-id" name="entercheck_plugin_options_fields[revenue][id]" value="<?php echo esc_html($options['revenue']['id']); ?>" />
+			</div>
+			<?php
+		}
+		
+		public function result_callback(){
+			$options  = get_option( 'entercheck_plugin_options_fields', array() ); 
+			
+			if (!isset($options['result']['name'])) {
+				$options['result']['name'] = 'result';
+			}
+			if (!isset($options['result']['id'])) {
+				$options['result']['id'] = 'result';
+			}
+			?>
+			<div class="box_row">
+				<label for="result-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="result-name" name="entercheck_plugin_options_fields[result][name]" value="<?php echo esc_html($options['result']['name']); ?>" />
+			</div>
+			<div class="box_row">
+				<label for="result-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="result-id" name="entercheck_plugin_options_fields[result][id]" value="<?php echo esc_html($options['result']['id']); ?>" />
+			</div>
+			<?php
+		}
+		
+		public function employees_callback(){
+			$options  = get_option( 'entercheck_plugin_options_fields', array() ); 
+			
+			if (!isset($options['employees']['name'])) {
+				$options['employees']['name'] = 'employees';
+			}
+			if (!isset($options['employees']['id'])) {
+				$options['employees']['id'] = 'employees';
+			}
+			?>
+			<div class="box_row">
+				<label for="employees-name"><?php esc_html_e('Field name', 'entercheck-company-search'); ?>:</label>
+				<input type="text" id="employees-name" name="entercheck_plugin_options_fields[employees][name]" value="<?php echo esc_html($options['employees']['name']); ?>" />
+			</div>
+			<div class="box_row">
+				<label for="employees-id"><?php esc_html_e('Field ID', 'entercheck-company-search'); ?>:</label>			
+				<input type="text" id="employees-id" name="entercheck_plugin_options_fields[employees][id]" value="<?php echo esc_html($options['employees']['id']); ?>" />
+			</div>
+			<?php
+		}
+					
+					
 					
 
 		// Search country

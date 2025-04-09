@@ -67,6 +67,26 @@
 		 }
 	 });
 	 
+	 $( document ).on('change', '#entercheck_plugin_setting_auth_type', function(){
+		 var type = $(this).find(":selected").val();
+		 
+		 if (type == 'api_key'){
+			$('.auth_api_key').each(function(){
+				$(this).removeClass('field_hide');
+			});
+			$('.auth_login').each(function(){
+				$(this).addClass('field_hide');
+			});
+		 } else {
+			 $('.auth_login').each(function(){
+				$(this).removeClass('field_hide');
+			});
+			$('.auth_api_key').each(function(){
+				$(this).addClass('field_hide');
+			});
+		 }
+	 });
+	 
 
 })(jQuery);
 

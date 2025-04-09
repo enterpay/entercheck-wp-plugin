@@ -77,10 +77,8 @@ class Entercheck_Company_Search {
 		$this->plugin_name = 'entercheck-company-search';
 
 		$this->load_dependencies();
-		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-		$this->update_options();
 		$this->define_options();
 	}
 
@@ -109,12 +107,6 @@ class Entercheck_Company_Search {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-entercheck-company-search-loader.php';
 
 		/**
-		 * The class responsible for defining internationalization functionality
-		 * of the plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-entercheck-company-search-i18n.php';
-
-		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-entercheck-company-search-admin.php';
@@ -126,23 +118,6 @@ class Entercheck_Company_Search {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-entercheck-company-search-public.php';
 
 		$this->loader = new Entercheck_Company_Search_Loader();
-
-	}
-
-	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the Entercheck_Company_Search_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function set_locale() {
-
-		$plugin_i18n = new Entercheck_Company_Search_i18n();
-
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
 	}
 
@@ -212,32 +187,6 @@ class Entercheck_Company_Search {
 		
 	}
 	
-	private function update_options(){
-		$options = get_option('enterpay_plugin_options');
-		if ($options && is_array($options) && count($options) > 0){
-			update_option('entercheck_plugin_options', $options, false);
-			delete_option('enterpay_plugin_options');
-		}
-		
-		$options = get_option('enterpay_plugin_options_fields');
-		if ($options && is_array($options) && count($options) > 0){
-			update_option('entercheck_plugin_options_fields', $options, false);
-			delete_option('enterpay_plugin_options_fields');
-		}
-		
-		$options = get_option('enterpay_plugin_options_form_mapping');
-		if ($options && is_array($options) && count($options) > 0){
-			update_option('entercheck_plugin_options_form_mapping', $options, false);
-			delete_option('enterpay_plugin_options_form_mapping');
-		}
-		
-		$enterpay_token = get_option('enterpay_token');
-		if ($enterpay_token && $enterpay_token != ''){
-			update_option('entercheck_token', $enterpay_token, false);
-			delete_option('enterpay_token');
-		}		
-	}
-	
 	private function define_options(){
 		$options_fields = get_option('entercheck_plugin_options_fields');		
 		if ($options_fields === false || !is_array($options_fields)){
@@ -245,16 +194,10 @@ class Entercheck_Company_Search {
 			update_option('entercheck_plugin_options_fields', $options_fields, false);
 		}
 		
-		$options = get_option('entercheck_plugin_options');
+		$options = get_option('entercheck_plugin_options');		
 		if ($options === false || !is_array($options)){
 			$options = [];
 			update_option('entercheck_plugin_options', $options, false);
-		}
-		
-		$options_form_mapping = get_option('entercheck_plugin_options_form_mapping');
-		if ($options_form_mapping === false || !is_array($options_form_mapping)){
-			$options_form_mapping = [];
-			update_option('entercheck_plugin_options_form_mapping', $options_form_mapping, false);
 		}
 	}
 
