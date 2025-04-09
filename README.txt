@@ -94,10 +94,10 @@ Incorporate these shortcodes within your form as needed to provide the desired f
 * The number of re-authentication attempts is limited.
 
 = 1.0.10 =
-* Fixed a requset to comany/details
+* Fixed a request to comany/details
 
 = 1.0.11 =
-* Fixed a requset to comany/details
+* Fixed a request to comany/details
 
 = 1.0.12 =
 * The authorization process has been changed to use the API key
