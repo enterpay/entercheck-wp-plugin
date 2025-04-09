@@ -30,21 +30,22 @@
    */
 
   $(document).ready(function () {
-	if ($("#" + entercheckjs.company_name_id).length){  
-		if (entercheckjs.business_id_auto == 1){
-			$('form').each(function(){
-				var form = $( this );
-				var form_comp_fields = form.find("#" + entercheckjs.company_name_id);
-				if (form_comp_fields.length > 0){
+	if ($("#" + entercheckjs.company_name_id).length){  		
+		$('form').each(function(){
+			var form = $( this );
+			var form_comp_fields = form.find("#" + entercheckjs.company_name_id);
+			if (form_comp_fields.length > 0){
+				if (entercheckjs.business_id_auto == 1){
 					var form_buisness_fields = form.find("#" + entercheckjs.business_id_id);
 					if (!form_buisness_fields.length){
 						$('<input type="hidden" id="' + entercheckjs.business_id_id_first + '" name="' + entercheckjs.business_id_name_first + '">').insertAfter($("#" + entercheckjs.company_name_id));
 					}
-					
-					$(entercheckjs.entercheck_nonce_field).insertAfter($("#" + entercheckjs.company_name_id));
 				}
-			});
-		} 
+				
+				$(entercheckjs.entercheck_nonce_field).insertAfter($("#" + entercheckjs.company_name_id));
+			}
+		});
+		
 		 
 		if ($("#" + entercheckjs.invoice_selector_id).length && $("#" + entercheckjs.invoice_selector_id).is('select')){ 
 			//$("#" + entercheckjs.invoice_selector_id).attr('readonly','readonly');
@@ -142,7 +143,7 @@
 			  type: "post",
 			  dataType: "json",
 			  url: entercheckjs.ajaxurl,
-			  data: { action: "company_detail", bid: suggestion.businessId, country: entercheckCountry, nonce: nonce },
+			  data: { action: "company_detail", bid: suggestion.businessId, country: entercheckCountry(), nonce: nonce },
 			})
 			.done(function (e) {
 			  console.log(e);
@@ -202,6 +203,13 @@
 			  $("#company_info").val(JSON.stringify(e));
 			  
 			  $('#company_loader').removeClass('spinner');
+			})
+			.fail(function(jqXHR, textStatus, errorThrown){
+				console.log(textStatus);				
+			})
+			.always(function( data, textStatus, jqXHR ) {
+				console.log(textStatus);
+				$('#company_loader').removeClass('spinner');
 			});
 		});
 		
