@@ -34,7 +34,7 @@
     }
 	
 	function entercheck_plugin_processing_section_text(){
-		echo '<p><strong>'.esc_html__('Simple', 'entercheck-company-search').'</strong> '.esc_html__('processing registers new business to the Entercheck backend.', 'entercheck-company-search').'<br>';
+		//echo '<p><strong>'.esc_html__('Simple', 'entercheck-company-search').'</strong> '.esc_html__('processing registers new business to the Entercheck backend.', 'entercheck-company-search').'<br>';
 		echo '<strong>'.esc_html__('Workflow', 'entercheck-company-search').'</strong> '.esc_html__('processing mode forwards data specified on the form mapping page and executes the workflow.', 'entercheck-company-search').'</p>';
 	}
 	
