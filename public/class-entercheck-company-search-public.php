@@ -491,7 +491,7 @@ class Entercheck_Company_Search_Public
 				
 		$options  = get_option( 'entercheck_plugin_options', array() );
 						
-		if (isset($options["request_mode"]) && $options["request_mode"] == "smart"){
+		//if (isset($options["request_mode"]) && $options["request_mode"] == "smart"){
 			$options_fields  = get_option( 'entercheck_plugin_options_fields', array() );			
 			$company_name_fields = isset($options_fields['company_name']['name']) ? explode(",", $options_fields['company_name']['name']) : ['billing_company'];
 			/*if (isset($form_mapping_options["smartFormId"]) && $form_mapping_options["smartFormId"]['value'] != ""){*/
@@ -509,7 +509,10 @@ class Entercheck_Company_Search_Public
 						}
 					}
 					
-					$fields = ["businessId" => $businessId, "country" => $country, "workflowId" => $smartFormId];
+					$fields = ["businessId" => $businessId, "country" => $country];
+					if (!empty($smartFormId)){
+						$fields["workflowId"] = $smartFormId;
+					}
 						
 					$additional_data = ["field1" => "", "field2" => ""];
 					
@@ -541,7 +544,7 @@ class Entercheck_Company_Search_Public
 					break;
 				}
 			}
-		}		
+		//}		
 	}
 
 	function request_after_registration_submission($user_id)
@@ -555,7 +558,7 @@ class Entercheck_Company_Search_Public
 		$this->send_post_request();
 		
 		//return;
-		
+		/*
 		$options  = get_option( 'entercheck_plugin_options', array() );						
 		if (!isset($options["request_mode"]) || $options["request_mode"] != "smart"){		
 			$options_fields  = get_option( 'entercheck_plugin_options_fields', array() );		
@@ -584,22 +587,11 @@ class Entercheck_Company_Search_Public
 						update_user_meta($user_id, 'company_info', sanitize_text_field($data));
 					}
 					
-					/*
-					$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
-					$data =	$this->send_API_request($endpoint_url, "GET");
-					update_user_meta($user_id, 'company_base', $data);
-					
-					$_REQUEST['bid'] = $business_id;				
-					$data = $this->get_company_detail(true);
-					if (!empty($data)) {
-						update_user_meta($user_id, 'company_info', sanitize_text_field($data));
-					}
-					*/
-					
 					break;
 				}
 			}
 		}
+		*/
 	}
 	
 	function request_after_submission_form()
@@ -712,7 +704,7 @@ class Entercheck_Company_Search_Public
 	{
 		$options = get_option('entercheck_plugin_options');
 		$options['start_date'] = trim($input['start_date']);
-		$options['request_mode'] = trim($input['request_mode']);
+		//$options['request_mode'] = trim($input['request_mode']);
 		$options['smart_form_id'] = trim($input['smart_form_id']);
 		$options['api_key'] = trim($input['api_key']);
 		return $options;
