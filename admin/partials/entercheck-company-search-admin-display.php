@@ -22,7 +22,11 @@
 <form action="options.php" method="post">
     <?php
     settings_fields('entercheck_plugin_options');
-    do_settings_sections('dbi_example_plugin'); ?>
+    do_settings_sections('dbi_example_plugin');
+	
+	echo '<p>'.esc_attr('You can configure the form submission to trigger workflows and additional actions, such as sending data to a CRM system. The configuration is done in the entercheck dashboard.').'</p>';
+	 ?>
+	 
     <p><input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Save', 'entercheck-company-search'); ?>" /></p>
 	
     <?php
@@ -35,7 +39,7 @@
 	
 	function entercheck_plugin_processing_section_text(){
 		//echo '<p><strong>'.esc_html__('Simple', 'entercheck-company-search').'</strong> '.esc_html__('processing registers new business to the Entercheck backend.', 'entercheck-company-search').'<br>';
-		echo '<strong>'.esc_html__('Workflow', 'entercheck-company-search').'</strong> '.esc_html__('processing mode forwards data specified on the form mapping page and executes the workflow.', 'entercheck-company-search').'</p>';
+		echo /*'<strong>'.esc_html__('Workflow', 'entercheck-company-search').'</strong> '.*/esc_html__('The form submission is stored with the provided form id. If no form id is provided, a default value is used. Use the form mapping to specify which fields you want to submit.', 'entercheck-company-search').'</p>';
 	}
 	
     function entercheck_plugin_setting_request_mode()
@@ -60,7 +64,7 @@
             $options['smart_form_id'] = "";
         }
 
-		echo '<label for="company_name-id">'.esc_attr__('Workflow ID - null uses default value', 'entercheck-company-search').'</label><br>';
+		echo '<label for="company_name-id">'.esc_attr__('Form ID - null uses default value', 'entercheck-company-search').'</label><br>';
 		echo "<input id='entercheck_plugin_setting_smart_form_id' name='entercheck_plugin_options[smart_form_id]' type='text' value='" . esc_attr($options['smart_form_id']) . "' />";
 	}
 	

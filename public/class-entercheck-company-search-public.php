@@ -606,7 +606,7 @@ class Entercheck_Company_Search_Public
 		$this->send_post_request();
 		
 		//return;
-	
+	/*
 		$options  = get_option( 'entercheck_plugin_options', array() );						
 		if (!isset($options["request_mode"]) || $options["request_mode"] != "smart"){		
 			$options_fields  = get_option( 'entercheck_plugin_options_fields', array() ); 		
@@ -637,24 +637,12 @@ class Entercheck_Company_Search_Public
 							update_user_meta($current_user->ID, 'company_info', sanitize_text_field($data));
 						}
 					}
-						
-					/*
-					$endpoint_url = 'https://'.$this->api_domain.'/v2/decision/company/base?businessId=' . $business_id . '&country='.$country.'&refresh=true';
-					$data =	$this->send_API_request($endpoint_url, "GET");
-					$current_user = wp_get_current_user();
-					if ($current_user instanceof WP_User && $current_user->ID > 0){				
-						update_user_meta($current_user->ID, 'company_base', $data);					
-						$_REQUEST['bid'] = $business_id;				
-						$data = $this->get_company_detail(true);
-						if (!empty($data)) {
-							update_user_meta($current_user->ID, 'company_info', sanitize_text_field($data));
-						}
-					}
-					*/
+					
 					break;
 				}
 			}
 		}
+		*/
 	}	
 
 	function save_custom_data($user_id = -1){
