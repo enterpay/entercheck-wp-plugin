@@ -535,7 +535,8 @@ class Entercheck_Company_Search_Public
 
 					$fields["additionalData"] = $additional_data;
 					
-					$endpoint_url = 'https://'.$this->api_domain.'/workflow/start';
+					//$endpoint_url = 'https://'.$this->api_domain.'/workflow/start';
+					$endpoint_url = 'https://'.$this->api_domain.'/forms/submit';
 					$data =	$this->send_API_request($endpoint_url, "POST", $fields);
 					
 					$GLOBALS["entercheck_post_request_already_sent"] = 1;
