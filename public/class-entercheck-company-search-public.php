@@ -73,9 +73,12 @@ class Entercheck_Company_Search_Public
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-		
+		/*
 		$this->api_domain = "entercheck-api.fly.dev";
 		$this->portal_api_domain = "entercheck-api.fly.dev";
+		*/
+		$this->api_domain = "service.entercheck.eu";
+		$this->portal_api_domain = "service.entercheck.eu";
 	}
 
 	/**
