@@ -25,6 +25,7 @@
     do_settings_sections('dbi_example_plugin');
 	
 	echo '<p>'.esc_attr('You can configure the form submission to trigger workflows and additional actions, such as sending data to a CRM system. The configuration is done in the entercheck dashboard.').'</p>';
+	echo '<p>'.esc_attr('You can view all form submissions in the dashboard, by navigating to ').'<a href="https://entercheck.eu/dashboard/forms/submissions" target="_blank">https://entercheck.eu/dashboard/forms/submissions</p>';
 	 ?>
 	 
     <p><input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e('Save', 'entercheck-company-search'); ?>" /></p>
